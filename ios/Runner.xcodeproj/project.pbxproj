@@ -97,7 +97,6 @@
 				56B1E68DE70911EDBA28E12E /* Pods-RunnerTests.release.xcconfig */,
 				E3063DBA268E1592E24C6492 /* Pods-RunnerTests.profile.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -131,6 +130,7 @@
 				CDC31D71C16E14AAD93743CD /* Frameworks */,
 			);
 			sourceTree = "<group>";
+			usesTabs = 0;
 		};
 		97C146EF1CF9000F007C117D /* Products */ = {
 			isa = PBXGroup;

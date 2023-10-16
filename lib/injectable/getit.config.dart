@@ -15,7 +15,7 @@ import 'package:internet_connection_checker_plus/internet_connection_checker_plu
     as _i5;
 import 'package:mawad/injectable/external.package.injection.dart' as _i3;
 
-import '../src/appcore/network/network.info.dart' as _i4;
+import '../src/presentation/appcore/network/network.info.dart' as _i4;
 
 extension GetItInjectableX on _i1.GetIt {
 // initializes the registration of main-scope dependencies inside of GetIt

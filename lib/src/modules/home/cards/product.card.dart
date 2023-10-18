@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mawad/src/core/models/product.dart';
+import 'package:mawad/src/core/models/products.dart';
 
 class ProductCard extends StatefulWidget {
   final Product product;
@@ -45,8 +45,8 @@ class _ProductCardState extends State<ProductCard> {
               children: [
                 ClipRRect(
                   borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  child: Image.asset(
-                    widget.product.imagePath,
+                  child: Image.network(
+                    widget.product.images.first.url,
                     fit: BoxFit.cover,
                     height: MediaQuery.of(context).size.width * (5 / 12),
                   ),
@@ -88,7 +88,7 @@ class _ProductCardState extends State<ProductCard> {
                   children: [
                     const SizedBox(height: 10),
                     Text(
-                      widget.product.name,
+                      widget.product.nameEng,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context)
                           .textTheme
@@ -97,7 +97,7 @@ class _ProductCardState extends State<ProductCard> {
                     ),
                     const SizedBox(height: 3),
                     Text(
-                      widget.product.description,
+                      widget.product.detailsEng,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context)
                           .textTheme
@@ -110,7 +110,7 @@ class _ProductCardState extends State<ProductCard> {
                       children: [
                         Flexible(
                           child: Text(
-                            'Price ${widget.product.price} KWD',
+                            'Price ${widget.product.price}',
                             overflow: TextOverflow.ellipsis,
                             style: Theme.of(context)
                                 .textTheme

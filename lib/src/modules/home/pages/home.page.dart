@@ -1,4 +1,5 @@
-import 'package:dismissible_page/dismissible_page.dart';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -7,11 +8,12 @@ import 'package:mawad/src/modules/favorite/favorite_list.dart';
 import 'package:mawad/src/modules/home/cards/home.tab.cards.dart';
 import 'package:mawad/src/modules/home/pages/change.country.bottom.sheet.dart';
 import 'package:mawad/src/modules/home/pages/image_banner.dart';
+import 'package:mawad/src/modules/main_controller.dart';
 import 'package:mawad/src/modules/poducts/product/product_controller.dart';
 import 'package:mawad/src/presentation/routes/app_routes.dart';
+import 'package:mawad/src/presentation/sharedwidgets/appbottomshet.dart';
 import 'package:mawad/src/presentation/sharedwidgets/input/search_input.dart';
 import 'package:mawad/src/presentation/theme/app_color.dart';
-import 'package:mawad/src/utils/helpers/icon_routes.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -24,41 +26,15 @@ class _HomePageState extends State<HomePage> {
   String search = '';
   late TextEditingController searchController;
   final ProductController productController = Get.put(ProductController());
+  final MainController mainController = Get.put(MainController());
 
   int selectedIndex = 0;
-
-  List<Map> catagories = [
-    {
-      "id": "1",
-      "name": "all",
-      "icon": IconRoutes.checkbox,
-    },
-    {
-      "id": "1",
-      "name": "wood",
-      "icon": IconRoutes.wood,
-    },
-    {
-      "id": "1",
-      "name": "wood",
-      "icon": IconRoutes.wood,
-    },
-    {
-      "id": "1",
-      "name": "wood",
-      "icon": IconRoutes.wood,
-    },
-    {
-      "id": "1",
-      "name": "wood",
-      "icon": IconRoutes.wood,
-    },
-  ];
 
   @override
   void initState() {
     searchController = TextEditingController();
     super.initState();
+    productController.getReca();
   }
 
   @override
@@ -131,11 +107,11 @@ class _HomePageState extends State<HomePage> {
               height: 150.h,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: catagories.length,
+                itemCount: productController.categories.length,
                 shrinkWrap: true,
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 itemBuilder: (context, index) {
-                  final category = catagories[index];
+                  final category = productController.categories[index];
                   bool isSelected = selectedIndex ==
                       index; // Check if the current index matches the selectedIndex
                   return Container(
@@ -151,13 +127,13 @@ class _HomePageState extends State<HomePage> {
                         });
                       },
                       icon: Container(
-                          child: SvgPicture.asset(
-                        category["icon"],
+                          child: SvgPicture.network(
+                        category.image.url,
                         color: isSelected
                             ? AppColorTheme.white
                             : AppColorTheme.gray,
                       )),
-                      label: category["name"],
+                      label: category.nameEng,
                     ),
                   );
                 },
@@ -191,8 +167,16 @@ class _HomePageState extends State<HomePage> {
                 Padding(
                   padding: const EdgeInsets.only(right: 20),
                   child: InkWell(
-                    onTap: () => context
-                        .pushTransparentRoute(const ChangeCountryBottomSheet()),
+                    onTap: () => showAppBottomSheet(
+                      ChangeCountryBottomSheet(
+                        countries: mainController.countries,
+                        onCountrySelected: (selected) {
+                          log(selected.id);
+                          productController.getProductByCountry(selected.id);
+                          mainController.selectedCountry(selected);
+                        },
+                      ),
+                    ),
                     child: ClipRRect(
                         borderRadius:
                             const BorderRadius.all(Radius.circular(100)),
@@ -222,7 +206,7 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              FavoriteProductsList(productList: productController.sampleProduct)
+              FavoriteProductsList(productList: productController.products),
             ],
           ),
         ),

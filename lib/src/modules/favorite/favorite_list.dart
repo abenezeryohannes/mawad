@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mawad/src/core/models/product.dart';
+import 'package:mawad/src/core/models/products.dart';
 import 'package:mawad/src/modules/favorite/fevorite_controller.dart';
 import 'package:mawad/src/modules/home/cards/product.card.dart';
 import 'package:mawad/src/presentation/routes/app_routes.dart';
 
 class FavoriteProductsList extends StatelessWidget {
   final FavoritesController favoritesController = Get.find();
-  final List<Product>
+  final RxList<Product>
       productList; // Pass a list of products, not just sampleProduct
 
   FavoriteProductsList({Key? key, required this.productList}) : super(key: key);

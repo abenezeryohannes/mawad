@@ -49,14 +49,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.11.0"
-  bloc:
-    dependency: transitive
-    description:
-      name: bloc
-      sha256: "3820f15f502372d979121de1f6b97bfcf1630ebff8fe1d52fb2b0bfa49be5b49"
-      url: "https://pub.dev"
-    source: hosted
-    version: "8.1.2"
   boolean_selector:
     dependency: transitive
     description:
@@ -209,14 +201,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.1"
-  country_picker:
-    dependency: "direct main"
-    description:
-      name: country_picker
-      sha256: e440350c2f6397955499d5a647cc90599ba3048651c6858370483f55c346b525
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.21"
   cross_file:
     dependency: transitive
     description:
@@ -358,22 +342,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_bloc:
-    dependency: "direct main"
-    description:
-      name: flutter_bloc
-      sha256: e74efb89ee6945bcbce74a5b3a5a3376b088e5f21f55c263fc38cbdc6237faae
-      url: "https://pub.dev"
-    source: hosted
-    version: "8.1.3"
-  flutter_dotenv:
-    dependency: "direct main"
-    description:
-      name: flutter_dotenv
-      sha256: "9357883bdd153ab78cbf9ffa07656e336b8bbb2b5a3ca596b0b27e119f7c7d77"
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.1.0"
   flutter_launcher_icons:
     dependency: "direct dev"
     description:
@@ -621,14 +589,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.18.0"
-  intl_phone_number_input:
-    dependency: "direct main"
-    description:
-      name: intl_phone_number_input
-      sha256: b812c6e3924e56e65b9684076ccd8eb24126abe0c84091d35d75a25e613a1793
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.7.3+1"
   io:
     dependency: transitive
     description:
@@ -661,30 +621,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.7.1"
-  libphonenumber_platform_interface:
-    dependency: transitive
-    description:
-      name: libphonenumber_platform_interface
-      sha256: b8c57fc74bf61491672b8cd94039e35359c6e0d79a88018c1cc7facb76771a4b
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.4.1"
-  libphonenumber_plugin:
-    dependency: transitive
-    description:
-      name: libphonenumber_plugin
-      sha256: d95a0f799936e6e243cd0be151af9a6f09286bbb2c513d517dad548c4b3eb70e
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.2"
-  libphonenumber_web:
-    dependency: transitive
-    description:
-      name: libphonenumber_web
-      sha256: "3eb541422e581d198be4d59293cb5902e4057ae6bb0822eaddf9a0f98952d222"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.1"
   lints:
     dependency: transitive
     description:
@@ -733,14 +669,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
-  nested:
-    dependency: transitive
-    description:
-      name: nested
-      sha256: "03bac4c528c64c95c722ec99280375a6f2fc708eec17c7b3f07253b626cd2a20"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0"
   nm:
     dependency: transitive
     description:
@@ -861,14 +789,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.5.1"
-  provider:
-    dependency: transitive
-    description:
-      name: provider
-      sha256: cdbe7530b12ecd9eb455bdaa2fcb8d4dad22e80b8afb4798b41479d5ce26847f
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.0.5"
   pub_semver:
     dependency: transitive
     description:

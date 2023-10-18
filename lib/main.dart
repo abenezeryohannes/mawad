@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -52,7 +51,6 @@ void main() async {
 
   configureDependencies();
   // Loads contents from .env into memory.
-  await dotenv.load();
 
   runApp(const MyApp());
 }

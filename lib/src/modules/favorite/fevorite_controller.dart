@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:get/get.dart';
-import 'package:mawad/src/core/models/product.dart';
+import 'package:mawad/src/core/models/products.dart';
 import 'package:mawad/src/data/services/favorites_service.dart';
 
 class FavoritesController extends GetxController {

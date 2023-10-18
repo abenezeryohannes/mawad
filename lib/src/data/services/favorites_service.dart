@@ -1,4 +1,4 @@
-import 'package:mawad/src/core/models/product.dart';
+import 'package:mawad/src/core/models/products.dart';
 import 'dart:convert';
 
 import 'package:mawad/src/data/services/localstorage_service.dart';
@@ -24,6 +24,6 @@ class FavoritesService {
   Future<List<Product>> getFavorites() async {
     final encodedData = _localStorage.getString(_key) ?? '[]';
     final List<dynamic> decodedData = jsonDecode(encodedData);
-    return decodedData.map((data) => Product.fromMap(data)).toList();
+    return decodedData.map((data) => Product.fromJson(data)).toList();
   }
 }

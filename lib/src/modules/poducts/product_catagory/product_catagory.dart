@@ -2,48 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:mawad/src/core/models/catagorie.dart';
 import 'package:mawad/src/modules/home/cards/home.tab.cards.dart';
+import 'package:mawad/src/modules/poducts/product/product_controller.dart';
 import 'package:mawad/src/modules/poducts/product_catagory/product_categories_controller.dart';
 import 'package:mawad/src/presentation/routes/app_routes.dart';
 import 'package:mawad/src/presentation/sharedwidgets/big.text.button.dart';
-import 'package:mawad/src/presentation/sharedwidgets/input/search_input.dart';
 import 'package:mawad/src/presentation/sharedwidgets/scaffold/main_scaffold.dart';
 import 'package:mawad/src/presentation/theme/app_color.dart';
 import 'package:mawad/src/presentation/theme/textTheme.dart';
-import 'package:mawad/src/utils/helpers/icon_routes.dart';
 
-class ProductCategory extends GetView<ProductCategoryController> {
+class ProductCategory extends GetView<ProductController> {
   const ProductCategory({super.key});
 
   @override
   Widget build(BuildContext context) {
-    List<Map> catagories = [
-      {
-        "id": "1",
-        "name": "all",
-        "icon": IconRoutes.dashboard,
-      },
-      {
-        "id": "1",
-        "name": "wood",
-        "icon": IconRoutes.wood,
-      },
-      {
-        "id": "1",
-        "name": "wood",
-        "icon": IconRoutes.wood,
-      },
-      {
-        "id": "1",
-        "name": "wood",
-        "icon": IconRoutes.wood,
-      },
-      {
-        "id": "1",
-        "name": "wood",
-        "icon": IconRoutes.wood,
-      },
-    ];
     return MainScaffold(
         backgroundColor: AppColorTheme.bgColor,
         body: Column(
@@ -51,29 +24,6 @@ class ProductCategory extends GetView<ProductCategoryController> {
             Text(
               "مـواد",
               style: AppTextTheme.brown25,
-            ),
-            Directionality(
-              textDirection: TextDirection.ltr,
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
-                child: SearchInput(
-                  controller: controller.searchController,
-                  placeholder: 'Search',
-                  hintStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                        color: Theme.of(context).highlightColor,
-                        fontWeight: FontWeight.bold,
-                      ),
-                  fillColor: Colors.white,
-                  prefixIcon: Icon(
-                    Icons.search,
-                    color: Theme.of(context).highlightColor,
-                  ),
-                  contentPadding: const EdgeInsets.only(top: 10),
-                  onChanged: (val) {
-                    controller.searchValue = val;
-                  },
-                ),
-              ),
             ),
             SizedBox(
               height: 20.h,
@@ -97,12 +47,14 @@ class ProductCategory extends GetView<ProductCategoryController> {
             SizedBox(
               height: 24.h,
             ),
-            buildCategories(catagories),
+            buildCategories(controller.categories),
           ],
         ));
   }
 
-  Widget buildCategories(List<Map> catagories) {
+  Widget buildCategories(List<CategoryModel> catagories) {
+    final ProductCategoryController controller =
+        Get.put(ProductCategoryController());
     return Expanded(
       child: Directionality(
         textDirection: TextDirection.ltr,
@@ -120,30 +72,31 @@ class ProductCategory extends GetView<ProductCategoryController> {
             itemBuilder: (context, index) {
               final category = catagories[index];
 
-              return Container(
-                padding: EdgeInsets.all(10.r),
+              return Expanded(
+                // padding: EdgeInsets.all(10.r),
                 child: Obx(() {
                   bool isSelected = controller.selectedIndex == index;
                   return SelectableCard(
-                    backgroundColor:
-                        isSelected ? AppColorTheme.yellow : AppColorTheme.white,
-                    isSelected: isSelected,
-                    onTap: () {
-                      controller.selectedIndex = index;
-                      if (controller.selectedIndex == 0) {
-                        Get.toNamed(AppRoutes.productCategory);
-                      }
-                    },
-                    icon: Container(
-                      child: SvgPicture.asset(
-                        category["icon"],
-                        color: isSelected
-                            ? AppColorTheme.white
-                            : AppColorTheme.gray,
+                      backgroundColor: isSelected
+                          ? AppColorTheme.yellow
+                          : AppColorTheme.white,
+                      isSelected: isSelected,
+                      onTap: () {
+                        controller.selectedIndex = index;
+                        Get.back();
+                        if (controller.selectedIndex == 0) {
+                          Get.toNamed(AppRoutes.productCategory);
+                        }
+                      },
+                      icon: Container(
+                        child: SvgPicture.network(
+                          category.image.url,
+                          color: isSelected
+                              ? AppColorTheme.white
+                              : AppColorTheme.gray,
+                        ),
                       ),
-                    ),
-                    label: category["name"],
-                  );
+                      label: category.nameEng);
                 }),
               );
             },

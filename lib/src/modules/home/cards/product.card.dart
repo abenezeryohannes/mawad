@@ -43,12 +43,15 @@ class _ProductCardState extends State<ProductCard> {
             child: Stack(
               alignment: Alignment.topLeft,
               children: [
-                ClipRRect(
-                  borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  child: Image.network(
-                    widget.product.images.first.url,
-                    fit: BoxFit.cover,
-                    height: MediaQuery.of(context).size.width * (5 / 12),
+                GestureDetector(
+                  onTap: widget.onTap,
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.all(Radius.circular(8)),
+                    child: Image.network(
+                      widget.product.images.first.url,
+                      fit: BoxFit.cover,
+                      height: MediaQuery.of(context).size.width * (5 / 12),
+                    ),
                   ),
                 ),
                 Align(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:mawad/src/core/models/products.dart';
 import 'package:mawad/src/modules/cart/carts/cart.item.card.dart';
 import 'package:mawad/src/modules/cart/carts/cart.total.card.dart';
 import 'package:mawad/src/modules/cart/carts/cart_controller.dart';
@@ -25,31 +27,33 @@ class CartsPage extends StatelessWidget {
                   shrinkWrap: true,
                   physics: const ClampingScrollPhysics(),
                   itemCount: _cartController.cartItems.length,
+                  padding: EdgeInsets.zero,
                   itemBuilder: (context, index) {
+                    Product item = _cartController.cartItems[index];
                     return Padding(
                       padding: const EdgeInsets.all(20.0),
                       child: CartItemCard(
-                        item: _cartController.cartItems[index],
-                        onValueChange: (val) {
-                          _cartController.updateItemQuantity(
-                              _cartController.cartItems[index].id, val);
-                        },
-                        countable: index !=
-                            3, // You might want to reconsider this logic based on cartItems
-                      ),
+                          radius: 14.r,
+                          item: item,
+                          onValueChange: (val) {
+                            _cartController.updateItemQuantity(item.id, val);
+                          },
+                          countable:
+                              true // You might want to reconsider this logic based on cartItems
+                          ),
                     );
                   },
                 );
               }),
               const Padding(
-                padding: EdgeInsets.all(20.0),
+                padding: EdgeInsets.all(10.0),
                 child: CartTotalCard(
                     items: []), // TODO: Pass the appropriate items here
               ),
               Padding(
-                padding: const EdgeInsets.all(12.0),
+                padding: const EdgeInsets.all(10.0),
                 child: Text(
-                  'Total is total is total is total is total ', // TODO: Calculate actual total
+                  'Payment fees will be divided into 3 payments', // TODO: Calculate actual total
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               ),
@@ -100,7 +104,9 @@ class CartsPage extends StatelessWidget {
               ),
             ),
             IconButton(
-              onPressed: () {}, // TODO: Implement the appropriate action
+              onPressed: () {
+                _cartController.clearCart();
+              },
               icon: Image.asset(
                 'assets/icon/remove.png',
                 width: 24,

@@ -44,12 +44,16 @@ class AppPages {
       ],
     ),
     GetPage(
-      name: AppRoutes.productDetail,
-      page: () => const ProductDetailPage(),
-    ),
+        name: AppRoutes.productDetail,
+        page: () => const ProductDetailPage(),
+        bindings: [
+          ProductCategoriesBinding(),
+          FavoriteProductBinding(),
+          CartBinding(),
+        ]),
     GetPage(
         name: AppRoutes.productCategory,
-        page: () => ProductCategory(),
+        page: () => const ProductCategory(),
         binding: ProductCategoriesBinding()),
     GetPage(
         name: AppRoutes.favproduct,

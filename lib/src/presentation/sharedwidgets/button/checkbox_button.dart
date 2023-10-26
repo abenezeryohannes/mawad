@@ -36,6 +36,9 @@ class _CheckboxIconState extends State<CheckboxIcon> {
       },
       child: Row(
         children: [
+          // Icon(
+          //   widget.isClicked ? Icons.check_box : Icons.check_box_outline_blank,
+          // ),
           SvgPicture.asset(
             widget.isClicked ? widget.checkedIconPath : widget.iconPath,
             height: 20,

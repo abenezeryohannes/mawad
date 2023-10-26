@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:get/get.dart';
 import 'package:mawad/src/core/models/catagorie.dart';
+import 'package:mawad/src/core/models/country.dart';
 import 'package:mawad/src/core/models/products.dart';
 import 'package:mawad/src/data/repositories/produact_category_repo.dart';
 import 'package:mawad/src/data/repositories/products.dart';
@@ -15,16 +16,33 @@ class ProductController extends GetxController {
   final ProductCategoryRepo _productCategoryRepo = ProductCategoryRepo();
   final ProductCategoryController productCategoryController =
       Get.put(ProductCategoryController());
+  final countries = <Country>[].obs;
+  var selectedCountry = Rx<Country?>(null);
   final products = <Product>[].obs;
   final productDetail = Rx<Product?>(null);
   final categories = <CategoryModel>[].obs;
 
   final isLeading = false.obs;
+  final isLeadingDetail = false.obs;
 
   Future<String?> getReca() async {
     final token = await recaptchaService.getRecaptchaV3Token();
     log(token.toString());
     return token;
+  }
+
+  @override
+  void onReady() async {
+    await fetchCountries();
+    if (countries.isEmpty) {
+      return;
+    }
+
+    selectedCountry.value = countries[1];
+    if (selectedCountry.isBlank != true) {
+      getProductByCountry(selectedCountry.value!.id);
+    }
+    super.onReady();
   }
 
   void getProductByCountry(String id) async {
@@ -54,12 +72,12 @@ class ProductController extends GetxController {
 
   void getProductDetail(String id) async {
     try {
+      isLeadingDetail.value = true;
       final productsData = await _productsRepo.getProductDetail(id);
-      log(productsData.toString());
+      isLeadingDetail.value = false;
       productDetail.value = productsData;
-
-      getCategoryByCountry(id);
     } catch (error) {
+      isLeadingDetail.value = false;
       // Handle error here
     }
   }
@@ -72,27 +90,12 @@ class ProductController extends GetxController {
       // Handle error here
     }
   }
-  // List<Product> sampleProduct = [
-  //   Product(
-  //       id: '1',
-  //       name: 'Sample Product 1',
-  //       description: 'This is a sample product description.',
-  //       price: 55.00,
-  //       imagePath: 'assets/icon/banner.png',
-  //       isFavorite: false),
-  //   Product(
-  //       id: '2',
-  //       name: 'Sample Product 2',
-  //       description: 'This is a sample product description.',
-  //       price: 55.00,
-  //       imagePath: 'assets/icon/banner.png',
-  //       isFavorite: false),
-  //   Product(
-  //       id: '3',
-  //       name: 'Sample Product 3',
-  //       description: 'This is a sample product description.',
-  //       price: 55.00,
-  //       imagePath: 'assets/icon/banner.png',
-  //       isFavorite: false)
-  // ].obs;
+
+  Future fetchCountries() async {
+    try {
+      final countriesData = await _productsRepo.getCountries();
+      countries.value = countriesData.obs;
+      selectedCountry.value = countries[1];
+    } catch (error) {}
+  }
 }

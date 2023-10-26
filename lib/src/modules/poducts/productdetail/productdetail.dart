@@ -3,22 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:mawad/src/core/models/color_item.dart';
 import 'package:mawad/src/core/models/product_addon.dart';
 import 'package:mawad/src/core/models/products.dart';
+import 'package:mawad/src/modules/cart/carts/cart_controller.dart';
 import 'package:mawad/src/modules/cart/widgets/item.count.controller.dart';
 import 'package:mawad/src/modules/poducts/addon_handler_factory.dart';
 import 'package:mawad/src/modules/poducts/product/product_controller.dart';
 import 'package:mawad/src/presentation/sharedwidgets/big.text.button.dart';
-import 'package:mawad/src/presentation/sharedwidgets/button/checkbox_button.dart';
 import 'package:mawad/src/presentation/sharedwidgets/button/favorite_button.dart';
-import 'package:mawad/src/presentation/sharedwidgets/cards/primery_cards.dart';
-import 'package:mawad/src/presentation/sharedwidgets/input/textarea_filed.dart';
 import 'package:mawad/src/presentation/sharedwidgets/scaffold/main_scaffold.dart';
 import 'package:mawad/src/presentation/theme/app_color.dart';
 import 'package:mawad/src/presentation/theme/textTheme.dart';
 import 'package:mawad/src/utils/helpers/icon_routes.dart';
-import 'package:mawad/src/utils/hex_color.dart';
 
 class ProductDetailPage extends StatefulWidget {
   const ProductDetailPage({super.key});
@@ -29,9 +25,9 @@ class ProductDetailPage extends StatefulWidget {
 
 class _ProductDetailPageState extends State<ProductDetailPage> {
   int currentSlide = 0;
-  bool isClicked = false;
-  ColorItem selectedColor = ColorItem(1, HexColor("#F9DDCB"));
-  final ProductController productController = Get.put(ProductController());
+
+  final ProductController productController = Get.find<ProductController>();
+  final CartController cartController = Get.find<CartController>();
   final myController = TextEditingController();
 
   final productID = Get.arguments;
@@ -66,30 +62,38 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       child: Container(
         margin: const EdgeInsets.only(top: 10),
         child: Obx(() {
-          return productController.productDetail.value != null
-              ? Column(
-                  children: [
-                    buildImageCarousel(),
-                    buildProductInfo(),
-                    buildProductPriceAndDescription(),
-                    buildCustomizationOptions(),
-                    ...productAddons.map((addon) {
-                      return AddonHandlerFactory.create(addon);
-                    }).toList(),
-                    buildSpecialRequests(),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    buildButton(),
-                  ],
-                )
-              : Container(
+          return productController.isLeadingDetail.value
+              ? Container(
                   alignment: Alignment.center,
                   margin: EdgeInsets.only(top: Get.height * 0.4),
                   child: const Center(
                     child: CircularProgressIndicator(),
                   ),
-                );
+                )
+              : productController.productDetail.value != null
+                  ? Container(
+                      child: Column(
+                      children: [
+                        buildImageCarousel(),
+                        buildProductInfo(),
+                        buildProductPriceAndDescription(),
+                        buildDescriptions(),
+                        ...productAddons.map((addon) {
+                          return AddonHandlerFactory.create(addon);
+                        }).toList(),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        buildButton(),
+                      ],
+                    ))
+                  : Container(
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.only(top: Get.height * 0.4),
+                      child: const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
         }),
       ),
     );
@@ -161,12 +165,14 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: List.generate(product.images.length, (index) {
                         return Container(
-                          width: index == 1 ? 42.0 : 24,
+                          width: index == currentSlide ? 30.0 : 24,
                           height: 4.0,
                           margin: const EdgeInsets.symmetric(horizontal: 5.0),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(2.0),
-                            color: index == 1 ? Colors.black : Colors.white,
+                            color: currentSlide == index
+                                ? Colors.black
+                                : Colors.grey,
                           ),
                         );
                       }),
@@ -251,105 +257,59 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(),
                   child: ItemCountController(
-                    backgroundColor: AppColorTheme.lightGray,
-                    iconColor: AppColorTheme.white,
-                    value: 3,
-                    iconSize: 14,
+                    initialValue: 1,
                     onChange: (value) {
+                      if (value == 0) {
+                        value = 1;
+                      }
                       print(value);
                     },
+                    backgroundColor: AppColorTheme.lightGray3,
+                    iconColor: Colors.white,
+                    canAdd: true,
+                    canSubtract: true,
                   ),
                 ),
               ),
             ],
           ),
         ),
-        Container(
-          padding: const EdgeInsets.all(15),
-          child: Text(
-            productController.productDetail.value!.detailsEng.toString(),
-            textAlign: TextAlign.start,
-          ),
-        ),
+
         // buildServiceRequestCheckbox(),
       ],
     );
   }
 
-  Widget buildCustomizationOptions() {
-    return Column(
-      children: [
-        buildServiceRequestCheckbox(),
-      ],
-    );
-  }
-
-  Widget buildServiceRequestCheckbox() {
-    return PrimerCard(
-      child: CheckboxIcon(
-        title: "طلب خدمة أخذ المقاس",
-        textStyle: AppTextTheme.darkblueTitle16,
-        onClicked: (v) {
-          setState(() {
-            isClicked = !isClicked;
-          });
-        },
-        isClicked: isClicked,
-        checkedIconPath: IconRoutes.wood,
-        iconPath: IconRoutes.checkbox,
-      ),
-    );
-  }
-
-  Widget buildSpecialRequests() {
-    return PrimerCard(
-      height: 200.h,
-      child: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.only(bottom: 10.h),
-            alignment: Alignment.centerRight,
-            child: Text(
-              "هل لديك مواصفات خاصة؟",
-              style: AppTextTheme.darkblueTitle16,
-            ),
-          ),
-          TextAreaFiled(
-            controller:
-                myController, // You need to create a TextEditingController
-            hintText: '',
-            onChanged: (text) {
-              // Handle text changes here
-            },
-          ),
-          Container(
-            padding: EdgeInsets.only(top: 10.h),
-            alignment: Alignment.centerRight,
-            child: Text(
-              "* سيتم الرد على الطلب الخاص خلال يومان عمل.",
-              style: AppTextTheme.graysubtitle12,
-            ),
-          ),
-        ],
+  Widget buildDescriptions() {
+    return Container(
+      padding: const EdgeInsets.all(15),
+      child: Text(
+        productController.productDetail.value!.detailsEng.toString(),
+        textAlign: TextAlign.start,
       ),
     );
   }
 
   Widget buildButton() {
     return SizedBox(
-      child: BigTextButton(
-        text: 'أضف للسلة',
-        fontWight: FontWeight.bold,
-        cornerRadius: 24,
-        elevation: 0,
-        backgroudColor: Theme.of(context).colorScheme.secondary,
-        borderColor: Theme.of(context).cardColor,
-        textColor: Theme.of(context).colorScheme.onBackground,
-        padding: const EdgeInsets.only(top: 15, bottom: 15),
-        horizontalMargin:
-            const EdgeInsets.only(left: 30, right: 30, bottom: 10),
-        onClick: () {},
-      ),
+      child: Obx(() {
+        return BigTextButton(
+          text: 'أضف للسلة',
+          fontWight: FontWeight.bold,
+          cornerRadius: 24,
+          elevation: 0,
+          backgroudColor: Theme.of(context).colorScheme.secondary,
+          borderColor: Theme.of(context).cardColor,
+          textColor: Theme.of(context).colorScheme.onBackground,
+          padding: const EdgeInsets.only(top: 15, bottom: 15),
+          isLoading: cartController.isLoading.value,
+          horizontalMargin:
+              const EdgeInsets.only(left: 30, right: 30, bottom: 10),
+          onClick: () {
+            cartController.addItem(productController.productDetail.value!);
+          },
+        );
+      }),
     );
   }
   // Implement other helper functions as needed.

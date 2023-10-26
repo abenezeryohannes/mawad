@@ -9,10 +9,17 @@ import 'package:mawad/src/data/repositories/produact_category_repo.dart';
 class ProductCategoryController extends GetxController {
   final ProductCategoryRepo _productCategoryRepo = ProductCategoryRepo();
   final _selectedIndex = 0.obs;
+  final _isSelected = false.obs;
   final searchController = TextEditingController();
   final _searchValue = ''.obs;
 
   String get searchValue => _searchValue.value;
+  bool get isSelected => _isSelected.value;
+  set isSelected(bool value) {
+    _isSelected.value = value;
+    update();
+  }
+
   set searchValue(String value) {
     _searchValue.value = value;
     update();
@@ -21,6 +28,7 @@ class ProductCategoryController extends GetxController {
   int get selectedIndex => _selectedIndex.value;
   set selectedIndex(int index) {
     _selectedIndex.value = index;
+
     update();
   }
 

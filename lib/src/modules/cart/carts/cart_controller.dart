@@ -1,77 +1,98 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:get/get.dart';
 import 'package:mawad/src/core/constants/contants.dart';
-import 'package:mawad/src/core/models/cart_item.dart';
+import 'package:mawad/src/core/models/products.dart';
 import 'package:mawad/src/data/services/localstorage_service.dart';
+import 'package:mawad/src/data/services/message_services.dart';
 
 class CartController extends GetxController {
-  RxList<CartItem> cartItems = RxList<CartItem>();
+  RxList<Product> _cartItems = RxList<Product>();
   final LocalStorageService _localStorageService = LocalStorageService();
+  final messageService = MessageService();
+  List<Product> get cartItems => _cartItems;
+  final isLoading = false.obs;
 
   @override
   void onInit() {
     super.onInit();
     _localStorageService.initialize();
     loadFromLocalStorage();
+    log(_cartItems.toString());
   }
 
-  void addItem(CartItem item) {
-    if (cartItems.any((cartItem) => cartItem.id == item.id)) {
-      var foundItem =
-          cartItems.firstWhere((cartItem) => cartItem.id == item.id);
-      foundItem.quantity++;
-    } else {
-      cartItems.add(item);
+  void addItem(Product item) {
+    isLoading.value = true;
+    try {
+      if (!_cartItems.any((cartItem) => cartItem.id == item.id)) {
+        _cartItems.add(item);
+        saveToLocalStorage();
+
+        isLoading.value = false;
+        messageService.showTopUpMessage('Success', 'Item added to cart');
+      } else {
+        isLoading.value = false;
+        messageService.showTopUpMessage('Error', 'Item already in cart');
+      }
+    } catch (e) {
+      messageService.showTopUpMessage('Error', 'Error adding item to cart');
     }
-    saveToLocalStorage();
-    update();
   }
 
   void removeItem(String id) {
-    cartItems.removeWhere((cartItem) => cartItem.id == id);
-    saveToLocalStorage();
-    update();
+    try {
+      _cartItems.removeWhere((cartItem) => cartItem.id == id);
+      saveToLocalStorage();
+      update();
+    } catch (e) {
+      messageService.showTopUpMessage('Error', 'Error removing item from cart');
+    }
   }
 
   void updateItemQuantity(String id, int newQuantity) {
-    var foundItem = cartItems.firstWhere((cartItem) => cartItem.id == id);
-    foundItem.quantity = newQuantity;
-    saveToLocalStorage();
-    update();
+    try {
+      saveToLocalStorage();
+      update();
+    } catch (e) {
+      // TODO: Handle exception by showing some feedback to the user
+    }
   }
 
   void clearCart() {
-    cartItems.clear();
-    saveToLocalStorage();
-    update();
+    try {
+      _cartItems.clear();
+      saveToLocalStorage();
+      update();
+    } catch (e) {
+      // TODO: Handle exception by showing some feedback to the user
+    }
   }
 
   Future<void> saveToLocalStorage() async {
-    List<String> cartStringList = cartItems
-        .map((item) =>
-            '${item.id}||${item.title}||${item.price}||${item.imageUrl}||${item.quantity}')
-        .toList();
-    await _localStorageService.saveString(
-        AppConstants.CART_ITEMS, cartStringList.join(';'));
+    try {
+      List<String> cartStringList =
+          _cartItems.map((item) => jsonEncode(item.toMap())).toList();
+      await _localStorageService.saveString(
+          AppConstants.CART_ITEMS, cartStringList.join(';'));
+    } catch (e) {
+      // TODO: Handle exception by showing some feedback to the user
+    }
   }
 
   Future<void> loadFromLocalStorage() async {
-    String? data = _localStorageService.getString(AppConstants.CART_ITEMS);
-    if (data != null && data.isNotEmpty) {
-      List<String> cartStringList = data.split(';');
-      cartItems = cartStringList
-          .map((itemString) {
-            var split = itemString.split('||');
-            return CartItem(
-              id: split[0],
-              title: split[1],
-              price: double.parse(split[2]),
-              imageUrl: split[3],
-              quantity: int.parse(split[4]),
-            );
-          })
-          .toList()
-          .obs;
-      update();
+    try {
+      String? data = _localStorageService.getString(AppConstants.CART_ITEMS);
+      if (data != null && data.isNotEmpty) {
+        List<String> cartStringList = data.split(';');
+        _cartItems = cartStringList
+            .map((itemString) => Product.fromJson(jsonDecode(itemString)))
+            .toList()
+            .obs;
+        update();
+      }
+    } catch (e) {
+      // TODO: Handle exception by showing some feedback to the user
     }
   }
 }

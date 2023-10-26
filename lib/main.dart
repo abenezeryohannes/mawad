@@ -19,6 +19,7 @@ import 'injectable/getit.dart';
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   final localStorage = LocalStorageService();
+
   await localStorage.initialize();
   final authService = AuthTokenService();
   await authService.initialize();

@@ -43,11 +43,15 @@ class _SelectableCardState extends State<SelectableCard> {
             ),
             child: widget.icon,
           ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 5),
-            child: Text(
-              widget.label,
-              style: AppTextTheme.brown14,
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.all(3),
+              alignment: Alignment.center,
+              child: Text(
+                widget.label,
+                style: AppTextTheme.brown14,
+                textAlign: TextAlign.center,
+              ),
             ),
           )
         ],

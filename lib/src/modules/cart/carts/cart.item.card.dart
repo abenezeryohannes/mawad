@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:mawad/src/core/models/products.dart';
 import 'package:mawad/src/modules/cart/widgets/item.count.controller.dart';
+import 'package:mawad/src/presentation/theme/textTheme.dart';
 
 class CartItemCard extends StatefulWidget {
   const CartItemCard(
       {super.key,
       this.backgroundColor = Colors.white,
       this.radius = 16,
-      this.item,
+      required this.item,
       required this.onValueChange,
       this.countable = true});
   final bool countable;
   final Color? backgroundColor;
   final double? radius;
-  final Object? item;
+  final Product item;
   final Function(int val) onValueChange;
 
   @override
@@ -40,8 +42,8 @@ class _CartItemCardState extends State<CartItemCard> {
                 padding: const EdgeInsets.only(right: 12.0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(widget.radius ?? 0),
-                  child: Image.asset(
-                    'assets/img/placeholder.jpeg',
+                  child: Image.network(
+                    widget.item.images.first.url,
                     fit: BoxFit.cover,
                     height: 80,
                     width: 80,
@@ -57,7 +59,7 @@ class _CartItemCardState extends State<CartItemCard> {
                     Padding(
                       padding: const EdgeInsets.only(),
                       child: Text(
-                        'This is title',
+                        widget.item.nameEng,
                         style: Theme.of(context)
                             .textTheme
                             .titleSmall!
@@ -66,7 +68,7 @@ class _CartItemCardState extends State<CartItemCard> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 3, bottom: 0),
-                      child: Text('This is the sub title',
+                      child: Text(widget.item.detailsEng.substring(0, 50),
                           style: Theme.of(context).textTheme.bodyMedium!),
                     ),
                     Row(
@@ -78,17 +80,10 @@ class _CartItemCardState extends State<CartItemCard> {
                           child: Padding(
                             padding: const EdgeInsets.only(),
                             child: Text(
-                              widget.countable ? 'Price is 25E' : 'Placeholder',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color: (widget.countable)
-                                          ? Theme.of(context).hintColor
-                                          : Theme.of(context)
-                                              .colorScheme
-                                              .secondary),
+                              widget.countable
+                                  ? "Price:${widget.item.price}"
+                                  : 'Placeholder',
+                              style: AppTextTheme.darkGray14bold,
                             ),
                           ),
                         ),
@@ -96,7 +91,7 @@ class _CartItemCardState extends State<CartItemCard> {
                           Padding(
                               padding: const EdgeInsets.only(),
                               child: ItemCountController(
-                                  value: 3,
+                                  initialValue: 3,
                                   iconSize: 14,
                                   onChange: (val) {
                                     widget.onValueChange(val);

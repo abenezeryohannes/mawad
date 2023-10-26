@@ -63,7 +63,7 @@ class _MainPageState extends State<MainPage> {
   Widget getPage(int index) {
     switch (index) {
       case 0:
-        return const HomePage();
+        return HomePage();
       case 1:
         return FavoritePage();
       default:

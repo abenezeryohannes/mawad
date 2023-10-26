@@ -28,32 +28,35 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: getPage(_bottomNavIndex),
-      bottomNavigationBar: AnimatedBottomNavigationBar.builder(
-          itemCount: iconList.length,
-          tabBuilder: (int index, bool isActive) {
-            return Center(
-              child: Image.asset(
-                isActive
-                    ? iconList[index].replaceFirst('unselected', 'selected')
-                    : iconList[index],
-                width: 24,
-                height: 24,
-                // color: isActive ? null : Theme.of(context).disabledColor,
-              ),
-            );
-          },
-          activeIndex: _bottomNavIndex,
-          gapLocation: GapLocation.none,
-          notchSmoothness: NotchSmoothness.verySmoothEdge,
-          leftCornerRadius: 32,
-          rightCornerRadius: 32,
-          onTap: (index) {
-            if (index == 2) {
-              Get.to(() => const CartsPage());
-              return;
-            }
-            setState(() => _bottomNavIndex = index);
-          }),
+      bottomNavigationBar: Directionality(
+        textDirection: TextDirection.ltr,
+        child: AnimatedBottomNavigationBar.builder(
+            itemCount: iconList.length,
+            tabBuilder: (int index, bool isActive) {
+              return Center(
+                child: Image.asset(
+                  isActive
+                      ? iconList[index].replaceFirst('unselected', 'selected')
+                      : iconList[index],
+                  width: 24,
+                  height: 24,
+                  // color: isActive ? null : Theme.of(context).disabledColor,
+                ),
+              );
+            },
+            activeIndex: _bottomNavIndex,
+            gapLocation: GapLocation.none,
+            notchSmoothness: NotchSmoothness.verySmoothEdge,
+            leftCornerRadius: 32,
+            rightCornerRadius: 32,
+            onTap: (index) {
+              if (index == 2) {
+                Get.to(() => CartsPage());
+                return;
+              }
+              setState(() => _bottomNavIndex = index);
+            }),
+      ),
     );
   }
 

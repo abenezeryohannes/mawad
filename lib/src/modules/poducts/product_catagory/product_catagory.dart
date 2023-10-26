@@ -4,16 +4,19 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:mawad/src/core/models/catagorie.dart';
 import 'package:mawad/src/modules/home/cards/home.tab.cards.dart';
+import 'package:mawad/src/modules/home/pages/change.country.bottom.sheet.dart';
+import 'package:mawad/src/modules/main_controller.dart';
 import 'package:mawad/src/modules/poducts/product/product_controller.dart';
-import 'package:mawad/src/modules/poducts/product_catagory/product_categories_controller.dart';
-import 'package:mawad/src/presentation/routes/app_routes.dart';
+import 'package:mawad/src/presentation/sharedwidgets/appbottomshet.dart';
 import 'package:mawad/src/presentation/sharedwidgets/big.text.button.dart';
 import 'package:mawad/src/presentation/sharedwidgets/scaffold/main_scaffold.dart';
 import 'package:mawad/src/presentation/theme/app_color.dart';
 import 'package:mawad/src/presentation/theme/textTheme.dart';
 
 class ProductCategory extends GetView<ProductController> {
-  const ProductCategory({super.key});
+  ProductCategory({super.key});
+
+  final MainController mainController = Get.find<MainController>();
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +31,21 @@ class ProductCategory extends GetView<ProductController> {
             SizedBox(
               height: 20.h,
             ),
-            buildCountryButton(() {}),
+            buildCountryButton(() {
+              showAppBottomSheet(
+                Obx(() {
+                  return ChangeCountryBottomSheet(
+                    countries: mainController.countries,
+                    initialSelectedCountry: mainController.countries.first,
+                    onCountrySelected: (selected) {
+                      controller.getProductByCountry(selected.id);
+                      controller.getCategoryByCountry(selected.id);
+                      mainController.selectedCountry(selected);
+                    },
+                  );
+                }),
+              );
+            }),
             SizedBox(
               height: 20.h,
             ),
@@ -53,8 +70,7 @@ class ProductCategory extends GetView<ProductController> {
   }
 
   Widget buildCategories(List<CategoryModel> catagories) {
-    final ProductCategoryController controller =
-        Get.put(ProductCategoryController());
+    final ProductController controller = Get.put(ProductController());
     return Expanded(
       child: Directionality(
         textDirection: TextDirection.ltr,
@@ -75,18 +91,19 @@ class ProductCategory extends GetView<ProductController> {
               return Expanded(
                 // padding: EdgeInsets.all(10.r),
                 child: Obx(() {
-                  bool isSelected = controller.selectedIndex == index;
+                  bool isSelected =
+                      controller.productCategoryController.selectedIndex ==
+                          index;
                   return SelectableCard(
                       backgroundColor: isSelected
                           ? AppColorTheme.yellow
                           : AppColorTheme.white,
                       isSelected: isSelected,
                       onTap: () {
-                        controller.selectedIndex = index;
+                        controller.productCategoryController.selectedIndex =
+                            index;
+                        controller.getProductByCategory(category.id);
                         Get.back();
-                        if (controller.selectedIndex == 0) {
-                          Get.toNamed(AppRoutes.productCategory);
-                        }
                       },
                       icon: Container(
                         child: SvgPicture.network(

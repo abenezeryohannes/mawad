@@ -5,7 +5,16 @@ import 'package:mawad/src/presentation/theme/app_color.dart';
 class PrimerCard extends StatelessWidget {
   final Widget child;
   final double height;
-  const PrimerCard({required this.child, this.height = 65, super.key});
+  final double radius;
+  final bool hasBorder;
+  final Color? borderColor;
+  const PrimerCard(
+      {this.radius = 6,
+      this.hasBorder = false,
+      this.borderColor,
+      required this.child,
+      this.height = 65,
+      super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +27,14 @@ class PrimerCard extends StatelessWidget {
       margin: EdgeInsets.symmetric(vertical: 5.w, horizontal: 15.w),
       decoration: BoxDecoration(
         color: AppColorTheme.white,
-        borderRadius: BorderRadius.circular(6.r),
+        borderRadius: BorderRadius.circular(radius.r),
+        border: hasBorder
+            ? Border.all(
+                color: borderColor ?? AppColorTheme.yellow,
+                width: 3.sp,
+                style: BorderStyle.solid,
+                strokeAlign: 2)
+            : const Border.fromBorderSide(BorderSide.none),
       ),
       child: child,
     );

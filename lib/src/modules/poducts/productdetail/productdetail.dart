@@ -4,11 +4,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:mawad/src/core/models/color_item.dart';
+import 'package:mawad/src/core/models/product_addon.dart';
+import 'package:mawad/src/core/models/products.dart';
 import 'package:mawad/src/modules/cart/widgets/item.count.controller.dart';
+import 'package:mawad/src/modules/poducts/addon_handler_factory.dart';
+import 'package:mawad/src/modules/poducts/product/product_controller.dart';
 import 'package:mawad/src/presentation/sharedwidgets/big.text.button.dart';
 import 'package:mawad/src/presentation/sharedwidgets/button/checkbox_button.dart';
-import 'package:mawad/src/presentation/sharedwidgets/button/chip_button.dart';
-import 'package:mawad/src/presentation/sharedwidgets/button/color_selector.dart';
+import 'package:mawad/src/presentation/sharedwidgets/button/favorite_button.dart';
 import 'package:mawad/src/presentation/sharedwidgets/cards/primery_cards.dart';
 import 'package:mawad/src/presentation/sharedwidgets/input/textarea_filed.dart';
 import 'package:mawad/src/presentation/sharedwidgets/scaffold/main_scaffold.dart';
@@ -28,14 +31,24 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   int currentSlide = 0;
   bool isClicked = false;
   ColorItem selectedColor = ColorItem(1, HexColor("#F9DDCB"));
+  final ProductController productController = Get.put(ProductController());
   final myController = TextEditingController();
-  List<ColorItem> colorItems = [
-    ColorItem(1, HexColor("#F9DDCB")),
-    ColorItem(2, HexColor("#DBD9C7")),
-    ColorItem(3, HexColor("#72462A")),
-    ColorItem(4, HexColor("#33302D")),
-    ColorItem(5, HexColor("#DBDAD9")),
-  ];
+
+  final productID = Get.arguments;
+  late List<ProductAddons> productAddons;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    productController.getProductDetail(productID);
+    productAddons = productController.productDetail.value?.productAddons ?? [];
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    productController.getProductDetail(productID);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,47 +65,63 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     return SingleChildScrollView(
       child: Container(
         margin: const EdgeInsets.only(top: 10),
-        child: Column(
-          children: [
-            buildImageCarousel(),
-            buildProductInfo(),
-            buildProductPriceAndDescription(),
-            buildCustomizationOptions(),
-            buildSpecialRequests(),
-            const SizedBox(
-              height: 10,
-            ),
-            buildButton(),
-          ],
-        ),
+        child: Obx(() {
+          return productController.productDetail.value != null
+              ? Column(
+                  children: [
+                    buildImageCarousel(),
+                    buildProductInfo(),
+                    buildProductPriceAndDescription(),
+                    buildCustomizationOptions(),
+                    ...productAddons.map((addon) {
+                      return AddonHandlerFactory.create(addon);
+                    }).toList(),
+                    buildSpecialRequests(),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    buildButton(),
+                  ],
+                )
+              : Container(
+                  alignment: Alignment.center,
+                  margin: EdgeInsets.only(top: Get.height * 0.4),
+                  child: const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+        }),
       ),
     );
   }
 
   Widget buildImageCarousel() {
-    return CarouselSlider(
-      options: CarouselOptions(
-        enlargeCenterPage: true, // Set to true to show one image at a time
-        aspectRatio: 16 / 3, // Adjust the aspect ratio as needed
-        viewportFraction: 1.0,
+    return Obx(() => CarouselSlider(
+          options: CarouselOptions(
+            enlargeCenterPage: true, // Set to true to show one image at a time
+            aspectRatio: 16 / 3, // Adjust the aspect ratio as needed
+            viewportFraction: 1.0,
 
-        enlargeStrategy: CenterPageEnlargeStrategy.zoom,
-        scrollPhysics: const ScrollPhysics(
-          parent: BouncingScrollPhysics(),
-        ),
-        height: 290.0.h,
-        onPageChanged: (index, reason) {
-          setState(() {
-            currentSlide = index;
-          });
-        },
-      ),
-      items: carouselList(),
-    );
+            enlargeStrategy: CenterPageEnlargeStrategy.zoom,
+            scrollPhysics: const ScrollPhysics(
+              parent: BouncingScrollPhysics(),
+            ),
+            height: 290.0.h,
+            onPageChanged: (index, reason) {
+              setState(() {
+                currentSlide = index;
+              });
+            },
+          ),
+          items:
+              productController.productDetail.value?.images.isNotEmpty == true
+                  ? carouselList(productController.productDetail.value!)
+                  : List.empty(),
+        ));
   }
 
-  List<Widget> carouselList() {
-    return [1, 2, 3].map((i) {
+  List<Widget> carouselList(Product product) {
+    return product.images.map((prod) {
       return Builder(
         builder: (BuildContext context) {
           return SizedBox(
@@ -105,8 +134,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(6.r),
                     child: Image.network(
-                      "https://picsum.photos/200/300",
-                      fit: BoxFit.fitWidth,
+                      prod.url,
+                      fit: BoxFit.fill,
                       repeat: ImageRepeat.noRepeat,
                     ),
                   ),
@@ -130,14 +159,14 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: List.generate(3, (index) {
+                      children: List.generate(product.images.length, (index) {
                         return Container(
                           width: index == 1 ? 42.0 : 24,
                           height: 4.0,
                           margin: const EdgeInsets.symmetric(horizontal: 5.0),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(2.0),
-                            color: i == index ? Colors.black : Colors.white,
+                            color: index == 1 ? Colors.black : Colors.white,
                           ),
                         );
                       }),
@@ -180,23 +209,24 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
-            child: const Text("غرفة نوم",
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black)),
-          ),
-          Card(
-            color: AppColorTheme.white,
-            child: Container(
-              padding: EdgeInsets.all(6.r),
-              child: Icon(
-                Icons.favorite,
-                color: Colors.red,
-                size: 24.r,
-              ),
+            child: Expanded(
+              child: Text(
+                  productController.productDetail.value!.nameEng.toString(),
+                  style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black)),
             ),
           ),
+          SizedBox(
+            width: 10.w,
+          ),
+          //Todo add favorite logic
+          FavoriteButton(
+            isFavorite:
+                false, // Initial state, can be dynamic based on some data
+            onTap: () {},
+          )
         ],
       ),
     );
@@ -212,7 +242,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             children: [
               Directionality(
                 textDirection: TextDirection.ltr,
-                child: Text(" 219.00 د.ك", style: AppTextTheme.dark18),
+                child: Text(
+                    productController.productDetail.value!.price.toString(),
+                    style: AppTextTheme.dark18),
               ),
               Directionality(
                 textDirection: TextDirection.ltr,
@@ -234,8 +266,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         ),
         Container(
           padding: const EdgeInsets.all(15),
-          child: const Text(
-            "غرفة نوم متكاملة فردية أو مزدوجة، تحتوي على سرير وعدد 2 طاولة سرير جانبية، وعدد 1 خزانة ملابس تتكون من 6 أبواب.",
+          child: Text(
+            productController.productDetail.value!.detailsEng.toString(),
             textAlign: TextAlign.start,
           ),
         ),
@@ -248,8 +280,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     return Column(
       children: [
         buildServiceRequestCheckbox(),
-        buildColorSelector(),
-        buildChipGroup(),
       ],
     );
   }
@@ -267,69 +297,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         isClicked: isClicked,
         checkedIconPath: IconRoutes.wood,
         iconPath: IconRoutes.checkbox,
-      ),
-    );
-  }
-
-  Widget buildColorSelector() {
-    return PrimerCard(
-      child: Directionality(
-        textDirection: TextDirection.ltr,
-        child: Container(
-          alignment: Alignment.centerLeft,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Directionality(
-                textDirection: TextDirection.ltr,
-                child: ColorSelector(
-                  selectedColor: selectedColor,
-                  colorItems: colorItems,
-                  onColorSelected: (colorItem) {
-                    setState(() {
-                      selectedColor = colorItem;
-                    });
-                  },
-                ),
-              ),
-              SizedBox(
-                width: 12.w,
-              ),
-              Directionality(
-                textDirection: TextDirection.ltr,
-                child: Text(
-                  "اللون:",
-                  style: AppTextTheme.darkblueTitle16,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget buildChipGroup() {
-    return Directionality(
-      textDirection: TextDirection.ltr,
-      child: PrimerCard(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            const Directionality(
-                textDirection: TextDirection.ltr, child: ChipGroup()),
-            SizedBox(
-              width: 12.w,
-            ),
-            Directionality(
-              textDirection: TextDirection.rtl,
-              child: Text(
-                "اللون:",
-                style: AppTextTheme.darkblueTitle16,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -386,48 +353,4 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     );
   }
   // Implement other helper functions as needed.
-}
-
-class ChipGroup extends StatefulWidget {
-  const ChipGroup({super.key});
-
-  @override
-  _ChipGroupState createState() => _ChipGroupState();
-}
-
-class _ChipGroupState extends State<ChipGroup> {
-  int selectedChipIndex = 0; // Initialize to -1 for no selection
-
-  void handleChipSelection(int index) {
-    setState(() {
-      selectedChipIndex = index;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        ChipButton(
-          label: "غرفة مزدوجة",
-          isSelected: selectedChipIndex == 0,
-          onPressed: () {
-            handleChipSelection(0);
-          },
-        ),
-        SizedBox(
-          width: 10.w,
-        ),
-        ChipButton(
-          label: "غرفة أحادية",
-          isSelected: selectedChipIndex == 1,
-          onPressed: () {
-            handleChipSelection(1);
-          },
-        ),
-        // Add more ChipButtons as needed
-      ],
-    );
-  }
 }

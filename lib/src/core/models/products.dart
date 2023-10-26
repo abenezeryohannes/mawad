@@ -11,7 +11,7 @@ class Product {
   final String? label;
   final List<CategoryModel> categories;
   final bool showStock;
-  final List<ProductAddon> productAddons;
+  final List<ProductAddons> productAddons;
   final String nameAr;
   final String nameEng;
   final String detailsAr;
@@ -72,20 +72,20 @@ class Product {
           .toList(),
       showStock: json['showStock'],
       productAddons: (json['productAddons'] as List<dynamic>? ?? [])
-          .map((addon) => ProductAddon.fromJson(addon))
+          .map((addon) => ProductAddons.fromJson(addon))
           .toList(),
       nameAr: json['nameAr'] ?? '',
       nameEng: json['nameEng'] ?? '',
       detailsAr: json['detailsAr'] ?? '',
       detailsEng: json['detailsEng'] ?? '',
-      price: json['price'].toDouble(),
+      price: (json['price'] ?? 0).toDouble(),
       stock: json['stock'],
-      tax: json['tax'].toDouble(),
+      tax: (json['tax'] ?? 0).toDouble(),
       images: (json['images'] as List<dynamic>? ?? [])
           .map((image) => ImageModel.fromJson(image))
           .toList(),
       itemCode: json['itemCode'],
-      oldPrice: json['oldPrice'].toDouble(),
+      oldPrice: (json['oldPrice'] ?? 0).toDouble(),
       additionalInformationAr: json['additionalInformationAr'] ?? '',
       additionalInformationEng: json['additionalInformationEng'] ?? '',
       allowStock: json['allowStock'],

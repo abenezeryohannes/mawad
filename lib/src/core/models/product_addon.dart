@@ -1,4 +1,4 @@
-class ProductAddon {
+class ProductAddons {
   final List<Modifier> modifiers;
   final String id;
   final int index;
@@ -14,7 +14,7 @@ class ProductAddon {
   final bool showColors;
   final bool expanded;
 
-  ProductAddon({
+  ProductAddons({
     required this.modifiers,
     required this.id,
     required this.index,
@@ -31,8 +31,8 @@ class ProductAddon {
     required this.expanded,
   });
 
-  factory ProductAddon.fromJson(Map<String, dynamic> json) {
-    return ProductAddon(
+  factory ProductAddons.fromJson(Map<String, dynamic> json) {
+    return ProductAddons(
       modifiers: (json['modifiers'] as List)
           .map((modifier) => Modifier.fromJson(modifier))
           .toList(),
@@ -97,6 +97,26 @@ class Modifier {
       stock: json['stock'],
       productAddon: ProductAddon.fromJson(json['productAddon']),
       modifierTags: json['modifierTags'],
+    );
+  }
+}
+
+class ProductAddon {
+  final String id;
+  final String nameAr;
+  final String nameEng;
+
+  ProductAddon({
+    required this.id,
+    required this.nameAr,
+    required this.nameEng,
+  });
+
+  factory ProductAddon.fromJson(Map<String, dynamic> json) {
+    return ProductAddon(
+      id: json['id'] as String,
+      nameAr: json['nameAr'] as String,
+      nameEng: json['nameEng'] as String,
     );
   }
 }

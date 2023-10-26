@@ -9,6 +9,7 @@ class AppColorTheme {
   static final lightGray2 = HexColor("#EAECEF");
   static final white = HexColor("#FFFFFF");
   static final yellow = HexColor('#F4CF47');
+  static final bg = HexColor('#fafafa');
   static final dark = HexColor("#2E2E2E");
   static final lightGray = HexColor("#f4f4f4");
   static final lightGray3 = HexColor("#e4e4e4");

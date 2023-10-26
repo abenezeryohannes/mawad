@@ -6,4 +6,6 @@ class AppRoutes {
   static const productCategory = "/productCategory";
   static const favproduct = '/favproduct';
   static const orderDetail = '/orderDetail';
+  static const cart = '/cart';
+  static const checkout = '/checkout';
 }

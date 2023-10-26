@@ -16,6 +16,7 @@ class RegisterWithPhonePage extends GetView<RegisterWithPhoneController> {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
     return MainScaffold(
+        backgroundColor: AppColorTheme.white,
         showBackButton: true,
         body: Column(
           children: [
@@ -44,11 +45,12 @@ class RegisterWithPhonePage extends GetView<RegisterWithPhoneController> {
             ),
             Form(
               key: formKey,
-              child: Container(
+              child: Expanded(
                 child: Column(
-                  // mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Container(
+                      width: Get.width,
                       padding: EdgeInsets.symmetric(
                           vertical: 57.38.h, horizontal: 33.12.w),
                       child: CustomPhoneInput(
@@ -68,16 +70,23 @@ class RegisterWithPhonePage extends GetView<RegisterWithPhoneController> {
                         },
                       ),
                     ),
-                    AppButton(
-                      color: AppColorTheme.yellow,
-                      text: 'إرسال',
-                      onPressed: () {
-                        Get.toNamed('/otp');
-                        // if (formKey.currentState!.validate()) {
-                        //   formKey.currentState!.save();
-                        // }
-                      },
-                    )
+                    SizedBox(
+                      height: 153.h,
+                    ),
+                    SizedBox(
+                      width: Get.width,
+                      child: AppButton(
+                        radius: 0,
+                        color: AppColorTheme.yellow,
+                        text: 'إرسال',
+                        onPressed: () {
+                          Get.toNamed('/otp');
+                          // if (formKey.currentState!.validate()) {
+                          //   formKey.currentState!.save();
+                          // }
+                        },
+                      ),
+                    ),
                   ],
                 ),
               ),

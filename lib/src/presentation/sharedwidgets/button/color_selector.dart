@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mawad/src/core/models/color_item.dart';
 import 'package:mawad/src/presentation/theme/app_color.dart';
 
 class ColorSelector extends StatefulWidget {
-  final List<ColorItem> colorItems;
-  final ValueChanged<ColorItem> onColorSelected;
-  late ColorItem selectedColor;
+  final List<dynamic> colorItems;
+  final ValueChanged<dynamic> onColorSelected;
+  late dynamic selectedColor;
 
   ColorSelector(
       {super.key,

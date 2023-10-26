@@ -22,7 +22,7 @@ class _FlagCardState extends State<FlagCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onDoubleTap: () {
+      onTap: () {
         widget.onFlagSelected(widget.country);
       },
       child: Column(

@@ -29,6 +29,12 @@ class AppTextTheme {
         color: AppColorTheme.gray,
       );
 
+  static TextStyle get lightGray17 => TextStyle(
+        fontSize: 17.sp,
+        fontWeight: FontWeight.w400,
+        color: AppColorTheme.gray,
+      );
+
   static TextStyle get darkblueTitle17 => TextStyle(
         fontSize: 17.sp,
         fontWeight: FontWeight.w900,
@@ -49,6 +55,11 @@ class AppTextTheme {
         fontSize: 14.sp,
         fontWeight: FontWeight.w400,
         color: AppColorTheme.brown,
+      );
+  static TextStyle get yellow14 => TextStyle(
+        fontSize: 14.sp,
+        fontWeight: FontWeight.w400,
+        color: AppColorTheme.yellow,
       );
   static TextStyle get brown12 => TextStyle(
         fontSize: 12.sp,

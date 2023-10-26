@@ -6,8 +6,8 @@ import 'package:mawad/src/modules/poducts/product/product_controller.dart';
 class MainBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<MainController>(() => MainController());
     Get.lazyPut<FavoritesController>(() => FavoritesController());
+    Get.lazyPut<MainController>(() => MainController());
     Get.lazyPut<ProductController>(() => ProductController());
   }
 }

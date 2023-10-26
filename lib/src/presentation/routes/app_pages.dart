@@ -2,6 +2,10 @@ import 'package:get/get.dart';
 import 'package:mawad/src/modules/auth/otp/otp_page.dart';
 import 'package:mawad/src/modules/auth/register/register_with_phone_binding.dart';
 import 'package:mawad/src/modules/auth/register/register_with_phone_page.dart';
+import 'package:mawad/src/modules/cart/carts/cart_binding.dart';
+import 'package:mawad/src/modules/cart/checkout/checkout_binding.dart';
+import 'package:mawad/src/modules/cart/checkout/checkout_page.dart';
+import 'package:mawad/src/modules/cart/page/carts.page.dart';
 import 'package:mawad/src/modules/favorite/favorite_product_binding.dart';
 import 'package:mawad/src/modules/favorite/pages/favorite.page.dart';
 import 'package:mawad/src/modules/poducts/product_catagory/product_catagory.dart';
@@ -12,7 +16,12 @@ import 'package:mawad/src/modules/profile/order/orderdetail/order_detail.dart';
 import 'package:mawad/src/presentation/routes/app_routes.dart';
 
 class AppPages {
-  static final List<GetPage> pages = [...authpage, ...mainpage, ...profile];
+  static final List<GetPage> pages = [
+    ...authpage,
+    ...mainpage,
+    ...profile,
+    ...cart
+  ];
 
   static final authpage = [
     GetPage(
@@ -28,6 +37,11 @@ class AppPages {
     GetPage(
       name: AppRoutes.main,
       page: () => const MainPage(),
+      bindings: [
+        ProductCategoriesBinding(),
+        FavoriteProductBinding(),
+        CartBinding(),
+      ],
     ),
     GetPage(
       name: AppRoutes.productDetail,
@@ -35,7 +49,7 @@ class AppPages {
     ),
     GetPage(
         name: AppRoutes.productCategory,
-        page: () => const ProductCategory(),
+        page: () => ProductCategory(),
         binding: ProductCategoriesBinding()),
     GetPage(
         name: AppRoutes.favproduct,
@@ -47,6 +61,18 @@ class AppPages {
     GetPage(
       name: AppRoutes.orderDetail,
       page: () => const OrderDetail(),
+    ),
+  ];
+  static final cart = [
+    GetPage(
+      name: AppRoutes.checkout,
+      page: () => const CheckoutPage(),
+      binding: CheckoutBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.cart,
+      page: () => CartsPage(),
+      binding: CartBinding(),
     ),
   ];
 }

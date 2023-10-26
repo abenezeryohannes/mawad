@@ -46,7 +46,7 @@
 		</data>
 		<key>Frameworks/App.framework/App</key>
 		<data>
-		/HalNFaVROzUrqN4J4RPWHUjQ5c=
+		tJEhD+Mv0U+9GMbhKwHNWfZKvKY=
 		</data>
 		<key>Frameworks/App.framework/Info.plist</key>
 		<data>
@@ -54,7 +54,7 @@
 		</data>
 		<key>Frameworks/App.framework/_CodeSignature/CodeResources</key>
 		<data>
-		JVQY0oIBTOYJjruW3hPtkNsrrzc=
+		Wcei5gifWeuDBNIlkJi6j8sFJlI=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.bin</key>
 		<data>
@@ -70,7 +70,7 @@
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/NOTICES.Z</key>
 		<data>
-		PGPPiRc3o+aYCMkJgbChce6MSTM=
+		RPzb3lJMeM4i60+/RnWZXXM0XWI=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/assets/font/FFShamelFamily-SansOneBold.ttf</key>
 		<data>
@@ -334,7 +334,7 @@
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/kernel_blob.bin</key>
 		<data>
-		fcoNjuLJ2YYgl3OZMTES3/pLc6U=
+		GYo0F4dV2YbZi38rZmIYCJ01p4I=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
 		<data>
@@ -532,6 +532,18 @@
 		<data>
 		TmFKWuBh5vujxqmIAd/R/58BljA=
 		</data>
+		<key>Frameworks/smart_auth.framework/Info.plist</key>
+		<data>
+		rG6Em3/CyEStHG6c11RnuN6YAXw=
+		</data>
+		<key>Frameworks/smart_auth.framework/_CodeSignature/CodeResources</key>
+		<data>
+		zMbfUnzcD8yHwZhYibxvwugXwdo=
+		</data>
+		<key>Frameworks/smart_auth.framework/smart_auth</key>
+		<data>
+		r4d47Rg9rCIdZyQlWJG0MapKXSQ=
+		</data>
 		<key>Frameworks/url_launcher_ios.framework/Info.plist</key>
 		<data>
 		oF/E1l8OKrijGxkLK3VEoXSC77I=
@@ -629,7 +641,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			mOj+xbxsAtiHHWGmjbT8Xi8XgFUPxaTPhfuZnFNSi3w=
+			DXXd0UUkmzxQKbX2Ho5Ap9Sy3F2XsXU65afJVrcPj0I=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/Info.plist</key>
@@ -643,7 +655,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			A0RLrIB7I67wTafqmnPYeR5cwfKbPoc/dtGV4IyQxYQ=
+			pFQUnwqBuhxwX++sUxGGm+YGKhvBqmR9xnOY7YcynJk=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.bin</key>
@@ -671,7 +683,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			OssAP3tDJ04xuzKTT7lkNRpBN0sB2/uoTjSdGwB7XTg=
+			LzpwNFODs02JKkKBgXbYcjJjVY1fj87/vsr/mwK5wOM=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/assets/font/FFShamelFamily-SansOneBold.ttf</key>
@@ -1133,7 +1145,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			e8dfYs9EPfMrdC7MWk9xg70XkSvdJIpz4LtrVPDp+e4=
+			d5xJWOGsi73T/FFTVQv0TaXLOyDpCmhPJ6x7kQhSep8=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
@@ -1477,6 +1489,27 @@
 			<key>hash2</key>
 			<data>
 			XYE5K08t03j+JhFEe7OwFQeOm4Gx4vy3sc5I5k++Q10=
+			</data>
+		</dict>
+		<key>Frameworks/smart_auth.framework/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			kvm/Nh9J/osWjstoEdcgVVPFC6/m/LAbR6p/OuHnTX0=
+			</data>
+		</dict>
+		<key>Frameworks/smart_auth.framework/_CodeSignature/CodeResources</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			cB/vYQoMtGnOhimvIbRI5HMj1oaICMPhHLdjg13/OQg=
+			</data>
+		</dict>
+		<key>Frameworks/smart_auth.framework/smart_auth</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			ip2B8IYB0yvnryANa6rzjxrR1rhzMZoBL2ryrSTDUX4=
 			</data>
 		</dict>
 		<key>Frameworks/url_launcher_ios.framework/Info.plist</key>

@@ -78,14 +78,39 @@ class _CustomPhoneInputState extends State<CustomPhoneInput> {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        CountryDropdown(
-          selectedCountry: selectedCountry,
-          onCountrySelected: (CountryCode? country) {
-            setState(() {
-              selectedCountry = country;
-            });
-          },
-        ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(width: 12.sp),
+            Container(
+              color: AppColorTheme.lightGray2,
+              height: 55.h,
+              width: 2,
+            ),
+            SizedBox(width: 12.sp),
+            const Icon(Icons.arrow_drop_down),
+            Text(selectedCountry!.dialCode,
+                style: AppTextTheme.darkblueTitle17),
+            SizedBox(width: 12.sp),
+            CircleAvatar(
+              radius: 20.r,
+              backgroundColor: AppColorTheme.darkGray,
+              child: Text(
+                selectedCountry!.flag,
+                style: AppTextTheme.darkblueTitle17,
+              ),
+            ),
+            SizedBox(width: 12.sp),
+          ],
+        )
+        // CountryDropdown(
+        //   selectedCountry: selectedCountry,
+        //   onCountrySelected: (CountryCode? country) {
+        //     setState(() {
+        //       // selectedCountry = country;
+        //     });
+        //   },
+        // ),
       ],
     );
   }

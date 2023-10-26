@@ -27,7 +27,7 @@ class FavoriteProductsList extends StatelessWidget {
               child: ProductCard(
                 product: product,
                 onTap: () {
-                  Get.toNamed(AppRoutes.productDetail, arguments: product);
+                  Get.toNamed(AppRoutes.productDetail, arguments: product.id);
                 },
                 onFavoriteChanged: (isFav) {
                   favoritesController.toggleFavorite(product);

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:mawad/src/presentation/routes/app_routes.dart';
 import 'package:mawad/src/presentation/sharedwidgets/button/app_button.dart';
 import 'package:mawad/src/presentation/theme/app_color.dart';
 import 'package:mawad/src/presentation/theme/textTheme.dart';
@@ -41,7 +39,7 @@ class ImageBanner extends StatelessWidget {
               text: "شاهد المزيد",
               textStyle: AppTextTheme.brown12,
               onPressed: () {
-                Get.toNamed(AppRoutes.register);
+                onButtonPressed!();
               },
               color: AppColorTheme.white,
             ),

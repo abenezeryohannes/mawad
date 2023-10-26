@@ -6,7 +6,7 @@ import 'package:http_parser/http_parser.dart';
 import 'package:mime/mime.dart';
 
 class ApiService {
-  final String _baseUrl = 'http://52.59.217.174:8080/api/v1';
+  final String _baseUrl = 'http://ordermawad.com/api/v1';
   String? _token;
 
   ApiService._internal();

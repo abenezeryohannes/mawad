@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:mawad/src/presentation/sharedwidgets/button/app_button.dart';
+import 'package:mawad/src/modules/auth/register/register_with_phone_controller.dart';
+import 'package:mawad/src/presentation/sharedwidgets/big.text.button.dart';
 import 'package:mawad/src/presentation/sharedwidgets/input/otp_input.dart';
 import 'package:mawad/src/presentation/sharedwidgets/scaffold/main_scaffold.dart';
 import 'package:mawad/src/presentation/theme/app_color.dart';
 import 'package:mawad/src/presentation/theme/textTheme.dart';
 
-class OtpPage extends StatelessWidget {
+class OtpPage extends GetView<RegisterWithPhoneController> {
   const OtpPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final argument = Get.arguments;
+
     return MainScaffold(
         backgroundColor: AppColorTheme.white,
         showBackButton: true,
@@ -32,7 +35,7 @@ class OtpPage extends StatelessWidget {
                   style: AppTextTheme.graysubtitle15,
                 ),
                 Text(
-                  "On number 98998999",
+                  "On number $argument",
                   style: AppTextTheme.graysubtitle15,
                 ),
                 SizedBox(
@@ -49,7 +52,7 @@ class OtpPage extends StatelessWidget {
                     return null;
                   },
                   onCompleted: (value) {
-                    print('Your input is $value.');
+                    controller.OTP.value = int.parse(value);
                   },
                 ),
                 SizedBox(
@@ -78,14 +81,23 @@ class OtpPage extends StatelessWidget {
               ],
             ),
             SizedBox(
-              width: Get.width,
-              child: AppButton(
-                radius: 0,
-                text: "Submit",
-                onPressed: () {},
-                color: AppColorTheme.yellow,
-              ),
-            )
+                width: Get.width,
+                child: Obx(() {
+                  return BigTextButton(
+                    isLoading: controller.isOtpLoading.value,
+                    text: 'تأكيد',
+                    fontWight: FontWeight.bold,
+                    cornerRadius: 0.r,
+                    elevation: 0,
+                    backgroudColor: AppColorTheme.yellow,
+                    borderColor: AppColorTheme.yellow,
+                    textColor: AppColorTheme.brown,
+                    padding: EdgeInsets.only(top: 15.h, bottom: 15.h),
+                    onClick: () {
+                      controller.validateOTP(argument);
+                    },
+                  );
+                }))
           ],
         ));
   }

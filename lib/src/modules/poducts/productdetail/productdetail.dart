@@ -3,18 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:mawad/src/core/models/product_addon.dart';
+import 'package:mawad/src/core/models/cart_items.dart';
 import 'package:mawad/src/core/models/products.dart';
+import 'package:mawad/src/modules/auth/register/register_with_phone_controller.dart';
 import 'package:mawad/src/modules/cart/carts/cart_controller.dart';
 import 'package:mawad/src/modules/cart/widgets/item.count.controller.dart';
+import 'package:mawad/src/modules/favorite/fevorite_controller.dart';
 import 'package:mawad/src/modules/poducts/addon_handler_factory.dart';
 import 'package:mawad/src/modules/poducts/product/product_controller.dart';
+import 'package:mawad/src/modules/poducts/productdetail/widgets/Input_handler.dart';
+import 'package:mawad/src/presentation/routes/app_routes.dart';
 import 'package:mawad/src/presentation/sharedwidgets/big.text.button.dart';
 import 'package:mawad/src/presentation/sharedwidgets/button/favorite_button.dart';
 import 'package:mawad/src/presentation/sharedwidgets/scaffold/main_scaffold.dart';
 import 'package:mawad/src/presentation/theme/app_color.dart';
 import 'package:mawad/src/presentation/theme/textTheme.dart';
-import 'package:mawad/src/utils/helpers/icon_routes.dart';
 
 class ProductDetailPage extends StatefulWidget {
   const ProductDetailPage({super.key});
@@ -28,21 +31,19 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   final ProductController productController = Get.find<ProductController>();
   final CartController cartController = Get.find<CartController>();
+  final FavoritesController favoritesController =
+      Get.find<FavoritesController>();
+  final RegisterWithPhoneController authController =
+      Get.put(RegisterWithPhoneController());
   final myController = TextEditingController();
-
+  int initialQuantity = 1;
   final productID = Get.arguments;
-  late List<ProductAddons> productAddons;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    productController.getProductDetail(productID);
-    productAddons = productController.productDetail.value?.productAddons ?? [];
-  }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+    // Start loading the product details.
     productController.getProductDetail(productID);
   }
 
@@ -62,38 +63,45 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       child: Container(
         margin: const EdgeInsets.only(top: 10),
         child: Obx(() {
-          return productController.isLeadingDetail.value
-              ? Container(
-                  alignment: Alignment.center,
-                  margin: EdgeInsets.only(top: Get.height * 0.4),
-                  child: const Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                )
-              : productController.productDetail.value != null
-                  ? Container(
-                      child: Column(
-                      children: [
-                        buildImageCarousel(),
-                        buildProductInfo(),
-                        buildProductPriceAndDescription(),
-                        buildDescriptions(),
-                        ...productAddons.map((addon) {
-                          return AddonHandlerFactory.create(addon);
-                        }).toList(),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        buildButton(),
-                      ],
-                    ))
-                  : Container(
-                      alignment: Alignment.center,
-                      margin: EdgeInsets.only(top: Get.height * 0.4),
-                      child: const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    );
+          if (productController.isLeadingDetail.value) {
+            // Show loading indicator while fetching data
+            return Container(
+              alignment: Alignment.center,
+              margin: EdgeInsets.only(top: Get.height * 0.4),
+              child: const Center(child: CircularProgressIndicator()),
+            );
+          } else if (productController.productDetail.value != null) {
+            // Data is fetched and not null, display the product details
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  buildImageCarousel(),
+                  buildProductInfo(),
+                  buildProductPriceAndDescription(),
+                  buildDescriptions(),
+                  ...productController.productDetail.value!.productAddons
+                      .map((addon) => AddonHandlerFactory.create(addon))
+                      .toList(),
+                  const SizedBox(height: 10),
+                  Visibility(
+                      visible: productController
+                          .productDetail.value!.allowInstructions,
+                      child: const InputAddonHandler()),
+                  const SizedBox(height: 10),
+                  buildButton(),
+                ],
+              ),
+            );
+          } else {
+            // Data is not yet fetched and no error, can show a placeholder or empty state
+            return Container(
+              alignment: Alignment.center,
+              margin: EdgeInsets.only(top: Get.height * 0.4),
+              child: const Center(
+                child: Text('Product details are not available at the moment.'),
+              ),
+            );
+          }
         }),
       ),
     );
@@ -149,9 +157,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      AdditionalProductData("Wood", IconRoutes.wood),
-                      AdditionalProductData("45 cm", IconRoutes.arrowTop),
-                      AdditionalProductData("30 cm", IconRoutes.arrowLeft),
+                      ...productController.productDetail.value!.tags.map(
+                        (tg) => AdditionalProductData(tg.title, tg.url),
+                      )
                     ],
                   ),
                 ),
@@ -197,7 +205,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       child: Column(
         children: [
           Container(
-            child: SvgPicture.asset(dataIcon),
+            child: SvgPicture.network(
+              dataIcon,
+              width: 20.w,
+              height: 20.h,
+            ),
           ),
           Directionality(
             textDirection: TextDirection.ltr,
@@ -229,9 +241,17 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           ),
           //Todo add favorite logic
           FavoriteButton(
-            isFavorite:
-                false, // Initial state, can be dynamic based on some data
-            onTap: () {},
+            isFavorite: favoritesController.isFavorite(productController
+                .productDetail
+                .value!), // Initial state, can be dynamic based on some data
+            onTap: () async {
+              if (await authController.isAuth()) {
+                favoritesController
+                    .toggleFavorite(productController.productDetail.value!);
+              } else {
+                Get.toNamed(AppRoutes.register);
+              }
+            },
           )
         ],
       ),
@@ -249,7 +269,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               Directionality(
                 textDirection: TextDirection.ltr,
                 child: Text(
-                    productController.productDetail.value!.price.toString(),
+                    (productController.productDetail.value!.price *
+                            initialQuantity)
+                        .toString(),
                     style: AppTextTheme.dark18),
               ),
               Directionality(
@@ -257,16 +279,19 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(),
                   child: ItemCountController(
-                    initialValue: 1,
+                    maxCount: productController.productDetail.value!.stock,
+                    initialValue: initialQuantity,
                     onChange: (value) {
                       if (value == 0) {
                         value = 1;
                       }
-                      print(value);
+                      setState(() {
+                        initialQuantity = value;
+                      });
                     },
                     backgroundColor: AppColorTheme.lightGray3,
                     iconColor: Colors.white,
-                    canAdd: true,
+                    canAdd: productController.productDetail.value!.allowStock,
                     canSubtract: true,
                   ),
                 ),
@@ -306,7 +331,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           horizontalMargin:
               const EdgeInsets.only(left: 30, right: 30, bottom: 10),
           onClick: () {
-            cartController.addItem(productController.productDetail.value!);
+            cartController.addItem(CartItem(
+                product: productController.productDetail.value!,
+                quantity: initialQuantity));
           },
         );
       }),

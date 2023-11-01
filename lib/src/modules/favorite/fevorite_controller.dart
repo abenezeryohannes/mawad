@@ -1,35 +1,54 @@
-import 'dart:developer';
-
 import 'package:get/get.dart';
 import 'package:mawad/src/core/models/products.dart';
-import 'package:mawad/src/data/services/favorites_service.dart';
+import 'package:mawad/src/data/repositories/favorite_repo.dart';
 
 class FavoritesController extends GetxController {
-  final FavoritesService _service = FavoritesService();
+  final FavoritesRepository _repository = FavoritesRepository();
   final RxList<Product> favorites = <Product>[].obs;
 
   @override
   void onInit() {
     super.onInit();
     loadFavorites();
-    log(favorites.toString());
   }
 
   void loadFavorites() async {
-    favorites.addAll(await _service.getFavorites()); // Changed method name
+    try {
+      var fetchedFavorites = await _repository.getFavorites();
+      favorites.assignAll(fetchedFavorites);
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to load favorites: $e');
+    }
+  }
+
+  Future<void> refreshFavorites() async {
+    try {
+      var updatedFavorites = await _repository.getFavorites();
+      favorites.assignAll(updatedFavorites);
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to refresh favorites: $e');
+    }
   }
 
   bool isFavorite(Product product) {
-    return favorites.contains(product);
+    return favorites.any((favorite) => favorite.id == product.id);
   }
 
   void toggleFavorite(Product product) async {
-    if (isFavorite(product)) {
-      await _service.removeFavorite(product);
-      favorites.remove(product);
+    bool isCurrentlyFavorited = isFavorite(product);
+    if (isCurrentlyFavorited) {
+      favorites.removeWhere((item) => item.id == product.id);
+      bool success = await _repository.removeFavorite(product.id);
+      if (!success) {
+        favorites.add(product);
+      }
     } else {
-      await _service.addFavorite(product);
       favorites.add(product);
+      bool success = await _repository.addFavorite(product.id);
+      if (!success) {
+        favorites.removeWhere((item) => item.id == product.id);
+      }
     }
+    // No need to call update() because favorites is a RxList which is reactive
   }
 }

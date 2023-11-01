@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:mawad/src/core/constants/contants.dart';
 import 'package:mawad/src/core/models/catagorie.dart';
 import 'package:mawad/src/modules/home/cards/home.tab.cards.dart';
 import 'package:mawad/src/modules/home/pages/change.country.bottom.sheet.dart';
@@ -89,25 +90,31 @@ class ProductCategory extends GetView<ProductController> {
 
                 return Expanded(
                     child: SelectableCard(
-                        backgroundColor: catController.isSelected
-                            ? AppColorTheme.yellow
-                            : AppColorTheme.white,
-                        isSelected: catController.selectedIndex == index,
-                        onTap: () {
-                          catController.selectedIndex = index;
+                  backgroundColor: catController.isSelected
+                      ? AppColorTheme.yellow
+                      : AppColorTheme.white,
+                  isSelected: catController.selectedIndex == index,
+                  onTap: () {
+                    catController.selectedIndex = index;
 
-                          controller.getProductByCategory(category.id);
-                          Get.back();
-                        },
-                        icon: Container(
-                          child: SvgPicture.network(
-                            category.image.url,
-                            color: catController.isSelected
-                                ? AppColorTheme.white
-                                : AppColorTheme.gray,
-                          ),
+                    controller.getProductByCategory(category.id);
+                    Get.back();
+                  },
+                  label: category.nameEng,
+                  icon: index == 0
+                      ? SvgPicture.asset(
+                          category.image.url,
+                          color: catController.isSelected
+                              ? AppColorTheme.white
+                              : AppColorTheme.gray,
+                        )
+                      : SvgPicture.network(
+                          category.image.url,
+                          color: catController.isSelected
+                              ? AppColorTheme.white
+                              : AppColorTheme.gray,
                         ),
-                        label: category.nameEng));
+                ));
               },
             );
           }),
@@ -131,12 +138,20 @@ class ProductCategory extends GetView<ProductController> {
                 SizedBox(
                   width: 10.w,
                 ),
-                ClipRRect(
-                    borderRadius: const BorderRadius.all(Radius.circular(100)),
-                    child: Image.asset(
-                      'assets/icon/flag.png',
-                      width: 33.r,
-                    ))
+                Obx(() {
+                  return CircleAvatar(
+                    backgroundColor: Colors.transparent,
+                    radius: 22.r,
+                    child: ClipOval(
+                      child: SvgPicture.network(
+                        '${AppConstants.IMAGER_URL}/${controller.selectedCountry.value!.attachment.id}',
+                        fit: BoxFit.cover,
+                        width: 30,
+                        height: 30,
+                      ),
+                    ),
+                  );
+                }),
               ],
             ),
           ),

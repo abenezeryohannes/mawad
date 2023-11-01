@@ -1,3 +1,4 @@
+import 'package:mawad/src/core/constants/contants.dart';
 import 'package:mawad/src/data/services/api_serives.dart';
 import 'package:mawad/src/data/services/localstorage_service.dart';
 
@@ -12,31 +13,30 @@ class AuthTokenService {
 
   Future<void> initialize() async {
     await _localStorage.initialize();
-    final token = _localStorage.getString('auth_token');
+    final token = _localStorage.getString(AppConstants.ACCESS_TOKEN);
     if (token != null) {
       _apiService.setToken(token);
-    } else {
-      await login(email: "123456789", password: "123456789");
-    }
-  }
-
-  Future<void> login({required String email, required String password}) async {
-    final response = await _apiService
-        .postRequest('/auth/sign-in', {"email": email, "password": password});
-    if (response.containsKey('accessToken')) {
-      await saveToken(response['accessToken']);
-      _apiService.setToken(response['accessToken']);
-    }
+    } else {}
   }
 
   Future<void> saveToken(String token) async {
-    await _localStorage.saveString('auth_token', token);
+    await _localStorage.saveString(AppConstants.ACCESS_TOKEN, token);
   }
 
-  Future<void> refreshToken() async {}
+  Future<bool> hasToken() async {
+    final token = _localStorage.getString(AppConstants.ACCESS_TOKEN);
+    return token != null && token.isNotEmpty;
+  }
+
+  Future<void> refreshToken() async {
+    final token = _localStorage.getString(AppConstants.ACCESS_TOKEN);
+    if (token != null) {
+      _apiService.setToken(token);
+    }
+  }
 
   Future<void> logout() async {
     _apiService.clearToken();
-    await _localStorage.delete('auth_token');
+    await _localStorage.delete(AppConstants.ACCESS_TOKEN);
   }
 }

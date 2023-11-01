@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 class ItemCountController extends StatefulWidget {
   final int initialValue;
+  final int minCount;
+  final int maxCount;
   final Function(int val) onChange;
   final bool canAdd;
   final bool canSubtract;
@@ -14,6 +16,8 @@ class ItemCountController extends StatefulWidget {
   const ItemCountController({
     Key? key,
     this.initialValue = 0,
+    this.minCount = 1,
+    this.maxCount = 10,
     required this.onChange,
     this.canAdd = true,
     this.canSubtract = true,
@@ -37,6 +41,24 @@ class _ItemCountControllerState extends State<ItemCountController> {
     _value = widget.initialValue;
   }
 
+  void _incrementValue() {
+    if (_value < widget.maxCount) {
+      setState(() {
+        _value += 1;
+        widget.onChange(_value);
+      });
+    }
+  }
+
+  void _decrementValue() {
+    if (_value > widget.minCount) {
+      setState(() {
+        _value -= 1;
+        widget.onChange(_value);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -50,42 +72,18 @@ class _ItemCountControllerState extends State<ItemCountController> {
         mainAxisSize: MainAxisSize.min,
         children: [
           _button(
-            onClick: widget.canSubtract
-                ? () {
-                    setState(() {
-                      if (_value <= 1) return;
-                      _value -= 1;
-                      widget.onChange(_value);
-                    });
-                  }
-                : null,
+            onClick: widget.canSubtract ? _decrementValue : null,
             color: widget.iconColor,
-            icon: Icon(
-              Icons.remove,
-              size: widget.iconSize,
-            ),
+            icon: Icon(Icons.remove, size: widget.iconSize),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Text(
-              '$_value',
-              style: TextStyle(fontSize: widget.fontSize),
-            ),
+            child: Text('$_value', style: TextStyle(fontSize: widget.fontSize)),
           ),
           _button(
-            onClick: widget.canAdd
-                ? () {
-                    setState(() {
-                      _value += 1;
-                      widget.onChange(_value);
-                    });
-                  }
-                : null,
+            onClick: widget.canAdd ? _incrementValue : null,
             color: widget.iconColor,
-            icon: Icon(
-              Icons.add,
-              size: widget.iconSize,
-            ),
+            icon: Icon(Icons.add, size: widget.iconSize),
           ),
         ],
       ),

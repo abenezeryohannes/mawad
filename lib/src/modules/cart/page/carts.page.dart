@@ -1,7 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:mawad/src/core/models/products.dart';
+import 'package:mawad/src/core/models/cart_items.dart';
 import 'package:mawad/src/modules/cart/carts/cart.item.card.dart';
 import 'package:mawad/src/modules/cart/carts/cart.total.card.dart';
 import 'package:mawad/src/modules/cart/carts/cart_controller.dart';
@@ -29,26 +31,33 @@ class CartsPage extends StatelessWidget {
                   itemCount: _cartController.cartItems.length,
                   padding: EdgeInsets.zero,
                   itemBuilder: (context, index) {
-                    Product item = _cartController.cartItems[index];
-                    return Padding(
-                      padding: const EdgeInsets.all(20.0),
+                    log('index: $index');
+
+                    CartItem item = _cartController.cartItems[index];
+                    log('item: ${item.product.nameEng}');
+                    return Container(
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 5),
                       child: CartItemCard(
                           radius: 14.r,
                           item: item,
                           onValueChange: (val) {
-                            _cartController.updateItemQuantity(item.id, val);
+                            _cartController.updateItemQuantity(
+                                item.product.id, val);
                           },
-                          countable:
-                              true // You might want to reconsider this logic based on cartItems
+                          countable: !item.product.allowInstructions
+                          // You might want to reconsider this logic based on cartItems
                           ),
                     );
                   },
                 );
               }),
-              const Padding(
-                padding: EdgeInsets.all(10.0),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
                 child: CartTotalCard(
-                    items: []), // TODO: Pass the appropriate items here
+                  controller:
+                      _cartController, // TODO: Pass the appropriate items here
+                ), // TODO: Pass the appropriate items here
               ),
               Padding(
                 padding: const EdgeInsets.all(10.0),

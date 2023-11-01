@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:mawad/src/data/services/auth_token_service.dart';
 import 'package:mawad/src/data/services/localstorage_service.dart';
+import 'package:mawad/src/modules/auth/register/register_with_phone_controller.dart';
 import 'package:mawad/src/modules/main_binding.dart';
 import 'package:mawad/src/presentation/routes/app_pages.dart';
 import 'package:mawad/src/presentation/routes/app_routes.dart';
@@ -61,6 +62,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(() => RegisterWithPhoneController());
     final lang = GetStorage().read('lang');
     return ScreenUtilInit(
       designSize: const Size(428, 926),

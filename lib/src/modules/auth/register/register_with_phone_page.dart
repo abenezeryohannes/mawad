@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:mawad/src/modules/auth/register/register_with_phone_controller.dart';
-import 'package:mawad/src/presentation/sharedwidgets/button/app_button.dart';
+import 'package:mawad/src/presentation/sharedwidgets/big.text.button.dart';
 import 'package:mawad/src/presentation/sharedwidgets/input/phone_input.dart';
 import 'package:mawad/src/presentation/sharedwidgets/scaffold/main_scaffold.dart';
 import 'package:mawad/src/presentation/theme/app_color.dart';
@@ -13,8 +13,6 @@ class RegisterWithPhonePage extends GetView<RegisterWithPhoneController> {
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
     return MainScaffold(
         backgroundColor: AppColorTheme.white,
         showBackButton: true,
@@ -44,7 +42,7 @@ class RegisterWithPhonePage extends GetView<RegisterWithPhoneController> {
               ),
             ),
             Form(
-              key: formKey,
+              key: controller.formKey,
               child: Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -55,7 +53,7 @@ class RegisterWithPhonePage extends GetView<RegisterWithPhoneController> {
                           vertical: 57.38.h, horizontal: 33.12.w),
                       child: CustomPhoneInput(
                         onChanged: (p0) {
-                          print(p0);
+                          controller.controller.text = p0;
 
                           return p0;
                         },
@@ -74,19 +72,29 @@ class RegisterWithPhonePage extends GetView<RegisterWithPhoneController> {
                       height: 153.h,
                     ),
                     SizedBox(
-                      width: Get.width,
-                      child: AppButton(
-                        radius: 0,
-                        color: AppColorTheme.yellow,
-                        text: 'إرسال',
-                        onPressed: () {
-                          Get.toNamed('/otp');
-                          // if (formKey.currentState!.validate()) {
-                          //   formKey.currentState!.save();
-                          // }
-                        },
-                      ),
-                    ),
+                        width: Get.width,
+                        child: SizedBox(
+                            width: Get.width,
+                            child: Obx(() {
+                              return BigTextButton(
+                                isLoading: controller.isLoading.value,
+                                text: 'إرسال',
+                                fontWight: FontWeight.bold,
+                                cornerRadius: 0.r,
+                                elevation: 0,
+                                backgroudColor: AppColorTheme.yellow,
+                                borderColor: AppColorTheme.yellow,
+                                textColor: AppColorTheme.brown,
+                                padding:
+                                    EdgeInsets.only(top: 15.h, bottom: 15.h),
+                                onClick: () {
+                                  if (controller.formKey.currentState!
+                                      .validate()) {
+                                    controller.registerWithPhone();
+                                  }
+                                },
+                              );
+                            }))),
                   ],
                 ),
               ),

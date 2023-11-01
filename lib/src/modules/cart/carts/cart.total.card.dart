@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:mawad/src/modules/cart/carts/cart_controller.dart';
 
 class CartTotalCard extends StatefulWidget {
-  const CartTotalCard({super.key, this.backgroundColor, required this.items});
+  const CartTotalCard(
+      {required this.controller, super.key, this.backgroundColor});
 
   final Color? backgroundColor;
-  final List<Object> items;
+  final CartController controller;
 
   @override
   State<CartTotalCard> createState() => _CartTotalCardState();
@@ -33,13 +36,23 @@ class _CartTotalCardState extends State<CartTotalCard> {
           decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(12)),
               color: widget.backgroundColor ?? Colors.white),
-          child: Column(
-            children: [
-              ..._items(title: '', value: ''),
-              ..._items(title: '', value: ''),
-              ..._items(title: '', value: '', valueBig: true, separator: false),
-            ],
-          ),
+          child: Obx(() {
+            return Column(
+              children: [
+                ..._items(
+                    title: "subTotal",
+                    value: widget.controller.subtotal.toString()),
+                ..._items(
+                    title: 'shippingFees',
+                    value: widget.controller.shippingFees.toString()),
+                ..._items(
+                    title: 'Total',
+                    value: widget.controller.total.toString(),
+                    valueBig: true,
+                    separator: false),
+              ],
+            );
+          }),
         )
       ],
     );
@@ -59,7 +72,7 @@ class _CartTotalCardState extends State<CartTotalCard> {
             Padding(
               padding: const EdgeInsets.only(left: 8, right: 8),
               child: Text(
-                'Sub Total',
+                title,
                 style: Theme.of(context)
                     .textTheme
                     .bodyMedium!
@@ -69,7 +82,7 @@ class _CartTotalCardState extends State<CartTotalCard> {
             Padding(
               padding: const EdgeInsets.only(left: 8, right: 8),
               child: Text(
-                '203 KWD',
+                value,
                 style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                     fontWeight: FontWeight.w800,
                     fontSize: valueBig ? 20 : 14,

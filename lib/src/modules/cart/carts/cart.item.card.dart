@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mawad/src/core/models/products.dart';
+import 'package:mawad/src/core/models/cart_items.dart';
 import 'package:mawad/src/modules/cart/widgets/item.count.controller.dart';
 import 'package:mawad/src/presentation/theme/textTheme.dart';
 
@@ -14,7 +14,7 @@ class CartItemCard extends StatefulWidget {
   final bool countable;
   final Color? backgroundColor;
   final double? radius;
-  final Product item;
+  final CartItem item;
   final Function(int val) onValueChange;
 
   @override
@@ -43,7 +43,7 @@ class _CartItemCardState extends State<CartItemCard> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(widget.radius ?? 0),
                   child: Image.network(
-                    widget.item.images.first.url,
+                    widget.item.product.images.first.url,
                     fit: BoxFit.cover,
                     height: 80,
                     width: 80,
@@ -59,7 +59,7 @@ class _CartItemCardState extends State<CartItemCard> {
                     Padding(
                       padding: const EdgeInsets.only(),
                       child: Text(
-                        widget.item.nameEng,
+                        widget.item.product.nameEng,
                         style: Theme.of(context)
                             .textTheme
                             .titleSmall!
@@ -68,7 +68,8 @@ class _CartItemCardState extends State<CartItemCard> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 3, bottom: 0),
-                      child: Text(widget.item.detailsEng.substring(0, 50),
+                      child: Text(
+                          widget.item.product.detailsEng.substring(0, 50),
                           style: Theme.of(context).textTheme.bodyMedium!),
                     ),
                     Row(
@@ -81,9 +82,11 @@ class _CartItemCardState extends State<CartItemCard> {
                             padding: const EdgeInsets.only(),
                             child: Text(
                               widget.countable
-                                  ? "Price:${widget.item.price}"
-                                  : 'Placeholder',
-                              style: AppTextTheme.darkGray14bold,
+                                  ? "Price:${widget.item.product.price}"
+                                  : 'Special request',
+                              style: widget.countable
+                                  ? AppTextTheme.darkGray14bold
+                                  : AppTextTheme.yellow14,
                             ),
                           ),
                         ),
@@ -91,7 +94,7 @@ class _CartItemCardState extends State<CartItemCard> {
                           Padding(
                               padding: const EdgeInsets.only(),
                               child: ItemCountController(
-                                  initialValue: 3,
+                                  initialValue: widget.item.quantity,
                                   iconSize: 14,
                                   onChange: (val) {
                                     widget.onValueChange(val);
@@ -108,15 +111,8 @@ class _CartItemCardState extends State<CartItemCard> {
                                     .secondary
                                     .withOpacity(0.5)),
                             child: Text(
-                              'button',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall!
-                                  .copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onBackground),
+                              'Waiting for approval',
+                              style: AppTextTheme.brown12,
                             ),
                           )
                       ],

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:mawad/src/core/constants/contants.dart';
 import 'package:mawad/src/core/models/country.dart';
 
 class FlagCard extends StatefulWidget {
@@ -47,17 +50,20 @@ class _FlagCardState extends State<FlagCard> {
                     ),
                   ),
                 Align(
-                  alignment: Alignment.center,
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.all(Radius.circular(100)),
-                    child: Image.asset(
-                      // widget.country.attachment.name,
-                      "assets/icon/flag.png",
-                      width: widget.size - 12,
-                      height: widget.size - 12,
-                    ),
-                  ),
-                ),
+                    alignment: Alignment.center,
+                    child: CircleAvatar(
+                      radius: 26.r,
+                      child: ClipRRect(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(100)),
+                        child: SvgPicture.network(
+                          // widget.country.attachment.name,
+                          "${AppConstants.IMAGER_URL}/${widget.country.attachment.id}",
+                          width: widget.size - 12,
+                          height: widget.size - 12,
+                        ),
+                      ),
+                    )),
               ],
             ),
           ),

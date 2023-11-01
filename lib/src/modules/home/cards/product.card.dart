@@ -1,31 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import 'package:mawad/src/core/models/products.dart';
 
-class ProductCard extends StatefulWidget {
+class ProductCard extends StatelessWidget {
   final Product product;
   final VoidCallback? onTap;
+  final bool isFavorite;
   final ValueChanged<bool>? onFavoriteChanged;
+  final bool isEnabled; // Add this line
 
   const ProductCard({
     Key? key,
     required this.product,
     this.onTap,
     this.onFavoriteChanged,
+    this.isFavorite = false,
+    this.isEnabled = true, // Add this line
   }) : super(key: key);
-
-  @override
-  _ProductCardState createState() => _ProductCardState();
-}
-
-class _ProductCardState extends State<ProductCard> {
-  bool isFavorite = false;
-
-  @override
-  void initState() {
-    isFavorite = false;
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,13 +36,13 @@ class _ProductCardState extends State<ProductCard> {
               alignment: Alignment.topLeft,
               children: [
                 GestureDetector(
-                  onTap: widget.onTap,
+                  onTap: onTap,
                   child: ClipRRect(
                     borderRadius: const BorderRadius.all(Radius.circular(8)),
                     child: Image.network(
-                      widget.product.images.first.url,
+                      product.images.first.url,
                       fit: BoxFit.cover,
-                      height: MediaQuery.of(context).size.width * (5 / 12),
+                      height: Get.width * (5 / 12),
                     ),
                   ),
                 ),
@@ -59,7 +51,9 @@ class _ProductCardState extends State<ProductCard> {
                       ? Alignment.topLeft
                       : Alignment.topRight,
                   child: GestureDetector(
-                    onTap: _toggleFavorite,
+                    onTap: isEnabled
+                        ? () => onFavoriteChanged?.call(!isFavorite)
+                        : null,
                     child: Container(
                       padding: const EdgeInsets.all(5),
                       margin: const EdgeInsets.all(10),
@@ -82,7 +76,7 @@ class _ProductCardState extends State<ProductCard> {
           ),
           Expanded(
             child: GestureDetector(
-              onTap: widget.onTap,
+              onTap: onTap,
               child: SingleChildScrollView(
                 physics: const NeverScrollableScrollPhysics(),
                 child: Column(
@@ -91,7 +85,7 @@ class _ProductCardState extends State<ProductCard> {
                   children: [
                     const SizedBox(height: 10),
                     Text(
-                      widget.product.nameEng,
+                      product.nameEng,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context)
                           .textTheme
@@ -100,7 +94,7 @@ class _ProductCardState extends State<ProductCard> {
                     ),
                     const SizedBox(height: 3),
                     Text(
-                      widget.product.detailsEng,
+                      product.detailsEng,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context)
                           .textTheme
@@ -113,7 +107,7 @@ class _ProductCardState extends State<ProductCard> {
                       children: [
                         Flexible(
                           child: Text(
-                            'Price ${widget.product.price}',
+                            'Price ${product.price}',
                             overflow: TextOverflow.ellipsis,
                             style: Theme.of(context)
                                 .textTheme
@@ -131,14 +125,5 @@ class _ProductCardState extends State<ProductCard> {
         ],
       ),
     );
-  }
-
-  void _toggleFavorite() {
-    setState(() {
-      isFavorite = !isFavorite;
-    });
-    if (widget.onFavoriteChanged != null) {
-      widget.onFavoriteChanged!(isFavorite);
-    }
   }
 }

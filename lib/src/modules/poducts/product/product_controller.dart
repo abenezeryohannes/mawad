@@ -3,11 +3,13 @@ import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:mawad/src/core/models/catagorie.dart';
 import 'package:mawad/src/core/models/country.dart';
+import 'package:mawad/src/core/models/image_model.dart';
 import 'package:mawad/src/core/models/products.dart';
 import 'package:mawad/src/data/repositories/produact_category_repo.dart';
 import 'package:mawad/src/data/repositories/products.dart';
 import 'package:mawad/src/data/services/recaptcha_token.dart';
 import 'package:mawad/src/modules/poducts/product_catagory/product_categories_controller.dart';
+import 'package:mawad/src/utils/helpers/icon_routes.dart';
 
 class ProductController extends GetxController {
   final recaptchaService = ReCaptchaV3Service(
@@ -19,6 +21,7 @@ class ProductController extends GetxController {
   final countries = <Country>[].obs;
   var selectedCountry = Rx<Country?>(null);
   final products = <Product>[].obs;
+  final banners = <ImageModel>[].obs;
   final productDetail = Rx<Product?>(null);
   final categories = <CategoryModel>[].obs;
 
@@ -42,6 +45,7 @@ class ProductController extends GetxController {
     if (selectedCountry.isBlank != true) {
       getProductByCountry(selectedCountry.value!.id);
     }
+    getProductBanner();
     super.onReady();
   }
 
@@ -70,6 +74,14 @@ class ProductController extends GetxController {
     }
   }
 
+  void getProductBanner() async {
+    try {
+      isLeading.value = true;
+      final bannerData = await _productsRepo.getBanner();
+      banners.value = bannerData.obs;
+    } catch (error) {}
+  }
+
   void getProductDetail(String id) async {
     try {
       isLeadingDetail.value = true;
@@ -85,7 +97,21 @@ class ProductController extends GetxController {
   void getCategoryByCountry(String id) async {
     try {
       final productsData = await _productCategoryRepo.getCategory(id);
-      categories.value = productsData.obs;
+      // Insert an 'All' category at the start of the list
+      var allCategories = [
+        CategoryModel(
+          id: 'all', // a unique id for the 'All' category
+          status: true, // assuming 'All' category should always be active
+          nameAr: 'الكل', // 'All' in Arabic
+          nameEng: 'All',
+          image: ImageModel(
+              id: "2",
+              url: IconRoutes
+                  .menu), // provide a default image for 'All' category
+        )
+      ];
+      allCategories.addAll(productsData);
+      categories.value = allCategories.obs;
     } catch (error) {
       // Handle error here
     }

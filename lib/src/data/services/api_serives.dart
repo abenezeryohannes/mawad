@@ -37,6 +37,17 @@ class ApiService {
         body: json.encode(body), headers: _headers));
   }
 
+  Future<Map<String, dynamic>> putRequest(
+      String endpoint, Map<String, dynamic> body) async {
+    return await _makeRequest(() => http.put(Uri.parse('$_baseUrl$endpoint'),
+        body: json.encode(body), headers: _headers));
+  }
+
+  Future<Map<String, dynamic>> deleteRequest(String endpoint) async {
+    return await _makeRequest(
+        () => http.delete(Uri.parse('$_baseUrl$endpoint'), headers: _headers));
+  }
+
   Future<Map<String, dynamic>> uploadImage(
       String endpoint, File imageFile) async {
     final request =

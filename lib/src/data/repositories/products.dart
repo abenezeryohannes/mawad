@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:mawad/src/core/models/country.dart';
+import 'package:mawad/src/core/models/image_model.dart';
 import 'package:mawad/src/core/models/products.dart';
 import 'package:mawad/src/data/services/api_serives.dart';
 
@@ -26,7 +27,7 @@ class ProductsRepo {
     try {
       final result = await _apiService.getRequest('/website/home-products/$id');
 
-      List<Product> products = mapDataToProducts(result['data']);
+      List<Product> products = mapDataToProducts(result['data']['content']);
       log(products.toString());
       return products;
     } catch (error) {
@@ -37,8 +38,8 @@ class ProductsRepo {
 
   Future<List<Product>> getProductByCategory(String id) async {
     try {
-      final result = await _apiService
-          .getRequest('/product/by_category_id/$id?page=0&size=10');
+      final result =
+          await _apiService.getRequest('/product/by_category_id/$id');
       log(result["data"]["content"].toString());
       List<Product> products = mapDataToProducts(result['data']["content"]);
       log(products.toString());
@@ -47,6 +48,23 @@ class ProductsRepo {
       log('Error fetching products getProductByCategory: $error');
       rethrow;
     }
+  }
+
+  Future<List<ImageModel>> getBanner() async {
+    try {
+      final result = await _apiService.getRequest('/big-banner/website');
+      log(result.toString());
+      List<ImageModel> banners = mapBanner(result['data']);
+      log(banners.toString());
+      return banners;
+    } catch (error) {
+      log('Error fetching products getBanner: $error');
+      rethrow;
+    }
+  }
+
+  List<ImageModel> mapBanner(List<dynamic> data) {
+    return data.map((json) => ImageModel.fromJson(json)).toList();
   }
 
   List<Product> mapDataToProducts(List<dynamic> data) {

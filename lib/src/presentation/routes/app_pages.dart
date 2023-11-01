@@ -38,15 +38,17 @@ class AppPages {
       name: AppRoutes.main,
       page: () => const MainPage(),
       bindings: [
+        RegisterWithPhoneBinding(),
         ProductCategoriesBinding(),
         FavoriteProductBinding(),
-        CartBinding(),
+        CartBinding()
       ],
     ),
     GetPage(
         name: AppRoutes.productDetail,
         page: () => const ProductDetailPage(),
         bindings: [
+          RegisterWithPhoneBinding(),
           ProductCategoriesBinding(),
           FavoriteProductBinding(),
           CartBinding(),

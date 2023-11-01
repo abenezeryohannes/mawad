@@ -1,11 +1,11 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:mawad/src/core/constants/contants.dart';
 import 'package:mawad/src/modules/favorite/favorite_list.dart';
 import 'package:mawad/src/modules/home/cards/home.tab.cards.dart';
+import 'package:mawad/src/modules/home/cards/product.catagory.dart';
 import 'package:mawad/src/modules/home/pages/change.country.bottom.sheet.dart';
 import 'package:mawad/src/modules/home/pages/image_banner.dart';
 import 'package:mawad/src/modules/poducts/product/product_controller.dart';
@@ -97,58 +97,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            Container(
-              color: AppColorTheme.bg,
-              margin: const EdgeInsets.only(top: 10),
-              width: MediaQuery.of(context).size.width,
-              height: 150.h,
-              child: Obx(() {
-                return ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: productController.categories.length,
-                  shrinkWrap: true,
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  itemBuilder: (context, index) {
-                    final category = productController.categories[index];
-                    productController.productCategoryController.isSelected =
-                        productController
-                                .productCategoryController.selectedIndex ==
-                            index;
-                    return Container(
-                      padding: EdgeInsets.all(10.r),
-                      child: SelectableCard(
-                        isSelected: productController
-                            .productCategoryController.isSelected,
-                        onTap: () {
-                          setState(() {
-                            productController.productCategoryController
-                                .selectedIndex = index;
-                            if (productController
-                                    .productCategoryController.selectedIndex ==
-                                0) {
-                              Get.toNamed(AppRoutes.productCategory);
-                            } else {
-                              productController
-                                  .getProductByCategory(category.id);
-                            }
-                          });
-                        },
-                        icon: Container(
-                          child: SvgPicture.network(
-                            category.image.url,
-                            color: productController
-                                    .productCategoryController.isSelected
-                                ? AppColorTheme.white
-                                : AppColorTheme.gray,
-                          ),
-                        ),
-                        label: category.nameEng,
-                      ),
-                    );
-                  },
-                );
-              }),
-            ),
+            const ProductCategoryList()
           ],
         ),
       ),
@@ -182,7 +131,6 @@ class _HomePageState extends State<HomePage> {
                     padding: const EdgeInsets.only(right: 20),
                     child: InkWell(
                       onTap: () {
-                        log("message");
                         showAppBottomSheet(
                           Obx(() {
                             return ChangeCountryBottomSheet(
@@ -200,12 +148,21 @@ class _HomePageState extends State<HomePage> {
                           }),
                         );
                       },
-                      child: ClipRRect(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(100)),
-                        child: Image.asset(
-                          'assets/icon/flag.png',
-                          width: 32,
+                      child: CircleAvatar(
+                        radius: 24.r,
+                        backgroundColor: Colors.transparent,
+                        child: Obx(
+                          () => ClipOval(
+                            child:
+                                productController.selectedCountry.value != null
+                                    ? SvgPicture.network(
+                                        '${AppConstants.IMAGER_URL}/${productController.selectedCountry.value!.attachment.id}',
+                                        fit: BoxFit.cover,
+                                        width: 40,
+                                        height: 40,
+                                      )
+                                    : const SizedBox(),
+                          ),
                         ),
                       ),
                     ),
@@ -229,7 +186,7 @@ class _HomePageState extends State<HomePage> {
             onButtonPressed: () {
               Get.toNamed(AppRoutes.checkout);
             },
-            imagePath: 'assets/icon/banner.png',
+            imagePath: productController.banners,
           ),
           Expanded(
             child: Column(

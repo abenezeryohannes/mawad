@@ -4,12 +4,14 @@ import 'package:mawad/src/core/models/product_addon.dart';
 
 class Product {
   final String id;
-  final int index;
+
   final int? ordersCount;
   final bool status;
   final int salesCount;
   final String? label;
   final List<CategoryModel> categories;
+
+  //todo what is showStock?
   final bool showStock;
   final List<ProductAddons> productAddons;
   final String nameAr;
@@ -17,6 +19,7 @@ class Product {
   final String detailsAr;
   final String detailsEng;
   final double price;
+  //todo is this like if it's 0 so out of stock?
   final int stock;
   final double tax;
   final List<ImageModel> images;
@@ -28,11 +31,12 @@ class Product {
   final bool outOfStock;
   final bool allowBaseTax;
   final bool allowInstructions;
+  final List<Tag> tags;
+  //todo what is this one?
   final List<dynamic> promotions;
 
   Product({
     required this.id,
-    required this.index,
     required this.ordersCount,
     required this.status,
     required this.salesCount,
@@ -57,12 +61,12 @@ class Product {
     required this.allowBaseTax,
     required this.allowInstructions,
     required this.promotions,
+    this.tags = const [],
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
       id: json['id'] ?? '',
-      index: json['index'],
       ordersCount: json['ordersCount'] ?? 0,
       status: json['status'],
       salesCount: json['salesCount'],
@@ -93,12 +97,15 @@ class Product {
       allowBaseTax: json['allowBaseTax'],
       allowInstructions: json['allowInstructions'],
       promotions: json['promotions'] as List<dynamic>? ?? [],
+      tags: (json['tags'] as List<dynamic>? ?? [])
+          .map((tag) => Tag.fromJson(tag))
+          .toList(),
     );
   }
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'index': index,
+
       'ordersCount': ordersCount,
       'status': status,
       'salesCount': salesCount,
@@ -126,4 +133,28 @@ class Product {
           promotions, // Assuming promotions is a List of primitives (like int, String etc.)
     };
   }
+}
+
+class Tag {
+  final String id;
+  final String url;
+  final String title;
+
+  Tag({
+    required this.id,
+    required this.url,
+    required this.title,
+  });
+
+  factory Tag.fromJson(Map<String, dynamic> json) => Tag(
+        id: json['id'],
+        url: json['url'],
+        title: json['title'],
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'url': url,
+        'title': title,
+      };
 }

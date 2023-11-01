@@ -5,4 +5,6 @@ class IconRoutes {
   static const String arrowLeft = "assets/svg/arrowLeft.svg";
   static const String checkbox = "assets/svg/checbox.svg";
   static const String woodBoard = "assets/svg/home/wood_board.svg";
+  static const String checkedBox = "assets/svg/checked.svg";
+  static const String menu = "assets/svg/menu.svg";
 }

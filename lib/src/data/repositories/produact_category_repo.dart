@@ -21,19 +21,4 @@ class ProductCategoryRepo {
   List<CategoryModel> mapDataToCategory(List<dynamic> data) {
     return data.map((json) => CategoryModel.fromJson(json)).toList();
   }
-
-  Future<Map> fetchUserData(String phone) async {
-    log("phone: $phone");
-    try {
-      final result = await _apiService.postRequest('/auth/send-code', {
-        "recaptchaToken": "6Le73mIgAAAAAHAcNOnzqRHPsQVnS-EiTjG7KYQW",
-        "phone": phone
-      });
-      log("after: $phone");
-      log(result.toString());
-      return result;
-    } catch (error) {
-      rethrow;
-    }
-  }
 }

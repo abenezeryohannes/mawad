@@ -2,11 +2,13 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mawad/src/core/models/user.dart';
 import 'package:mawad/src/data/repositories/auth_repo.dart';
 import 'package:mawad/src/presentation/routes/app_routes.dart';
 
 class RegisterWithPhoneController extends GetxController {
   final AuthRepo _authRepo = AuthRepo();
+  final userDetail = Rx<UserModel?>(null);
 
   final isLoading = false.obs;
   final isOtpLoading = false.obs;
@@ -14,6 +16,14 @@ class RegisterWithPhoneController extends GetxController {
   final OTP = 0.obs;
 
   final formKey = GlobalKey<FormState>();
+
+  //int
+
+  @override
+  void onInit() {
+    super.onInit();
+    getUserDetail();
+  }
 
   void registerWithPhone() async {
     try {
@@ -50,6 +60,18 @@ class RegisterWithPhoneController extends GetxController {
       log(error.toString());
       // Handle error here
     }
+  }
+
+  void getUserDetail() async {
+    final user = await _authRepo.getUserDetail();
+
+    userDetail.value = user;
+  }
+
+  void updateUserDetail(UserModel user) {
+//todo update the user detail
+    final userDetail = _authRepo.addAccountDetail(user);
+    log(userDetail.toString());
   }
 
   Future<bool> isAuth() async {

@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:mawad/src/core/models/user.dart';
 import 'package:mawad/src/data/services/api_serives.dart';
 import 'package:mawad/src/data/services/auth_token_service.dart';
 
@@ -33,9 +36,39 @@ class AuthRepo {
       });
 
       String accessToken = result['data']['accessToken'];
+      log("accessToken: $accessToken");
       await _authTokenService.saveToken(accessToken);
       return accessToken;
     } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<UserModel> addAccountDetail(UserModel user) async {
+    try {
+      final result =
+          await _apiService.postRequest('user/update-account', user.toJson());
+
+      return UserModel.fromJson(result['data']);
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  //get user detail
+  Future<UserModel> getUserDetail() async {
+    try {
+      final result = await _apiService.getRequest('/user/me');
+      log('getUserDetail===>: $result');
+      if (result['success']) {
+        return UserModel.fromJson(result['data']);
+      }
+      return UserModel(
+        phone: '',
+      );
+    } catch (error) {
+      log('Error fetching products getUserDetail: $error');
+
       rethrow;
     }
   }

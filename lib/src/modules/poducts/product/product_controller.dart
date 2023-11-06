@@ -97,24 +97,19 @@ class ProductController extends GetxController {
   void getCategoryByCountry(String id) async {
     try {
       final productsData = await _productCategoryRepo.getCategory(id);
-      // Insert an 'All' category at the start of the list
+
       var allCategories = [
         CategoryModel(
-          id: 'all', // a unique id for the 'All' category
-          status: true, // assuming 'All' category should always be active
-          nameAr: 'الكل', // 'All' in Arabic
+          id: 'all',
+          status: true,
+          nameAr: 'الكل',
           nameEng: 'All',
-          image: ImageModel(
-              id: "2",
-              url: IconRoutes
-                  .menu), // provide a default image for 'All' category
+          image: ImageModel(id: "2", url: IconRoutes.menu),
         )
       ];
       allCategories.addAll(productsData);
       categories.value = allCategories.obs;
-    } catch (error) {
-      // Handle error here
-    }
+    } catch (error) {}
   }
 
   Future fetchCountries() async {

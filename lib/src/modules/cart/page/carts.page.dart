@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -31,10 +29,8 @@ class CartsPage extends StatelessWidget {
                   itemCount: _cartController.cartItems.length,
                   padding: EdgeInsets.zero,
                   itemBuilder: (context, index) {
-                    log('index: $index');
-
                     CartItem item = _cartController.cartItems[index];
-                    log('item: ${item.product.nameEng}');
+
                     return Container(
                       margin: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 5),
@@ -42,12 +38,14 @@ class CartsPage extends StatelessWidget {
                           radius: 14.r,
                           item: item,
                           onValueChange: (val) {
+                            if (val == 0) {
+                              _cartController.removeItem(item.product.id);
+                              return;
+                            }
                             _cartController.updateItemQuantity(
                                 item.product.id, val);
                           },
-                          countable: !item.product.allowInstructions
-                          // You might want to reconsider this logic based on cartItems
-                          ),
+                          countable: !item.product.allowInstructions),
                     );
                   },
                 );

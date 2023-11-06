@@ -14,6 +14,7 @@ class AuthTokenService {
   Future<void> initialize() async {
     await _localStorage.initialize();
     final token = _localStorage.getString(AppConstants.ACCESS_TOKEN);
+
     if (token != null) {
       _apiService.setToken(token);
     } else {}
@@ -21,6 +22,7 @@ class AuthTokenService {
 
   Future<void> saveToken(String token) async {
     await _localStorage.saveString(AppConstants.ACCESS_TOKEN, token);
+    _apiService.setToken(token);
   }
 
   Future<bool> hasToken() async {

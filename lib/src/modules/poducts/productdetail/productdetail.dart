@@ -241,9 +241,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           ),
           //Todo add favorite logic
           FavoriteButton(
-            isFavorite: favoritesController.isFavorite(productController
-                .productDetail
-                .value!), // Initial state, can be dynamic based on some data
+            isFavorite: favoritesController
+                .isFavorite(productController.productDetail.value!),
             onTap: () async {
               if (await authController.isAuth()) {
                 favoritesController

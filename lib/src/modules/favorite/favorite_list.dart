@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mawad/src/core/models/products.dart';
@@ -47,6 +49,7 @@ class FavoriteProductsList extends StatelessWidget {
                             if (snapshot.data!) {
                               favoritesController.toggleFavorite(product);
                             } else {
+                              log('not auth');
                               Get.toNamed(AppRoutes.register);
                             }
                           },

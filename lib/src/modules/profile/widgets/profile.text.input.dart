@@ -2,16 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:mawad/src/presentation/sharedwidgets/text.input.form.dart';
 
 class ProfileTextInput extends StatefulWidget {
-  const ProfileTextInput(
-      {super.key,
-      required this.onChange,
-      this.label,
-      this.placeholder,
-      this.initialText});
+  const ProfileTextInput({
+    super.key,
+    required this.onChange,
+    this.label,
+    this.placeholder,
+    this.initialText,
+    this.isEnabled = true,
+  });
+
   final Function(String text) onChange;
   final String? label;
   final String? placeholder;
   final String? initialText;
+  final bool isEnabled;
 
   @override
   State<ProfileTextInput> createState() => _ProfileTextInputState();
@@ -36,13 +40,17 @@ class _ProfileTextInputState extends State<ProfileTextInput> {
               ),
             ),
           TextInputForm(
-              fillColor: Theme.of(context).scaffoldBackgroundColor,
-              placeholder: widget.placeholder ?? '',
-              initialValue: widget.initialText,
-              radius: 20,
-              onChanged: (String text) {
+            fillColor: Theme.of(context).scaffoldBackgroundColor,
+            placeholder: widget.placeholder ?? '',
+            initialValue: widget.initialText,
+            radius: 20,
+            onChanged: (String text) {
+              if (widget.isEnabled) {
                 widget.onChange(text);
-              })
+              }
+            },
+            enabled: widget.isEnabled,
+          )
         ],
       ),
     );

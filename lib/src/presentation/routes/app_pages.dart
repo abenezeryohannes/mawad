@@ -56,7 +56,12 @@ class AppPages {
     GetPage(
         name: AppRoutes.productCategory,
         page: () => const ProductCategory(),
-        binding: ProductCategoriesBinding()),
+        bindings: [
+          ProductCategoriesBinding(),
+          RegisterWithPhoneBinding(),
+          FavoriteProductBinding(),
+          CartBinding(),
+        ]),
     GetPage(
         name: AppRoutes.favproduct,
         page: () => FavoritePage(),

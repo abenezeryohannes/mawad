@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:mawad/src/modules/profile/widgets/tab.custom.dart';
 import 'package:mawad/src/presentation/routes/app_routes.dart';
 
-import '../cards/profile.item.card.dart';
+import '../widgets/profile.item.card.dart';
 
 class OrderPage extends StatefulWidget {
   const OrderPage({super.key});

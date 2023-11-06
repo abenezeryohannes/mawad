@@ -16,7 +16,7 @@ dependencies:
   pinput: ^2.3.0
   shared_preferences: ^2.1.2
   json_annotation: ^4.8.1
-  image_picker: ^1.0.0
+  image_picker: ^1.0.4
   dismissible_page: ^1.0.2
   injectable: ^2.1.2
   cupertino_icons: ^1.0.2

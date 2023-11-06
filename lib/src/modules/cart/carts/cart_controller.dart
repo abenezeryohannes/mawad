@@ -10,15 +10,16 @@ import 'package:mawad/src/data/services/message_services.dart';
 class CartController extends GetxController {
   final RxList<CartItem> _cartItems = RxList<CartItem>();
   final LocalStorageService _localStorageService = LocalStorageService();
-  final messageService = MessageService();
-  List<CartItem> get cartItems => _cartItems;
+  final MessageService messageService = MessageService();
+
   final isLoading = false.obs;
-  var subtotal = 0.0.obs;
-  var shippingFees = 0.0.obs;
-  var total = 0.0.obs;
-  double standardShippingFee = 10.0; // set a fixed shipping fee
-  double freeShippingThreshold =
-      100.0; // free shipping for orders above this amount
+  final subtotal = 0.0.obs;
+  final shippingFees = 0.0.obs;
+  final total = 0.0.obs;
+  final double standardShippingFee = 10.0;
+  final double freeShippingThreshold = 100.0;
+
+  List<CartItem> get cartItems => _cartItems.toList();
 
   @override
   void onInit() {
@@ -29,39 +30,35 @@ class CartController extends GetxController {
   }
 
   void calculateTotals() {
-    subtotal.value = _cartItems.fold(0,
+    double newSubtotal = _cartItems.fold(0,
         (total, current) => total + (current.product.price * current.quantity));
+    double newShippingFees =
+        newSubtotal > freeShippingThreshold ? 0.0 : standardShippingFee;
+    double newTotal = newSubtotal + newShippingFees;
 
-    // Calculate shipping based on rules, e.g., free shipping over a certain amount
-    if (subtotal.value > freeShippingThreshold) {
-      shippingFees.value = 0.0;
-    } else {
-      shippingFees.value =
-          standardShippingFee; // This could also be dynamic based on items or user location
-    }
-
-    total.value = subtotal.value + shippingFees.value;
+    subtotal.value = newSubtotal;
+    shippingFees.value = newShippingFees;
+    total.value = newTotal;
   }
-
-  // Add other methods for cart management like addItem(), removeItem(), clearCart(), etc.
 
   void addItem(CartItem item) {
     isLoading.value = true;
     log('Attempting to add item: ${item.product.nameEng}');
     try {
-      // Check if the item is already in the cart
-      int index = _cartItems
-          .indexWhere((cartItem) => cartItem.product.id == item.product.id);
+      String itemKey = '${item.product.id}-${item.product.id}';
+
+      int index = _cartItems.indexWhere((cartItem) =>
+          '${cartItem.product.id}-${cartItem.product.id}' == itemKey);
+
       if (index != -1) {
         log('Item already in cart. No changes made to quantity.');
       } else {
-        // New item, add to cart with its initial quantity
         _cartItems.add(item);
         log('New item added to cart: ${item.product.nameEng}');
         messageService.showTopUpMessage('Success', 'New item added to cart');
       }
       saveToLocalStorage();
-      update(); // Ensure UI is updated with new cart state
+      update();
     } catch (e) {
       log('Error adding item to cart: $e');
       messageService.showTopUpMessage('Error', 'Error adding item to cart: $e');
@@ -71,49 +68,44 @@ class CartController extends GetxController {
   }
 
   void removeItem(String id) {
-    try {
-      _cartItems.removeWhere((cartItem) => cartItem.product.id == id);
-      saveToLocalStorage();
-      update();
-    } catch (e) {
-      messageService.showTopUpMessage('Error', 'Error removing item from cart');
-    }
+    // No try-catch needed, removeWhere doesn't throw an error in a typical scenario
+    _cartItems.removeWhere((cartItem) => cartItem.product.id == id);
+    calculateTotals(); // Update totals when an item is removed
+    saveToLocalStorage();
+    update();
   }
 
   void updateItemQuantity(String id, int newQuantity) {
-    try {
-      final itemIndex = _cartItems.indexWhere((item) => item.product.id == id);
-      if (itemIndex != -1) {
-        _cartItems[itemIndex].quantity = newQuantity;
-        saveToLocalStorage();
-        calculateTotals();
-        update(); // Notify listeners about changes
-      }
-    } catch (e) {
-      messageService.showTopUpMessage('Error', 'Error updating item quantity');
+    // Find the item and update its quantity directly without finding the index
+    final cartItem =
+        _cartItems.firstWhereOrNull((item) => item.product.id == id);
+    if (cartItem != null && newQuantity > 0) {
+      cartItem.quantity = newQuantity;
+      calculateTotals();
+      saveToLocalStorage();
+      update();
+    } else {
+      messageService.showTopUpMessage('Error', 'Invalid item or quantity');
     }
   }
 
   void clearCart() {
-    try {
-      _cartItems.clear();
-      saveToLocalStorage();
-      update();
-    } catch (e) {
-      // TODO: Handle exception by showing some feedback to the user
-    }
+    _cartItems.clear();
+    calculateTotals();
+    saveToLocalStorage();
+    update();
   }
 
   Future<void> saveToLocalStorage() async {
     try {
-      List<String> cartStringList =
-          _cartItems.map((item) => jsonEncode(item.toMap())).toList();
-      await _localStorageService.saveString(
-          AppConstants.CART_ITEMS, cartStringList.join(';'));
-      log('Cart saved: ${cartStringList.join(';')}');
+      await _localStorageService.saveString(AppConstants.CART_ITEMS,
+          _cartItems.map((item) => jsonEncode(item.toMap())).join(';'));
+      log('Cart saved to local storage');
     } catch (e) {
       log('Error saving to local storage: $e');
-      // TODO: Handle exception by showing some feedback to the user
+
+      messageService.showTopUpMessage(
+          'Error', 'Error saving cart to local storage');
     }
   }
 
@@ -121,36 +113,23 @@ class CartController extends GetxController {
     isLoading.value = true;
     try {
       String? data = _localStorageService.getString(AppConstants.CART_ITEMS);
-      calculateTotals();
       if (data != null && data.isNotEmpty) {
-        List<String> cartStringList = data.split(';');
-        List<CartItem> loadedItems = [];
+        var cartStringList = data.split(';').where((item) => item.isNotEmpty);
+        var loadedItems = cartStringList.map((itemString) {
+          return CartItem.fromJson(jsonDecode(itemString));
+        }).toList();
 
-        for (String itemString in cartStringList) {
-          if (itemString.isNotEmpty) {
-            try {
-              // Explicitly check if itemString is valid JSON
-              final itemMap = jsonDecode(itemString);
-              if (itemMap is! Map<String, dynamic>) {
-                log('Invalid item format: $itemMap');
-                continue; // Skip this item and go to the next one
-              }
-              loadedItems.add(CartItem.fromJson(itemMap));
-            } catch (decodeError) {
-              log('Error decoding item: $decodeError');
-            }
-          }
-        }
-
-        if (loadedItems.isNotEmpty) {
-          _cartItems.assignAll(loadedItems);
-        }
+        _cartItems.assignAll(loadedItems);
+        calculateTotals();
       }
     } catch (e) {
       log('Error loading from local storage: $e');
+
+      messageService.showTopUpMessage(
+          'Error', 'Error loading cart from local storage');
     } finally {
       isLoading.value = false;
-      update(); // Notify listeners to update UI
+      update();
     }
   }
 }

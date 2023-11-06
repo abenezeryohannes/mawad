@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
 import 'package:mawad/src/core/models/products.dart';
 import 'package:mawad/src/data/repositories/favorite_repo.dart';
@@ -17,7 +19,7 @@ class FavoritesController extends GetxController {
       var fetchedFavorites = await _repository.getFavorites();
       favorites.assignAll(fetchedFavorites);
     } catch (e) {
-      Get.snackbar('Error', 'Failed to load favorites: $e');
+      log('Failed to load favorites: $e');
     }
   }
 
@@ -49,6 +51,5 @@ class FavoritesController extends GetxController {
         favorites.removeWhere((item) => item.id == product.id);
       }
     }
-    // No need to call update() because favorites is a RxList which is reactive
   }
 }

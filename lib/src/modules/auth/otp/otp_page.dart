@@ -94,6 +94,9 @@ class OtpPage extends GetView<RegisterWithPhoneController> {
                     textColor: AppColorTheme.brown,
                     padding: EdgeInsets.only(top: 15.h, bottom: 15.h),
                     onClick: () {
+                      if (controller.OTP.value < 3) {
+                        return;
+                      }
                       controller.validateOTP(argument);
                     },
                   );

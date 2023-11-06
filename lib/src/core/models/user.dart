@@ -1,17 +1,47 @@
-class User {
-  final String id;
-  final String phone;
-  final String? email;
-  final String? name;
+class UserModel {
+  String? avatar;
+  String phone;
+  String? email;
+  List<String>? privileges;
+  bool? unreadAvailable;
+  bool? notificationSound;
+  String? userEmail;
+  String? name;
 
-  User({required this.id, required this.phone, required this.email, this.name});
+  UserModel({
+    this.avatar,
+    required this.phone,
+    this.email,
+    this.privileges,
+    this.unreadAvailable,
+    this.notificationSound,
+    this.userEmail,
+    this.name,
+  });
 
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-      id: json['id'].toString(),
-      phone: json['phone'],
-      email: json['email'],
-      name: json['name'],
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    return UserModel(
+      avatar: json['avatar'] ?? '',
+      phone: json['phone'] as String,
+      email: json['email'] ?? '',
+      privileges: List<String>.from(json['privileges']) ?? [],
+      unreadAvailable: json['unreadAvailable'] ?? false,
+      notificationSound: json['notificationSound'] ?? false,
+      userEmail: json['userEmail'] ?? '',
+      name: json['name'] ?? '',
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'avatar': avatar,
+      'phone': phone,
+      'email': email,
+      'privileges': privileges,
+      'unreadAvailable': unreadAvailable,
+      'notificationSound': notificationSound,
+      'userEmail': userEmail,
+      'name': name,
+    };
   }
 }

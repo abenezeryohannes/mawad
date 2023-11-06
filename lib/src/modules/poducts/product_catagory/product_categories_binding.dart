@@ -8,8 +8,8 @@ class ProductCategoriesBinding extends Bindings {
     Get.lazyPut<ProductCategoryController>(
       () => ProductCategoryController(),
     );
-    Get.lazyPut<FavoritesController>(
-      () => FavoritesController(),
+    Get.put<FavoritesController>(
+      FavoritesController(),
     );
   }
 }

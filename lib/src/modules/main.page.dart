@@ -1,9 +1,11 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mawad/src/modules/auth/register/register_with_phone_controller.dart';
 import 'package:mawad/src/modules/cart/page/carts.page.dart';
 import 'package:mawad/src/modules/home/pages/home.page.dart';
-import 'package:mawad/src/modules/profile/page/profile.page.dart';
+import 'package:mawad/src/modules/profile/profile.page.dart';
+import 'package:mawad/src/presentation/routes/app_routes.dart';
 
 import 'favorite/pages/favorite.page.dart';
 
@@ -49,10 +51,18 @@ class _MainPageState extends State<MainPage> {
             notchSmoothness: NotchSmoothness.verySmoothEdge,
             leftCornerRadius: 32,
             rightCornerRadius: 32,
-            onTap: (index) {
+            onTap: (index) async {
               if (index == 2) {
                 Get.to(() => CartsPage());
                 return;
+              }
+              if (index == 3) {
+                if (await Get.find<RegisterWithPhoneController>().isAuth()) {
+                  getPage(index);
+                } else {
+                  Get.toNamed(AppRoutes.register);
+                  return;
+                }
               }
               setState(() => _bottomNavIndex = index);
             }),
@@ -63,7 +73,7 @@ class _MainPageState extends State<MainPage> {
   Widget getPage(int index) {
     switch (index) {
       case 0:
-        return HomePage();
+        return const HomePage();
       case 1:
         return FavoritePage();
       default:

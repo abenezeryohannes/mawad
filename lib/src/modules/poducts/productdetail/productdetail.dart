@@ -9,6 +9,7 @@ import 'package:mawad/src/modules/auth/register/register_with_phone_controller.d
 import 'package:mawad/src/modules/cart/carts/cart_controller.dart';
 import 'package:mawad/src/modules/cart/widgets/item.count.controller.dart';
 import 'package:mawad/src/modules/favorite/fevorite_controller.dart';
+import 'package:mawad/src/modules/home/widgets%20/home_skeleton.dart';
 import 'package:mawad/src/modules/poducts/addon_handler_factory.dart';
 import 'package:mawad/src/modules/poducts/product/product_controller.dart';
 import 'package:mawad/src/modules/poducts/productdetail/widgets/Input_handler.dart';
@@ -18,6 +19,7 @@ import 'package:mawad/src/presentation/sharedwidgets/button/favorite_button.dart
 import 'package:mawad/src/presentation/sharedwidgets/scaffold/main_scaffold.dart';
 import 'package:mawad/src/presentation/theme/app_color.dart';
 import 'package:mawad/src/presentation/theme/textTheme.dart';
+import 'package:mawad/src/utils/utils.dart';
 
 class ProductDetailPage extends StatefulWidget {
   const ProductDetailPage({super.key});
@@ -64,14 +66,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         margin: const EdgeInsets.only(top: 10),
         child: Obx(() {
           if (productController.isLeadingDetail.value) {
-            // Show loading indicator while fetching data
-            return Container(
-              alignment: Alignment.center,
-              margin: EdgeInsets.only(top: Get.height * 0.4),
-              child: const Center(child: CircularProgressIndicator()),
-            );
+            return buildProductDetailSkeleton();
           } else if (productController.productDetail.value != null) {
-            // Data is fetched and not null, display the product details
             return SingleChildScrollView(
               child: Column(
                 children: [
@@ -268,8 +264,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               Directionality(
                 textDirection: TextDirection.ltr,
                 child: Text(
-                    (productController.productDetail.value!.price *
-                            initialQuantity)
+                    ("KWD " +
+                            Util.formatNumberWithCommas(
+                                (productController.productDetail.value!.price *
+                                        initialQuantity)
+                                    .toString()))
                         .toString(),
                     style: AppTextTheme.dark18),
               ),

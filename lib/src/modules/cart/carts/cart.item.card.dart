@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:mawad/src/core/models/cart_items.dart';
 import 'package:mawad/src/modules/cart/widgets/item.count.controller.dart';
@@ -69,10 +71,12 @@ class _CartItemCardState extends State<CartItemCard> {
                     Padding(
                       padding: const EdgeInsets.only(top: 3, bottom: 0),
                       child: Text(
-                          widget.item.product.detailsEng.isNotEmpty
-                              ? widget.item.product.detailsEng.substring(0, 50)
-                              : "",
-                          style: Theme.of(context).textTheme.bodyMedium!),
+                        widget.item.product.detailsEng.isNotEmpty
+                            ? widget.item.product.detailsEng.substring(0,
+                                min(50, widget.item.product.detailsEng.length))
+                            : "",
+                        style: Theme.of(context).textTheme.bodyMedium!,
+                      ),
                     ),
                     Row(
                       mainAxisSize: MainAxisSize.max,

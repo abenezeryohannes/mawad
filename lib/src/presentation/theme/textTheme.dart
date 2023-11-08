@@ -47,7 +47,7 @@ class AppTextTheme {
       );
   static TextStyle get dark18 => TextStyle(
         fontSize: 18.sp,
-        fontWeight: FontWeight.w400,
+        fontWeight: FontWeight.w700,
         color: AppColorTheme.dark,
       );
 

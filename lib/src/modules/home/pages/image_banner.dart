@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:mawad/src/core/models/image_model.dart';
+import 'package:mawad/src/modules/home/widgets%20/home_skeleton.dart';
 import 'package:mawad/src/presentation/sharedwidgets/button/app_button.dart';
 import 'package:mawad/src/presentation/theme/app_color.dart';
 import 'package:mawad/src/presentation/theme/textTheme.dart';
@@ -36,7 +37,9 @@ class ImageBanner extends StatelessWidget {
           // });
         },
       ),
-      items: imagePath.isNotEmpty ? banner(imagePath) : List.empty(),
+      items: imagePath.isNotEmpty
+          ? banner(imagePath)
+          : List.generate(1, (index) => buildBannerSkeleton(context)),
     );
   }
 
@@ -45,7 +48,7 @@ class ImageBanner extends StatelessWidget {
         .map((ban) => Container(
               margin: EdgeInsets.zero,
               padding: EdgeInsets.zero,
-              child: ban.id.isNotEmpty
+              child: ban.url.isNotEmpty
                   ? Stack(
                       children: [
                         ClipRRect(

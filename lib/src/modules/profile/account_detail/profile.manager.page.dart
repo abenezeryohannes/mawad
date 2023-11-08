@@ -45,7 +45,7 @@ class ProfileManagerPage extends GetView<RegisterWithPhoneController> {
                       height: 20,
                     ),
                     BigTextButton(
-                        text: 'This is the button',
+                        text: 'Save',
                         fontWight: FontWeight.bold,
                         cornerRadius: 24,
                         elevation: 0,
@@ -60,7 +60,7 @@ class ProfileManagerPage extends GetView<RegisterWithPhoneController> {
                 );
               }),
               BigTextButton(
-                  text: 'This is the button',
+                  text: 'Delete Account',
                   fontWight: FontWeight.bold,
                   cornerRadius: 16,
                   elevation: 0,

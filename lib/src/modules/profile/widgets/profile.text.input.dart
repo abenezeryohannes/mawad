@@ -9,6 +9,7 @@ class ProfileTextInput extends StatefulWidget {
     this.placeholder,
     this.initialText,
     this.isEnabled = true,
+    this.controller,
   });
 
   final Function(String text) onChange;
@@ -16,6 +17,7 @@ class ProfileTextInput extends StatefulWidget {
   final String? placeholder;
   final String? initialText;
   final bool isEnabled;
+  final TextEditingController? controller;
 
   @override
   State<ProfileTextInput> createState() => _ProfileTextInputState();
@@ -43,6 +45,7 @@ class _ProfileTextInputState extends State<ProfileTextInput> {
             fillColor: Theme.of(context).scaffoldBackgroundColor,
             placeholder: widget.placeholder ?? '',
             initialValue: widget.initialText,
+            controller: widget.controller,
             radius: 20,
             onChanged: (String text) {
               if (widget.isEnabled) {

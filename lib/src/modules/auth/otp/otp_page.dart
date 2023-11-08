@@ -14,6 +14,7 @@ class OtpPage extends GetView<RegisterWithPhoneController> {
   @override
   Widget build(BuildContext context) {
     final argument = Get.arguments;
+    final isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
 
     return MainScaffold(
         backgroundColor: AppColorTheme.white,
@@ -53,6 +54,9 @@ class OtpPage extends GetView<RegisterWithPhoneController> {
                   },
                   onCompleted: (value) {
                     controller.OTP.value = int.parse(value);
+                    if (value.length == 4) {
+                      controller.validateOTP(int.parse(value));
+                    }
                   },
                 ),
                 SizedBox(
@@ -81,18 +85,20 @@ class OtpPage extends GetView<RegisterWithPhoneController> {
               ],
             ),
             SizedBox(
-                width: Get.width,
+                width: isKeyboardOpen ? Get.width : Get.width * 0.9,
                 child: Obx(() {
                   return BigTextButton(
                     isLoading: controller.isOtpLoading.value,
                     text: 'تأكيد',
                     fontWight: FontWeight.bold,
-                    cornerRadius: 0.r,
+                    cornerRadius: isKeyboardOpen ? 0.r : 22.r,
                     elevation: 0,
                     backgroudColor: AppColorTheme.yellow,
                     borderColor: AppColorTheme.yellow,
                     textColor: AppColorTheme.brown,
-                    padding: EdgeInsets.only(top: 15.h, bottom: 15.h),
+                    padding: EdgeInsets.symmetric(
+                      vertical: 15.h,
+                    ),
                     onClick: () {
                       if (controller.OTP.value < 3) {
                         return;

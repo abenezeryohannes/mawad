@@ -4,8 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:mawad/src/core/constants/contants.dart';
 import 'package:mawad/src/modules/favorite/favorite_list.dart';
-import 'package:mawad/src/modules/home/cards/home.tab.cards.dart';
-import 'package:mawad/src/modules/home/cards/product.catagory.dart';
+import 'package:mawad/src/modules/home/widgets%20/product.catagory.dart';
 import 'package:mawad/src/modules/home/pages/change.country.bottom.sheet.dart';
 import 'package:mawad/src/modules/home/pages/image_banner.dart';
 import 'package:mawad/src/modules/poducts/product/product_controller.dart';
@@ -13,6 +12,8 @@ import 'package:mawad/src/presentation/routes/app_routes.dart';
 import 'package:mawad/src/presentation/sharedwidgets/appbottomshet.dart';
 import 'package:mawad/src/presentation/sharedwidgets/input/search_input.dart';
 import 'package:mawad/src/presentation/theme/app_color.dart';
+
+import '../widgets /home_skeleton.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -119,7 +120,7 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   Expanded(
                     child: Text(
-                      'This is the title',
+                      'Products',
                       textAlign: TextAlign.center,
                       style: Theme.of(context)
                           .textTheme
@@ -188,28 +189,21 @@ class _HomePageState extends State<HomePage> {
             },
             imagePath: productController.banners,
           ),
-          Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                productController.isLeading.value
-                    ? const SizedBox(
-                        height: 100,
-                        child: Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                      )
-                    : productController.products.isNotEmpty
-                        ? FavoriteProductsList(
-                            productList: productController.products)
-                        : const Center(
-                            child: Text('No product'),
-                          ),
-              ],
+          if (productController.isLeading.value)
+            Expanded(
+              child: SingleChildScrollView(
+                // Make sure this is scrollable
+                child: buildFavoriteProductsListSkeleton(context),
+              ),
             ),
-          ),
+          if (!productController.isLeading.value &&
+              productController.products.isNotEmpty)
+            FavoriteProductsList(
+              productList: productController.products,
+            ),
+          if (!productController.isLeading.value &&
+              productController.products.isEmpty)
+            Expanded(child: buildFavoriteProductsListSkeleton(context)),
         ],
       );
     });

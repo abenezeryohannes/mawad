@@ -13,6 +13,8 @@ class RegisterWithPhonePage extends GetView<RegisterWithPhoneController> {
 
   @override
   Widget build(BuildContext context) {
+    final isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+
     return MainScaffold(
         backgroundColor: AppColorTheme.white,
         showBackButton: true,
@@ -64,6 +66,9 @@ class RegisterWithPhonePage extends GetView<RegisterWithPhoneController> {
                           if (val == null || val.isEmpty) {
                             return 'Please enter phone number';
                           }
+                          if (!controller.isPhoneNumberValid(val)) {
+                            return 'Please enter valid phone number';
+                          }
                           return null;
                         },
                       ),
@@ -72,29 +77,28 @@ class RegisterWithPhonePage extends GetView<RegisterWithPhoneController> {
                       height: 153.h,
                     ),
                     SizedBox(
-                        width: Get.width,
-                        child: SizedBox(
-                            width: Get.width,
-                            child: Obx(() {
-                              return BigTextButton(
-                                isLoading: controller.isLoading.value,
-                                text: 'إرسال',
-                                fontWight: FontWeight.bold,
-                                cornerRadius: 0.r,
-                                elevation: 0,
-                                backgroudColor: AppColorTheme.yellow,
-                                borderColor: AppColorTheme.yellow,
-                                textColor: AppColorTheme.brown,
-                                padding:
-                                    EdgeInsets.only(top: 15.h, bottom: 15.h),
-                                onClick: () {
-                                  if (controller.formKey.currentState!
-                                      .validate()) {
-                                    controller.registerWithPhone();
-                                  }
-                                },
-                              );
-                            }))),
+                        width: isKeyboardOpen ? Get.width : Get.width * 0.9,
+                        child: SizedBox(child: Obx(() {
+                          return BigTextButton(
+                            isLoading: controller.isLoading.value,
+                            text: 'إرسال',
+                            fontWight: FontWeight.bold,
+                            cornerRadius: isKeyboardOpen ? 0.r : 22.r,
+                            elevation: 0,
+                            backgroudColor: AppColorTheme.yellow,
+                            borderColor: AppColorTheme.yellow,
+                            textColor: AppColorTheme.brown,
+                            padding: EdgeInsets.only(top: 15.h, bottom: 15.h),
+                            onClick: () {
+                              if (controller.formKey.currentState!.validate() &&
+                                  controller.controller.text.isNotEmpty &&
+                                  controller.isPhoneNumberValid(
+                                      controller.controller.text)) {
+                                controller.registerWithPhone();
+                              }
+                            },
+                          );
+                        }))),
                   ],
                 ),
               ),

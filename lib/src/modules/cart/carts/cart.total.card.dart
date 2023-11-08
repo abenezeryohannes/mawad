@@ -4,10 +4,16 @@ import 'package:mawad/src/modules/cart/carts/cart_controller.dart';
 
 class CartTotalCard extends StatefulWidget {
   const CartTotalCard(
-      {required this.controller, super.key, this.backgroundColor});
+      {required this.controller,
+      this.textStyle,
+      super.key,
+      this.backgroundColor,
+      this.title});
 
   final Color? backgroundColor;
   final CartController controller;
+  final String? title;
+  final TextStyle? textStyle;
 
   @override
   State<CartTotalCard> createState() => _CartTotalCardState();
@@ -23,11 +29,12 @@ class _CartTotalCardState extends State<CartTotalCard> {
         Padding(
           padding: const EdgeInsets.only(bottom: 12.0, left: 5, right: 5),
           child: Text(
-            'Total',
-            style: Theme.of(context)
-                .textTheme
-                .bodyMedium!
-                .copyWith(fontWeight: FontWeight.bold),
+            widget.title ?? 'Total',
+            style: widget.textStyle ??
+                Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .copyWith(fontWeight: FontWeight.bold),
           ),
         ),
         Container(

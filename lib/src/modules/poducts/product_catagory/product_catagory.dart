@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:mawad/src/core/constants/contants.dart';
 import 'package:mawad/src/core/models/catagorie.dart';
-import 'package:mawad/src/modules/home/cards/home.tab.cards.dart';
+import 'package:mawad/src/modules/home/widgets%20/home.tab.cards.dart';
 import 'package:mawad/src/modules/home/pages/change.country.bottom.sheet.dart';
 import 'package:mawad/src/modules/poducts/product/product_controller.dart';
 import 'package:mawad/src/modules/poducts/product_catagory/product_categories_controller.dart';

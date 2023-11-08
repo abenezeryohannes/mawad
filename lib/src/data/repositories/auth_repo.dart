@@ -59,8 +59,8 @@ class AuthRepo {
   Future<UserModel> getUserDetail() async {
     try {
       final result = await _apiService.getRequest('/user/me');
-      log('getUserDetail===>: $result');
-      if (result['success']) {
+
+      if (result['success'] && result['data'] != null) {
         return UserModel.fromJson(result['data']);
       }
       return UserModel(

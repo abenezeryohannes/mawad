@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mawad/src/core/models/country.dart';
-import 'package:mawad/src/modules/home/cards/flag.cards.dart';
+import 'package:mawad/src/modules/home/widgets%20/flag.cards.dart';
 
 import '../../../presentation/sharedwidgets/big.text.button.dart';
 

@@ -44,11 +44,18 @@ class RegisterWithPhoneController extends GetxController {
     }
   }
 
+  bool isPhoneNumberValid(String phoneNumber) {
+    final RegExp phoneRegExp = RegExp(r'^[0-9]{10}$');
+
+    return phoneRegExp.hasMatch(phoneNumber);
+  }
+
   void validateOTP(phone) async {
     try {
       isOtpLoading.value = true;
       if (OTP.value.toString().length == 4) {
-        final result = await _authRepo.validateOTP(phone, OTP.value.toString());
+        final result =
+            await _authRepo.validateOTP(phone.toString(), OTP.value.toString());
 
         if (result.isNotEmpty) {
           isOtpLoading.value = false;

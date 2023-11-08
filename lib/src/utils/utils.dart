@@ -119,4 +119,15 @@ class Util {
     String color = s.replaceAll('#', '0xFF');
     return Color(int.parse(color));
   }
+
+  static formatNumberWithCommas(String number) {
+    final formatter = NumberFormat.decimalPattern();
+    return formatter.format(double.parse(number));
+  }
+
+  static String formatNumberAsPercentage(double number, int percentage) {
+    double percentageValue = percentage / 100.0; // Convert 20% to 0.20
+    double result = number * percentageValue;
+    return result.toStringAsFixed(2);
+  }
 }

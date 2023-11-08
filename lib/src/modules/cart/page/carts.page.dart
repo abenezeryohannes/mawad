@@ -5,6 +5,7 @@ import 'package:mawad/src/core/models/cart_items.dart';
 import 'package:mawad/src/modules/cart/carts/cart.item.card.dart';
 import 'package:mawad/src/modules/cart/carts/cart.total.card.dart';
 import 'package:mawad/src/modules/cart/carts/cart_controller.dart';
+import 'package:mawad/src/presentation/routes/app_routes.dart';
 
 import '../../../presentation/sharedwidgets/big.text.button.dart';
 
@@ -50,32 +51,51 @@ class CartsPage extends StatelessWidget {
                   },
                 );
               }),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: CartTotalCard(
-                  controller:
-                      _cartController, // TODO: Pass the appropriate items here
-                ), // TODO: Pass the appropriate items here
+              Obx(
+                () => _cartController.cartItems.isNotEmpty
+                    ? Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: CartTotalCard(
+                          controller: _cartController,
+                        ),
+                      )
+                    : Container(
+                        alignment: Alignment.center,
+                        margin: EdgeInsets.only(top: 100.h),
+                        child: const Center(
+                          child: Text('No items in cart'),
+                        ),
+                      ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Text(
-                  'Payment fees will be divided into 3 payments', // TODO: Calculate actual total
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
+              Obx(
+                () => _cartController.cartItems.isNotEmpty
+                    ? Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text(
+                          'Payment fees will be divided into 3 payments', // TODO: Calculate actual total
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      )
+                    : const SizedBox.shrink(),
               ),
-              BigTextButton(
-                text: 'This is the button',
-                fontWight: FontWeight.bold,
-                cornerRadius: 24,
-                elevation: 0,
-                backgroudColor: Theme.of(context).colorScheme.secondary,
-                borderColor: Theme.of(context).cardColor,
-                textColor: Theme.of(context).colorScheme.onBackground,
-                padding: const EdgeInsets.all(15),
-                horizontalMargin: const EdgeInsets.all(30),
-                onClick: () {},
-              ),
+              Obx(
+                () => _cartController.cartItems.isNotEmpty
+                    ? BigTextButton(
+                        text: 'Complete the payment',
+                        fontWight: FontWeight.bold,
+                        cornerRadius: 24,
+                        elevation: 0,
+                        backgroudColor: Theme.of(context).colorScheme.secondary,
+                        borderColor: Theme.of(context).cardColor,
+                        textColor: Theme.of(context).colorScheme.onBackground,
+                        padding: const EdgeInsets.all(15),
+                        horizontalMargin: const EdgeInsets.all(30),
+                        onClick: () {
+                          Get.toNamed(AppRoutes.checkout);
+                        },
+                      )
+                    : const SizedBox.shrink(),
+              )
             ],
           ),
         ),

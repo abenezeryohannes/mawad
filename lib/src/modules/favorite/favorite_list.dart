@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:mawad/src/core/models/products.dart';
 import 'package:mawad/src/modules/auth/register/register_with_phone_controller.dart';
 import 'package:mawad/src/modules/favorite/fevorite_controller.dart';
-import 'package:mawad/src/modules/home/cards/product.card.dart';
+import 'package:mawad/src/modules/home/widgets%20/product.card.dart';
 import 'package:mawad/src/presentation/routes/app_routes.dart';
 
 class FavoriteProductsList extends StatelessWidget {

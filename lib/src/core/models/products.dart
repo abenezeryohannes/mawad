@@ -64,6 +64,34 @@ class Product {
     this.tags = const [],
   });
 
+  Product.empity()
+      : id = '',
+        ordersCount = 0,
+        status = false,
+        salesCount = 0,
+        label = '',
+        categories = [],
+        showStock = false,
+        productAddons = [],
+        nameAr = '',
+        nameEng = '',
+        detailsAr = '',
+        detailsEng = '',
+        price = 0.0,
+        stock = 0,
+        tax = 0.0,
+        images = [],
+        itemCode = '',
+        oldPrice = 0.0,
+        additionalInformationAr = '',
+        additionalInformationEng = '',
+        allowStock = false,
+        outOfStock = false,
+        allowBaseTax = false,
+        allowInstructions = false,
+        promotions = [],
+        tags = [];
+
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
       id: json['id'] ?? '',

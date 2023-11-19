@@ -12,6 +12,9 @@ import 'package:mawad/src/utils/helpers/icon_routes.dart';
 
 class ProductController extends GetxController {
   final ProductsRepo _productsRepo = ProductsRepo();
+  final isCategory = false.obs;
+
+  set isCategory(value) => isCategory.value = value;
 
   CacheService cacheService = CacheService();
   final ProductCategoryRepo _productCategoryRepo = ProductCategoryRepo();
@@ -81,6 +84,7 @@ class ProductController extends GetxController {
   void getProductDetail(String id) async {
     try {
       isLeadingDetail.value = true;
+
       final productsData = await _productsRepo.getProductDetail(id);
       isLeadingDetail.value = false;
       productDetail.value = productsData;

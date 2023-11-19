@@ -18,6 +18,14 @@ class CartItem {
     List<Addon>? attributes,
   }) : attributes = attributes ?? [];
 
+  CartItem.empity()
+      : product = Product.empity(),
+        quantity = 1,
+        comment = '',
+        price = 0.0,
+        taxPrice = 0.0,
+        attributes = [];
+
   Map<String, dynamic> toMap() {
     return {
       'id': product.id,

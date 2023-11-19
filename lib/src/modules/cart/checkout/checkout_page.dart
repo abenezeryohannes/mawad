@@ -143,7 +143,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   ),
                   Obx(() {
                     return BigTextButton(
-                      text: "Click to pay $_downPayment",
+                      text:
+                          "Click to pay ${_downPayment == 0 ? '' : '$_downPayment KWD'} ",
                       fontWight: FontWeight.bold,
                       cornerRadius: 24,
                       isLoading: _checkoutcontroller.isLoading.value,

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -46,9 +44,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   @override
   void initState() {
     super.initState();
-    log("productID $productID");
-    // Start loading the product details.
     productController.getProductDetail(productID);
+    int currentQuantity = cartController.getQuantityOfProductInCart(productID);
+    setState(() {
+      initialQuantity = currentQuantity;
+    });
   }
 
   @override
@@ -322,7 +322,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     return SizedBox(
       child: Obx(() {
         return BigTextButton(
-          text: 'أضف للسلة',
+          text: 'Add to cart',
           fontWight: FontWeight.bold,
           cornerRadius: 24,
           enabled:

@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:mawad/src/modules/home/widgets%20/home.tab.cards.dart';
 import 'package:mawad/src/modules/home/widgets%20/home_skeleton.dart';
 import 'package:mawad/src/modules/poducts/product/product_controller.dart';
-import 'package:mawad/src/presentation/routes/app_routes.dart';
 import 'package:mawad/src/presentation/theme/app_color.dart';
 
 class ProductCategoryList extends GetView<ProductController> {
@@ -43,7 +42,7 @@ class ProductCategoryList extends GetView<ProductController> {
                           if (controller
                                   .productCategoryController.selectedIndex ==
                               0) {
-                            Get.toNamed(AppRoutes.productCategory);
+                            controller.isCategory(true);
                             controller.getProductByCountry(
                                 controller.selectedCountry.value!.id);
                           } else if (controller

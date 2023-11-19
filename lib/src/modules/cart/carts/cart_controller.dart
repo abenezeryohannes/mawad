@@ -45,7 +45,6 @@ class CartController extends GetxController {
 
   void addItem(CartItem item) {
     isLoading.value = true;
-    log('Attempting to add item: ${item.product.nameEng}');
     try {
       String itemKey = '${item.product.id}-${item.product.id}';
 
@@ -53,7 +52,10 @@ class CartController extends GetxController {
           '${cartItem.product.id}-${cartItem.product.id}' == itemKey);
 
       if (index != -1) {
-        log('Item already in cart. No changes made to quantity.');
+        _cartItems[index].quantity = item.quantity; // Set the new quantity
+        log('Item quantity updated in cart: ${item.product.nameEng}');
+        messageService.showTopUpMessage(
+            'Info', 'Item quantity updated in cart.');
       } else {
         _cartItems.add(item);
         log('New item added to cart: ${item.product.nameEng}');
@@ -69,8 +71,16 @@ class CartController extends GetxController {
     }
   }
 
+  int getQuantityOfProductInCart(String productId) {
+    CartItem? cartItem = _cartItems.firstWhere(
+      (item) => item.product.id == productId,
+      orElse: () => CartItem.empity(),
+    );
+
+    return cartItem.quantity ?? 0;
+  }
+
   void removeItem(String id) {
-    // No try-catch needed, removeWhere doesn't throw an error in a typical scenario
     _cartItems.removeWhere((cartItem) => cartItem.product.id == id);
     calculateTotals(); // Update totals when an item is removed
     saveToLocalStorage();

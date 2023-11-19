@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:mawad/src/modules/auth/register/register_with_phone_controller.dart';
 import 'package:mawad/src/modules/cart/page/carts.page.dart';
 import 'package:mawad/src/modules/home/pages/home.page.dart';
+import 'package:mawad/src/modules/poducts/product/product_controller.dart';
 import 'package:mawad/src/modules/profile/profile.page.dart';
 import 'package:mawad/src/presentation/routes/app_routes.dart';
 
@@ -52,6 +53,9 @@ class _MainPageState extends State<MainPage> {
             leftCornerRadius: 32,
             rightCornerRadius: 32,
             onTap: (index) async {
+              if (index == 0) {
+                Get.put(ProductController()).isCategory(false);
+              }
               if (index == 2) {
                 Get.to(() => CartsPage());
                 return;
@@ -74,6 +78,7 @@ class _MainPageState extends State<MainPage> {
     switch (index) {
       case 0:
         return const HomePage();
+
       case 1:
         return FavoritePage();
       default:

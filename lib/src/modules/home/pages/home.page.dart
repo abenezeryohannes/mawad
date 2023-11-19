@@ -9,6 +9,7 @@ import 'package:mawad/src/modules/home/widgets%20/product.catagory.dart';
 import 'package:mawad/src/modules/home/pages/change.country.bottom.sheet.dart';
 import 'package:mawad/src/modules/home/pages/image_banner.dart';
 import 'package:mawad/src/modules/poducts/product/product_controller.dart';
+import 'package:mawad/src/modules/poducts/product_catagory/product_catagory.dart';
 import 'package:mawad/src/presentation/sharedwidgets/appbottomshet.dart';
 import 'package:mawad/src/presentation/sharedwidgets/input/search_input.dart';
 import 'package:mawad/src/presentation/theme/app_color.dart';
@@ -31,37 +32,42 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColorTheme.bg,
-      body: SafeArea(
-        child: NestedScrollView(
-          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-            return <Widget>[
-              SliverAppBar(
-                surfaceTintColor: AppColorTheme.bg,
-                pinned: true,
-                primary: true,
-                backgroundColor: AppColorTheme.bg,
-                floating: true,
-                iconTheme: const IconThemeData(size: 0),
-                leadingWidth: 0,
-                leading: null,
-                collapsedHeight: 230.h,
-                expandedHeight: 280.h,
-                forceElevated: innerBoxIsScrolled,
-                flexibleSpace: FlexibleSpaceBar(
-                  title: _appBarBackground(context),
-                  titlePadding: EdgeInsets.zero,
-                  expandedTitleScale: 1,
-                  background: _appBar(context),
+      body: Obx(() {
+        return SafeArea(
+          child: productController.isCategory.value
+              ? const ProductCategory()
+              : NestedScrollView(
+                  headerSliverBuilder:
+                      (BuildContext context, bool innerBoxIsScrolled) {
+                    return <Widget>[
+                      SliverAppBar(
+                        surfaceTintColor: AppColorTheme.bg,
+                        pinned: true,
+                        primary: true,
+                        backgroundColor: AppColorTheme.bg,
+                        floating: true,
+                        iconTheme: const IconThemeData(size: 0),
+                        leadingWidth: 0,
+                        leading: null,
+                        collapsedHeight: 230.h,
+                        expandedHeight: 280.h,
+                        forceElevated: innerBoxIsScrolled,
+                        flexibleSpace: FlexibleSpaceBar(
+                          title: _appBarBackground(context),
+                          titlePadding: EdgeInsets.zero,
+                          expandedTitleScale: 1,
+                          background: _appBar(context),
+                        ),
+                      ),
+                    ];
+                  },
+                  body: Padding(
+                    padding: const EdgeInsets.only(left: 8, right: 8, top: 10),
+                    child: _body(context),
+                  ),
                 ),
-              ),
-            ];
-          },
-          body: Padding(
-            padding: const EdgeInsets.only(left: 8, right: 8, top: 10),
-            child: _body(context),
-          ),
-        ),
-      ),
+        );
+      }),
     );
   }
 

@@ -10,7 +10,6 @@ import 'package:mawad/src/modules/poducts/product/product_controller.dart';
 import 'package:mawad/src/modules/poducts/product_catagory/product_categories_controller.dart';
 import 'package:mawad/src/presentation/sharedwidgets/appbottomshet.dart';
 import 'package:mawad/src/presentation/sharedwidgets/big.text.button.dart';
-import 'package:mawad/src/presentation/sharedwidgets/scaffold/main_scaffold.dart';
 import 'package:mawad/src/presentation/theme/app_color.dart';
 import 'package:mawad/src/presentation/theme/textTheme.dart';
 
@@ -19,53 +18,52 @@ class ProductCategory extends GetView<ProductController> {
 
   @override
   Widget build(BuildContext context) {
-    return MainScaffold(
-        backgroundColor: AppColorTheme.bgColor,
-        body: Column(
-          children: [
-            Text(
-              "Categories",
-              style: AppTextTheme.brown25,
-            ),
-            SizedBox(
-              height: 20.h,
-            ),
-            buildCountryButton(() {
-              showAppBottomSheet(
-                Obx(() {
-                  return ChangeCountryBottomSheet(
-                    countries: controller.countries,
-                    initialSelectedCountry: controller.selectedCountry.value,
-                    onCountrySelected: (selected) {
-                      controller.getProductByCountry(selected.id);
-                      controller.getCategoryByCountry(selected.id);
-                      controller.selectedCountry(selected);
-                    },
-                  );
-                }),
+    return Container(
+        child: Column(
+      children: [
+        Text(
+          "Categories",
+          style: AppTextTheme.brown25,
+        ),
+        SizedBox(
+          height: 20.h,
+        ),
+        buildCountryButton(() {
+          showAppBottomSheet(
+            Obx(() {
+              return ChangeCountryBottomSheet(
+                countries: controller.countries,
+                initialSelectedCountry: controller.selectedCountry.value,
+                onCountrySelected: (selected) {
+                  controller.getProductByCountry(selected.id);
+                  controller.getCategoryByCountry(selected.id);
+                  controller.selectedCountry(selected);
+                },
               );
             }),
-            SizedBox(
-              height: 20.h,
+          );
+        }),
+        SizedBox(
+          height: 20.h,
+        ),
+        Directionality(
+          textDirection: TextDirection.ltr,
+          child: Container(
+            margin: EdgeInsets.only(right: 19.w),
+            alignment: Alignment.topRight,
+            child: Text(
+              "sections",
+              style: AppTextTheme.brown14,
+              textAlign: TextAlign.left,
             ),
-            Directionality(
-              textDirection: TextDirection.ltr,
-              child: Container(
-                margin: EdgeInsets.only(right: 19.w),
-                alignment: Alignment.topRight,
-                child: Text(
-                  "sections",
-                  style: AppTextTheme.brown14,
-                  textAlign: TextAlign.left,
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 24.h,
-            ),
-            buildCategories(controller.categories),
-          ],
-        ));
+          ),
+        ),
+        SizedBox(
+          height: 24.h,
+        ),
+        buildCategories(controller.categories),
+      ],
+    ));
   }
 
   Widget buildCategories(List<CategoryModel> catagories) {
@@ -95,7 +93,7 @@ class ProductCategory extends GetView<ProductController> {
                   onTap: () {
                     catController.selectedIndex = index;
                     controller.getProductByCategory(category.id);
-                    Get.back();
+                    controller.isCategory(false);
                   },
                   label: category.nameEng,
                   icon: index == 0

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:mawad/src/core/models/user.dart';
 import 'package:mawad/src/modules/auth/register/register_with_phone_controller.dart';
 import 'package:mawad/src/modules/profile/widgets/profile.avatar.dart';
 import 'package:mawad/src/modules/profile/widgets/profile.text.input.dart';
@@ -15,63 +17,83 @@ class ProfileManagerPage extends GetView<RegisterWithPhoneController> {
     return Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Obx(() {
-                return Column(
-                  children: [
-                    _appBar(context),
-                    Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: ProfileAvatar(
-                        radius: 50,
-                        onImagePicked: (p0) {},
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Obx(() {
+                  return Column(
+                    children: [
+                      _appBar(context),
+                      Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: ProfileAvatar(
+                          radius: 50,
+                          onImagePicked: (p0) {},
+                        ),
                       ),
-                    ),
-                    ProfileTextInput(
-                        label: 'Name',
-                        placeholder:
-                            controller.userDetail.value!.name.toString(),
-                        onChange: (text) {}),
-                    //todo change this to phone
-                    ProfileTextInput(
-                        isEnabled: false,
-                        label: 'Phone',
-                        initialText:
-                            controller.userDetail.value!.email.toString(),
-                        onChange: (text) {}),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    BigTextButton(
-                        text: 'Save',
-                        fontWight: FontWeight.bold,
-                        cornerRadius: 24,
-                        elevation: 0,
-                        backgroudColor: Theme.of(context).colorScheme.secondary,
-                        borderColor: Theme.of(context).cardColor,
-                        textColor: Theme.of(context).colorScheme.onBackground,
-                        padding: const EdgeInsets.only(top: 15, bottom: 15),
-                        horizontalMargin: const EdgeInsets.only(
-                            left: 30, right: 30, bottom: 10),
-                        onClick: () {})
-                  ],
-                );
-              }),
-              BigTextButton(
-                  text: 'Delete Account',
-                  fontWight: FontWeight.bold,
-                  cornerRadius: 16,
-                  elevation: 0,
-                  backgroudColor: Theme.of(context).scaffoldBackgroundColor,
-                  borderColor: Theme.of(context).cardColor,
-                  textColor: Theme.of(context).hintColor,
-                  padding: const EdgeInsets.only(top: 17, bottom: 17),
-                  horizontalMargin:
-                      const EdgeInsets.only(left: 30, right: 30, bottom: 10),
-                  onClick: () {})
-            ],
+                      ProfileTextInput(
+                          label: 'Full Name',
+                          controller: controller.nameController,
+                          placeholder:
+                              controller.userDetail.value!.name.toString(),
+                          onChange: (text) {
+                            controller.nameController.text = text;
+                          }),
+                      //todo change this to phone
+                      ProfileTextInput(
+                          isEnabled: false,
+                          label: 'Phone',
+                          initialText:
+                              controller.userDetail.value!.phone.toString(),
+                          onChange: (text) {}),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Obx(() {
+                        return BigTextButton(
+                            text: 'Save',
+                            fontWight: FontWeight.bold,
+                            cornerRadius: 24,
+                            isLoading: controller.isLoading.value,
+                            elevation: 0,
+                            backgroudColor:
+                                Theme.of(context).colorScheme.secondary,
+                            borderColor: Theme.of(context).cardColor,
+                            textColor:
+                                Theme.of(context).colorScheme.onBackground,
+                            padding: const EdgeInsets.only(top: 15, bottom: 15),
+                            horizontalMargin: const EdgeInsets.only(
+                                left: 30, right: 30, bottom: 10),
+                            onClick: () {
+                              controller.updateUserDetail(UserModel(
+                                phone: controller.userDetail.value!.phone,
+                                name: controller.nameController.text,
+                              ));
+                            });
+                      })
+                    ],
+                  );
+                }),
+                SizedBox(
+                  height: 100.h,
+                ),
+                BigTextButton(
+                    text: 'Log out',
+                    fontWight: FontWeight.bold,
+                    cornerRadius: 16,
+                    elevation: 0,
+                    backgroudColor: Theme.of(context).scaffoldBackgroundColor,
+                    borderColor: Theme.of(context).cardColor,
+                    textColor: Theme.of(context).hintColor,
+                    padding: const EdgeInsets.only(top: 17, bottom: 17),
+                    horizontalMargin:
+                        const EdgeInsets.only(left: 30, right: 30, bottom: 10),
+                    onClick: () {
+                      controller.logout();
+                    })
+              ],
+            ),
           ),
         ));
   }
@@ -95,7 +117,7 @@ class ProfileManagerPage extends GetView<RegisterWithPhoneController> {
                 )),
             Expanded(
               child: Text(
-                'This is title',
+                'Edit Profile',
                 textAlign: TextAlign.center,
                 style: Theme.of(context)
                     .textTheme

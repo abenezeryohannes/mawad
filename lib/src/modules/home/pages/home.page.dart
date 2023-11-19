@@ -3,12 +3,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:mawad/src/core/constants/contants.dart';
+import 'package:mawad/src/modules/cart/payment/payment_view.dart';
 import 'package:mawad/src/modules/favorite/favorite_list.dart';
 import 'package:mawad/src/modules/home/widgets%20/product.catagory.dart';
 import 'package:mawad/src/modules/home/pages/change.country.bottom.sheet.dart';
 import 'package:mawad/src/modules/home/pages/image_banner.dart';
 import 'package:mawad/src/modules/poducts/product/product_controller.dart';
-import 'package:mawad/src/presentation/routes/app_routes.dart';
 import 'package:mawad/src/presentation/sharedwidgets/appbottomshet.dart';
 import 'package:mawad/src/presentation/sharedwidgets/input/search_input.dart';
 import 'package:mawad/src/presentation/theme/app_color.dart';
@@ -185,7 +185,10 @@ class _HomePageState extends State<HomePage> {
         children: [
           ImageBanner(
             onButtonPressed: () {
-              Get.toNamed(AppRoutes.checkout);
+              Get.to(const PaymentWebViewScreen(
+                paymentUrl: 'http://ordermawad.com',
+                title: "",
+              ));
             },
             imagePath: productController.banners,
           ),

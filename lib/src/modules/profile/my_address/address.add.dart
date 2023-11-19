@@ -99,29 +99,31 @@ class AddAddress extends GetView<AddressController> {
                 const SizedBox(
                   height: 20,
                 ),
-                BigTextButton(
-                    text: 'This is the button',
-                    fontWight: FontWeight.bold,
-                    cornerRadius: 24,
-                    elevation: 0,
-                    enabled: controller.formKey.currentState!.validate(),
-                    backgroudColor: Theme.of(context).colorScheme.secondary,
-                    borderColor: Theme.of(context).cardColor,
-                    textColor: Theme.of(context).colorScheme.onBackground,
-                    padding: const EdgeInsets.only(top: 15, bottom: 15),
-                    horizontalMargin:
-                        const EdgeInsets.only(left: 30, right: 30, bottom: 10),
-                    onClick: () {
-                      if (controller.formKey.currentState!.validate()) {
-                        controller.addLocationDetail(LocationDetail(
-                            avenue: controller.avenueController.text,
-                            block: controller.blockController.text,
-                            house: controller.houseController.text,
-                            street: controller.streetController.text,
-                            cityId: controller.selectedCityId.value,
-                            areaId: controller.selectedAreaId.value));
-                      }
-                    })
+                Obx(() {
+                  return BigTextButton(
+                      text: 'Save',
+                      fontWight: FontWeight.bold,
+                      cornerRadius: 24,
+                      elevation: 0,
+                      isLoading: controller.isLeading.value,
+                      backgroudColor: Theme.of(context).colorScheme.secondary,
+                      borderColor: Theme.of(context).cardColor,
+                      textColor: Theme.of(context).colorScheme.onBackground,
+                      padding: const EdgeInsets.only(top: 15, bottom: 15),
+                      horizontalMargin: const EdgeInsets.only(
+                          left: 30, right: 30, bottom: 10),
+                      onClick: () {
+                        if (controller.formKey.currentState!.validate()) {
+                          controller.addLocationDetail(LocationDetail(
+                              avenue: controller.avenueController.text,
+                              block: controller.blockController.text,
+                              house: controller.houseController.text,
+                              street: controller.streetController.text,
+                              cityId: controller.selectedCityId.value,
+                              areaId: controller.selectedAreaId.value));
+                        }
+                      });
+                })
               ],
             ),
           ),
@@ -149,7 +151,7 @@ class AddAddress extends GetView<AddressController> {
                 )),
             Expanded(
               child: Text(
-                'This is title',
+                'Add Address',
                 textAlign: TextAlign.center,
                 style: Theme.of(Get.context!)
                     .textTheme

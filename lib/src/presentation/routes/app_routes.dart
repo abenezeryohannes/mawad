@@ -9,4 +9,7 @@ class AppRoutes {
   static const cart = '/cart';
   static const checkout = '/checkout';
   static const address = '/address';
+
+  static const editAddress = '/editedAddress';
+  static const addAddress = '/addAddress';
 }

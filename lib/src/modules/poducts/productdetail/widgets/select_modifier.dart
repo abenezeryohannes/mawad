@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mawad/src/core/models/cart_items.dart';
 import 'package:mawad/src/core/models/product_addon.dart';
 import 'package:mawad/src/modules/poducts/modifire_handler_factory.dart';
 import 'package:mawad/src/presentation/sharedwidgets/button/groupe_chip.dart';
@@ -9,20 +9,26 @@ import 'package:mawad/src/presentation/theme/textTheme.dart';
 class SelectionModifierHandler extends StatefulWidget
     implements ModifierHandler {
   final ModifierTag addon;
+  final Modifier modifier;
+  final Function(ModifierCart)? onSelectionChanged;
 
-  const SelectionModifierHandler(this.addon, {Key? key}) : super(key: key);
+  const SelectionModifierHandler(this.addon, this.modifier,
+      {Key? key, this.onSelectionChanged})
+      : super(key: key);
 
   @override
   _SelectionModifierHandlerState createState() =>
       _SelectionModifierHandlerState();
 
   @override
-  Widget displayAddon(ModifierTag addon) {
-    return SelectionModifierHandler(addon);
+  Widget displayAddon(ModifierTag addon, Modifier modifier) {
+    return this;
   }
 }
 
 class _SelectionModifierHandlerState extends State<SelectionModifierHandler> {
+  String? selectedValue;
+
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -35,16 +41,36 @@ class _SelectionModifierHandlerState extends State<SelectionModifierHandler> {
             Directionality(
                 textDirection: TextDirection.rtl,
                 child: ChipGroup(
-                  labels: widget.addon.productModifierChoice.map((modifier) {
-                    return modifier.nameEng;
-                  }).toList(),
+                  labels: widget.addon.productModifierChoice
+                      .map((modifier) => modifier.nameEng)
+                      .toList(),
                   onSelectionChanged: (selectedLabel) {
-                    print("Selected label: $selectedLabel");
+                    var selectedModifierDetail =
+                        widget.addon.productModifierChoice.firstWhere(
+                            (modifier) => modifier.nameEng == selectedLabel,
+                            orElse: () =>
+                                widget.addon.productModifierChoice.first);
+
+                    selectedValue = selectedModifierDetail
+                        .id; // Assuming each choice has an id.
+
+                    ModifierCart selectedModifierCart = ModifierCart(
+                        modifierId: widget.modifier.id,
+                        count: 0,
+                        modifierChoice: [
+                          ModifierChoice(
+                              choseAddonId: widget.addon.id,
+                              modifier: [
+                                ModifierDetail(id: selectedValue!, count: 1)
+                              ])
+                        ]);
+
+                    if (widget.onSelectionChanged != null) {
+                      widget.onSelectionChanged!(selectedModifierCart);
+                    }
                   },
                 )),
-            SizedBox(
-              width: 12.w,
-            ),
+            const SizedBox(width: 12), // Assuming 12 is a predefined width
             Directionality(
               textDirection: TextDirection.ltr,
               child: Text(

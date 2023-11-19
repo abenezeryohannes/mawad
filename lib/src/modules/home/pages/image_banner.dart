@@ -68,7 +68,7 @@ class ImageBanner extends StatelessWidget {
                             radius: 20.r,
                             height: 39.h,
                             width: 130.w,
-                            text: "شاهد المزيد",
+                            text: "See more",
                             textStyle: AppTextTheme.brown12,
                             onPressed: () {
                               onButtonPressed!();

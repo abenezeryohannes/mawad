@@ -25,7 +25,7 @@ class OtpPage extends GetView<RegisterWithPhoneController> {
             Column(
               children: [
                 Text(
-                  "أدخل رمز التفعيل",
+                  "Enter activation code",
                   style: AppTextTheme.brown25,
                 ),
                 SizedBox(
@@ -55,7 +55,7 @@ class OtpPage extends GetView<RegisterWithPhoneController> {
                   onCompleted: (value) {
                     controller.OTP.value = int.parse(value);
                     if (value.length == 4) {
-                      controller.validateOTP(int.parse(value));
+                      controller.validateOTP(argument);
                     }
                   },
                 ),
@@ -89,7 +89,7 @@ class OtpPage extends GetView<RegisterWithPhoneController> {
                 child: Obx(() {
                   return BigTextButton(
                     isLoading: controller.isOtpLoading.value,
-                    text: 'تأكيد',
+                    text: 'Confirm',
                     fontWight: FontWeight.bold,
                     cornerRadius: isKeyboardOpen ? 0.r : 22.r,
                     elevation: 0,

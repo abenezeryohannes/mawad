@@ -24,13 +24,9 @@ void main() async {
   await localStorage.initialize();
   final authService = AuthTokenService();
   await authService.initialize();
-  // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   await GetStorage.init();
-  // await Firebase.initializeApp(
-  //   options: DefaultFirebaseOptions.currentPlatform,
-  // );
-  // Locks app orientation
+
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   await SystemChrome.setEnabledSystemUIMode(

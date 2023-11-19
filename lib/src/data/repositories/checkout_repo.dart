@@ -1,8 +1,8 @@
-// create checklout repo
-
 import 'dart:developer';
 
+import 'package:mawad/src/core/models/order.dart';
 import 'package:mawad/src/core/models/payment_mode.dart';
+import 'package:mawad/src/core/models/payment_type.dart';
 import 'package:mawad/src/data/services/api_serives.dart';
 
 class CheckoutRepo {
@@ -23,5 +23,27 @@ class CheckoutRepo {
     return data.map((json) => PaymentPercentage.fromJson(json)).toList();
   }
 
-  //getPaymentPercentage
+// make order
+  Future<PaymentInfo> makeOrder(OrderModel order) async {
+    try {
+      log('makeOrder==>: ${order.toMap()}');
+      final result = await _apiService.postRequest(
+          '/website/order/make-order', order.toMap());
+      log('makeOrder==|||>: $result');
+      return PaymentInfo.fromJson(result['data']);
+    } catch (error) {
+      log("makeOrder error $error");
+      rethrow;
+    }
+  }
+
+  Future<PaymentMethods> getPaymentAvailability() async {
+    try {
+      final result = await _apiService.getRequest('/website/payment/type');
+      log('getPaymentAvailability==|||>: $result');
+      return PaymentMethods.fromJson(result['data']);
+    } catch (error) {
+      rethrow;
+    }
+  }
 }

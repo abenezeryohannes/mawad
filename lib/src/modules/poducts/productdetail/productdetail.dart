@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -44,7 +46,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   @override
   void initState() {
     super.initState();
-
+    log("productID $productID");
     // Start loading the product details.
     productController.getProductDetail(productID);
   }
@@ -76,7 +78,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   buildProductPriceAndDescription(),
                   buildDescriptions(),
                   ...productController.productDetail.value!.productAddons
-                      .map((addon) => AddonHandlerFactory.create(addon))
+                      .map((addon) => AddonHandlerFactory.create(
+                            addon,
+                            onAddonChanged: cartController.handleAddon,
+                          ))
                       .toList(),
                   const SizedBox(height: 10),
                   Visibility(
@@ -320,6 +325,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           text: 'أضف للسلة',
           fontWight: FontWeight.bold,
           cornerRadius: 24,
+          enabled:
+              productController.productDetail.value!.allowInstructions == true
+                  ? productController.productDetail.value!.allowInstructions &&
+                      productController.commentController.text.isNotEmpty
+                  : true,
           elevation: 0,
           backgroudColor: Theme.of(context).colorScheme.secondary,
           borderColor: Theme.of(context).cardColor,
@@ -331,7 +341,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           onClick: () {
             cartController.addItem(CartItem(
                 product: productController.productDetail.value!,
-                quantity: initialQuantity));
+                quantity: initialQuantity,
+                attributes: cartController.selectedAddons,
+                comment: productController.commentController.text,
+                price: productController.productDetail.value!.price));
           },
         );
       }),

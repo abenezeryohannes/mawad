@@ -1,3 +1,5 @@
+import 'package:mawad/src/core/enums/paymentType.dart';
+
 class PaymentMethods {
   final int id;
   final bool knet;
@@ -24,11 +26,41 @@ class PaymentMethods {
 class PaymentTypeMode {
   final String id;
   final String icon;
-  final String name;
+  final PaymentType name;
+  bool isAvailable = false;
 
   PaymentTypeMode({
     required this.id,
     required this.icon,
     required this.name,
+    this.isAvailable = false,
   });
+}
+
+class PaymentInfo {
+  final String id;
+  final String orderId;
+  final String payLink;
+
+  PaymentInfo({
+    required this.id,
+    required this.orderId,
+    required this.payLink,
+  });
+
+  factory PaymentInfo.fromJson(Map<String, dynamic> json) {
+    return PaymentInfo(
+      id: json['id'] as String,
+      orderId: json['orderId'] as String,
+      payLink: json['payLink'] as String,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'orderId': orderId,
+      'payLink': payLink,
+    };
+  }
 }

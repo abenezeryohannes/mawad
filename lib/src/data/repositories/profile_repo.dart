@@ -7,10 +7,10 @@ import 'package:mawad/src/data/services/api_serives.dart';
 
 class ProfileRepo {
   final ApiService _apiService = ApiService();
+
   Future<List<City>> getCity(String id) async {
     try {
       final result = await _apiService.getRequest('/country/city/get/$id');
-      log('getCityresult==>: $result');
       return mapCity(result['data']);
     } catch (error) {
       rethrow;
@@ -60,9 +60,11 @@ class ProfileRepo {
   }
 
   Future<bool> updateLocationDetail(LocationDetail locationDetail) async {
+    log("updateLocationDetail: ${locationDetail.toJsonInput()}");
     try {
-      final result = await _apiService.postRequest(
+      final result = await _apiService.putRequest(
           '/user/address/${locationDetail.id}', locationDetail.toJsonInput());
+      log("updateLocationDetail: $result");
       return result['success'];
     } catch (error) {
       rethrow;

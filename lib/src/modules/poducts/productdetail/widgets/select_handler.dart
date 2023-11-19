@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mawad/src/core/models/cart_items.dart';
 import 'package:mawad/src/core/models/product_addon.dart';
 import 'package:mawad/src/modules/poducts/addon_handler_factory.dart';
 import 'package:mawad/src/modules/poducts/modifire_handler_factory.dart';
@@ -9,20 +10,44 @@ import 'package:mawad/src/presentation/theme/textTheme.dart';
 class SelectionAddonHandler extends StatefulWidget implements AddonHandler {
   final ProductAddons addon;
 
-  const SelectionAddonHandler(this.addon, {Key? key}) : super(key: key);
+  final Function(Addon)? onSelectionChanged; // Add this line
+  final Function(dynamic)? onModifierChanged; // Add this line
+
+  const SelectionAddonHandler(
+    this.addon, {
+    Key? key,
+    this.onSelectionChanged,
+    this.onModifierChanged,
+  }) : super(key: key);
 
   @override
   _SelectionAddonHandlerState createState() => _SelectionAddonHandlerState();
 
   @override
   Widget displayAddon(ProductAddons addon) {
-    return SelectionAddonHandler(addon);
+    return SelectionAddonHandler(
+      addon,
+      onSelectionChanged: onSelectionChanged,
+      onModifierChanged: onModifierChanged,
+    );
   }
 }
 
 class _SelectionAddonHandlerState extends State<SelectionAddonHandler> {
   String? selectedModifierId;
-  Map<String, bool> additionalSelections = {};
+  Map<String, dynamic> additionalSelections = {};
+  ModifierCart? selectedModifier;
+  void handleModifierChange(ModifierCart modifier) {
+    setState(() {
+      selectedModifier = modifier;
+    });
+
+    Addon addon = Addon(
+      addonId: widget.addon.id,
+      modifiers: [selectedModifier!],
+    );
+    widget.onSelectionChanged?.call(addon);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,8 +71,19 @@ class _SelectionAddonHandlerState extends State<SelectionAddonHandler> {
                       );
                       selectedModifierId = selectedModifier.id;
 
-                      // Reset the additional selections when the main selection changes
                       additionalSelections.clear();
+
+                      widget.onSelectionChanged?.call(
+                        Addon(
+                          addonId: widget.addon.id,
+                          modifiers: [
+                            ModifierCart(
+                                modifierId: selectedModifierId!,
+                                count: selectedModifier.index,
+                                modifierChoice: [])
+                          ],
+                        ),
+                      );
                     });
                   },
                 ),
@@ -65,10 +101,12 @@ class _SelectionAddonHandlerState extends State<SelectionAddonHandler> {
             ...widget.addon.modifiers
                 .firstWhere((modifier) => modifier.id == selectedModifierId)
                 .modifierTags
-                .map((tag) => Visibility(
-                      visible: true,
-                      child: ModifierHandlerFactory.create(tag),
-                    ))
+                .map((tag) => ModifierHandlerFactory.create(
+                    tag,
+                    widget.addon.modifiers.firstWhere(
+                      (modifier) => modifier.id == selectedModifierId,
+                    ),
+                    onModifierChanged: handleModifierChange))
                 .toList(),
         ],
       ),

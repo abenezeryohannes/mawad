@@ -88,7 +88,7 @@ class _CartItemCardState extends State<CartItemCard> {
                             padding: const EdgeInsets.only(),
                             child: Text(
                               widget.countable
-                                  ? "Price:${widget.item.product.price * widget.item.quantity}"
+                                  ? "KWD ${widget.item.product.price * widget.item.quantity}"
                                   : 'Special request',
                               style: widget.countable
                                   ? AppTextTheme.darkGray14bold

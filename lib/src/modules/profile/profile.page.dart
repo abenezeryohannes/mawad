@@ -19,37 +19,42 @@ class ProfilePage extends GetView<RegisterWithPhoneController> {
           child: Column(children: [
             Obx(() {
               return Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    ProfileAvatar(
-                      radius: 50,
-                      onImagePicked: (p0) {},
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 12.0),
-                      child: Text(
-                        controller.userDetail.value!.name.toString(),
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleLarge!
-                            .copyWith(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 12.0),
-                      child: Text(
-                        controller.userDetail.value!.email.toString(),
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodySmall!
-                            .copyWith(fontWeight: FontWeight.bold),
-                      ),
-                    )
-                  ],
-                ),
+                child: controller.userDetail.value != null
+                    ? Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          ProfileAvatar(
+                            radius: 50,
+                            onImagePicked: (p0) {},
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 12.0),
+                            child: Text(
+                              controller.userDetail.value!.name.toString(),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge!
+                                  .copyWith(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Directionality(
+                            textDirection: TextDirection.ltr,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 12.0),
+                              child: Text(
+                                controller.userDetail.value!.phone.toString(),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall!
+                                    .copyWith(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          )
+                        ],
+                      )
+                    : Container(),
               );
             }),
             Container(

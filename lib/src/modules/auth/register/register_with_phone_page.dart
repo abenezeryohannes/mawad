@@ -26,18 +26,18 @@ class RegisterWithPhonePage extends GetView<RegisterWithPhoneController> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    'أدخل رقم الهاتف',
+                    'Enter a phone number',
                     style: AppTextTheme.titleText26,
                   ),
                   SizedBox(
                     height: 30.h,
                   ),
                   Text(
-                    'سيتم إرسال لك رسالة قصيرة',
+                    'A short message will be sent to you',
                     style: AppTextTheme.graysubtitle15,
                   ),
                   Text(
-                    'بها رمز التفعيل علي الرقم المسجل',
+                    'to confirm your phone number',
                     style: AppTextTheme.graysubtitle15,
                   ),
                 ],
@@ -74,14 +74,14 @@ class RegisterWithPhonePage extends GetView<RegisterWithPhoneController> {
                       ),
                     ),
                     SizedBox(
-                      height: 153.h,
+                      height: 100.h,
                     ),
                     SizedBox(
                         width: isKeyboardOpen ? Get.width : Get.width * 0.9,
                         child: SizedBox(child: Obx(() {
                           return BigTextButton(
                             isLoading: controller.isLoading.value,
-                            text: 'إرسال',
+                            text: 'Continue',
                             fontWight: FontWeight.bold,
                             cornerRadius: isKeyboardOpen ? 0.r : 22.r,
                             elevation: 0,
@@ -99,6 +99,9 @@ class RegisterWithPhonePage extends GetView<RegisterWithPhoneController> {
                             },
                           );
                         }))),
+                    SizedBox(
+                      height: 0.1.h,
+                    ),
                   ],
                 ),
               ),

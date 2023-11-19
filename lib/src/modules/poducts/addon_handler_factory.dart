@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mawad/src/core/constants/addonoption.dart';
+import 'package:mawad/src/core/models/cart_items.dart';
 import 'package:mawad/src/core/models/product_addon.dart';
 import 'package:mawad/src/modules/poducts/productdetail/widgets/check_box_handler.dart';
+import 'package:mawad/src/modules/poducts/productdetail/widgets/counter_handler.dart';
 import 'package:mawad/src/modules/poducts/productdetail/widgets/select_handler.dart';
 import 'package:mawad/src/presentation/sharedwidgets/button/color_selector.dart';
 import 'package:mawad/src/presentation/sharedwidgets/cards/primery_cards.dart';
@@ -9,7 +12,56 @@ import 'package:mawad/src/presentation/theme/textTheme.dart';
 
 abstract class AddonHandler {
   Widget displayAddon(ProductAddons addon);
-  // other methods related to handling the addon can be added here
+}
+
+class AddonHandlerFactory {
+  static Widget create(
+    ProductAddons addon, {
+    Function(Addon)? onAddonChanged,
+  }) {
+    final handler = _createHandler(
+      addon,
+      onAddonChanged: onAddonChanged,
+    );
+    return handler.displayAddon(addon);
+  }
+
+  static AddonHandler _createHandler(
+    ProductAddons addon, {
+    Function(Addon)? onAddonChanged,
+  }) {
+    switch (addon.addonOption) {
+      case AddonOption.SELECT:
+        return SelectionAddonHandler(
+          addon,
+          onSelectionChanged: (Addon selectedAddon) {
+            if (onAddonChanged != null) {
+              onAddonChanged.call(selectedAddon);
+            }
+          },
+        );
+      case AddonOption.CHECKBOX:
+        return CheckboxAddonHandler(
+          addon,
+          onCheckboxChanged: (Addon selectedAddon) {
+            if (onAddonChanged != null) {
+              onAddonChanged.call(selectedAddon);
+            }
+          },
+        );
+      case AddonOption.COUNTER:
+        return CounterAddonHandler(
+          addon: addon,
+          onAddonChanged: (selectedAddon) {
+            if (onAddonChanged != null) {
+              onAddonChanged.call(selectedAddon);
+            }
+          },
+        );
+      default:
+        throw Exception("Unknown addon type: ${addon.addonOption}");
+    }
+  }
 }
 
 class ColorAddonHandler extends AddonHandler {
@@ -56,23 +108,5 @@ class ColorAddonHandler extends AddonHandler {
         ),
       ),
     );
-  }
-}
-
-class AddonHandlerFactory {
-  static Widget create(ProductAddons addon) {
-    final handler = _createHandler(addon);
-    return handler.displayAddon(addon);
-  }
-
-  static AddonHandler _createHandler(ProductAddons addon) {
-    switch (addon.addonOption) {
-      case "SELECT":
-        return SelectionAddonHandler(addon);
-      case "CHECKBOX":
-        return CheckboxAddonHandler(addon);
-      default:
-        throw Exception("Unknown addon type: ${addon.addonOption}");
-    }
   }
 }

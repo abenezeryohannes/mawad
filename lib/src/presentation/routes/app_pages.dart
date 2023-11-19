@@ -12,6 +12,8 @@ import 'package:mawad/src/modules/poducts/product_catagory/product_catagory.dart
 import 'package:mawad/src/modules/poducts/product_catagory/product_categories_binding.dart';
 import 'package:mawad/src/modules/poducts/productdetail/productdetail.dart';
 import 'package:mawad/src/modules/main.page.dart';
+import 'package:mawad/src/modules/profile/my_address/address.add.dart';
+import 'package:mawad/src/modules/profile/my_address/address.edite.dart';
 import 'package:mawad/src/modules/profile/my_address/address.page.dart';
 import 'package:mawad/src/modules/profile/my_address/address_binding.dart';
 import 'package:mawad/src/modules/profile/order/orderdetail/order_detail.dart';
@@ -78,6 +80,14 @@ class AppPages {
     GetPage(
         name: AppRoutes.address,
         page: () => const AddressPage(),
+        binding: AddressBinding()),
+    GetPage(
+        name: AppRoutes.editAddress,
+        page: () => const EditAddress(),
+        binding: AddressBinding()),
+    GetPage(
+        name: AppRoutes.addAddress,
+        page: () => const AddAddress(),
         binding: AddressBinding()),
   ];
   static final cart = [

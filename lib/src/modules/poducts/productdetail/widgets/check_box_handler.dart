@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mawad/src/core/models/cart_items.dart';
 import 'package:mawad/src/core/models/product_addon.dart';
 import 'package:mawad/src/modules/poducts/addon_handler_factory.dart';
 import 'package:mawad/src/modules/poducts/modifire_handler_factory.dart';
@@ -9,15 +10,25 @@ import 'package:mawad/src/utils/helpers/icon_routes.dart';
 
 class CheckboxAddonHandler extends StatefulWidget implements AddonHandler {
   final ProductAddons addon;
-
-  const CheckboxAddonHandler(this.addon, {Key? key}) : super(key: key);
+  final Function(Addon)? onCheckboxChanged;
+  final Function(ModifierCart)? onModifierChanged;
+  const CheckboxAddonHandler(
+    this.addon, {
+    Key? key,
+    this.onCheckboxChanged,
+    this.onModifierChanged,
+  }) : super(key: key);
 
   @override
   _CheckboxAddonHandlerState createState() => _CheckboxAddonHandlerState();
 
   @override
   Widget displayAddon(ProductAddons addon) {
-    return this; // Simply return the current instance.
+    return CheckboxAddonHandler(
+      addon,
+      onCheckboxChanged: onCheckboxChanged,
+      onModifierChanged: onModifierChanged,
+    );
   }
 }
 
@@ -32,6 +43,21 @@ class _CheckboxAddonHandlerState extends State<CheckboxAddonHandler> {
         selectedModifierIds.add(id);
       }
     });
+
+    // Update the Addon object on each change
+    if (widget.onCheckboxChanged != null) {
+      List<ModifierCart> modifiers = selectedModifierIds.map((selectedId) {
+        return ModifierCart(
+            modifierId: selectedId, count: 1, modifierChoice: []);
+      }).toList();
+
+      Addon addon = Addon(
+        addonId: widget.addon.id,
+        modifiers: modifiers,
+      );
+
+      widget.onCheckboxChanged!(addon);
+    }
   }
 
   bool isDisabled(String id) {
@@ -70,9 +96,14 @@ class _CheckboxAddonHandlerState extends State<CheckboxAddonHandler> {
         ...widget.addon.modifiers
             .expand((modifier) => modifier.modifierTags.map((tag) {
                   return Visibility(
-                    visible: selectedModifierIds.contains(
-                        widget.addon.id), // Adjust this condition as needed.
-                    child: ModifierHandlerFactory.create(tag),
+                    visible: selectedModifierIds.contains(modifier.id),
+                    child: ModifierHandlerFactory.create(
+                      tag,
+                      modifier,
+                      onModifierChanged: (value) {
+                        widget.onModifierChanged?.call(value);
+                      },
+                    ),
                   );
                 }))
             .toList(),

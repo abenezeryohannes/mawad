@@ -12,6 +12,8 @@ class CartController extends GetxController {
   final LocalStorageService _localStorageService = LocalStorageService();
   final MessageService messageService = MessageService();
 
+  final selectedAddons = <Addon>[].obs;
+
   final isLoading = false.obs;
   final subtotal = 0.0.obs;
   final shippingFees = 0.0.obs;
@@ -130,6 +132,22 @@ class CartController extends GetxController {
     } finally {
       isLoading.value = false;
       update();
+    }
+  }
+
+  void handleAddon(Addon addonChange) {
+    if (addonChange.modifiers.isEmpty) {
+      selectedAddons.value = selectedAddons
+          .where((addon) => addon.addonId != addonChange.addonId)
+          .toList();
+    } else {
+      var updatedSelectedAddons = selectedAddons
+          .where((addon) => addon.addonId != addonChange.addonId)
+          .toList();
+
+      updatedSelectedAddons.add(addonChange);
+
+      selectedAddons.value = updatedSelectedAddons;
     }
   }
 }

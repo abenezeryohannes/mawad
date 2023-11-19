@@ -24,7 +24,7 @@ class ProductCategory extends GetView<ProductController> {
         body: Column(
           children: [
             Text(
-              "مـواد",
+              "Categories",
               style: AppTextTheme.brown25,
             ),
             SizedBox(
@@ -87,16 +87,13 @@ class ProductCategory extends GetView<ProductController> {
               itemCount: catagories.length,
               itemBuilder: (context, index) {
                 final category = catagories[index];
-
-                return Expanded(
-                    child: SelectableCard(
+                return SelectableCard(
                   backgroundColor: catController.isSelected
                       ? AppColorTheme.yellow
                       : AppColorTheme.white,
                   isSelected: catController.selectedIndex == index,
                   onTap: () {
                     catController.selectedIndex = index;
-
                     controller.getProductByCategory(category.id);
                     Get.back();
                   },
@@ -114,7 +111,7 @@ class ProductCategory extends GetView<ProductController> {
                               ? AppColorTheme.white
                               : AppColorTheme.gray,
                         ),
-                ));
+                );
               },
             );
           }),

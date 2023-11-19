@@ -13,6 +13,7 @@ class RegisterWithPhoneController extends GetxController {
   final isLoading = false.obs;
   final isOtpLoading = false.obs;
   final TextEditingController controller = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
   final OTP = 0.obs;
 
   final formKey = GlobalKey<FormState>();
@@ -23,6 +24,7 @@ class RegisterWithPhoneController extends GetxController {
   void onInit() {
     super.onInit();
     getUserDetail();
+    isLoading.value = false;
   }
 
   void registerWithPhone() async {
@@ -31,10 +33,12 @@ class RegisterWithPhoneController extends GetxController {
       if (formKey.currentState!.validate()) {
         final phone = controller.text;
 
-        final user = await _authRepo.registerWithPhone(phone);
+        final user = await _authRepo
+            .registerWithPhone(convertToInternationalPhoneNumber(phone));
         if (user) {
           isLoading.value = false;
-          Get.toNamed(AppRoutes.otp, arguments: phone);
+          Get.toNamed(AppRoutes.otp,
+              arguments: convertToInternationalPhoneNumber(phone));
         }
       }
     } catch (error) {
@@ -45,20 +49,37 @@ class RegisterWithPhoneController extends GetxController {
   }
 
   bool isPhoneNumberValid(String phoneNumber) {
-    final RegExp phoneRegExp = RegExp(r'^[0-9]{10}$');
+    final RegExp phoneRegExp =
+        RegExp(r'^(?:\+?\d{1,3})?\s?-?\(?\d{3}\)?\s?-?\d{3}\s?-?\d{4}$');
 
     return phoneRegExp.hasMatch(phoneNumber);
   }
 
+  String convertToInternationalPhoneNumber(String phoneNumber,
+      [String countryCode = '251']) {
+    String numericOnly = phoneNumber.replaceAll(RegExp(r'[^0-9]'), '');
+
+    if (numericOnly.length == 10 && numericOnly.startsWith('0')) {
+      numericOnly = numericOnly.substring(1);
+    }
+
+    if (!numericOnly.startsWith('251')) {
+      return '$countryCode$numericOnly';
+    }
+    return numericOnly;
+  }
+
   void validateOTP(phone) async {
+    log("validateOTP:  ${convertToInternationalPhoneNumber(phone)}");
     try {
       isOtpLoading.value = true;
       if (OTP.value.toString().length == 4) {
-        final result =
-            await _authRepo.validateOTP(phone.toString(), OTP.value.toString());
+        final result = await _authRepo.validateOTP(
+            convertToInternationalPhoneNumber(phone), OTP.value.toString());
 
         if (result.isNotEmpty) {
           isOtpLoading.value = false;
+
           Get.offAllNamed(AppRoutes.main);
         }
       }
@@ -75,13 +96,26 @@ class RegisterWithPhoneController extends GetxController {
     userDetail.value = user;
   }
 
-  void updateUserDetail(UserModel user) {
-//todo update the user detail
-    final userDetail = _authRepo.addAccountDetail(user);
-    log(userDetail.toString());
+  void updateUserDetail(UserModel user) async {
+    log("updateUserDetail:  ${user.toJson()}");
+    try {
+      isLoading.value = true;
+      await _authRepo.updateAccount(user);
+      isLoading.value = false;
+    } catch (error) {
+      isLoading.value = false;
+      log(error.toString());
+      // Handle error here
+    }
   }
 
   Future<bool> isAuth() async {
     return _authRepo.isUserRegistered();
+  }
+
+  void logout() async {
+    await _authRepo.logout();
+    update();
+    Get.close(2);
   }
 }

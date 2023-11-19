@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:mawad/src/modules/poducts/product/product_controller.dart';
 import 'package:mawad/src/presentation/sharedwidgets/cards/primery_cards.dart';
 import 'package:mawad/src/presentation/sharedwidgets/input/textarea_filed.dart';
 import 'package:mawad/src/presentation/theme/textTheme.dart';
 
-class InputAddonHandler extends StatefulWidget {
+class InputAddonHandler extends GetView<ProductController> {
   const InputAddonHandler({super.key});
 
-  @override
-  State<InputAddonHandler> createState() => _InputAddonHandlerState();
-}
-
-class _InputAddonHandlerState extends State<InputAddonHandler> {
-  final TextEditingController myController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return PrimerCard(
@@ -28,11 +24,11 @@ class _InputAddonHandlerState extends State<InputAddonHandler> {
             ),
           ),
           TextAreaFiled(
-            controller:
-                myController, // You need to create a TextEditingController
+            controller: controller
+                .commentController, // You need to create a TextEditingController
             hintText: '',
             onChanged: (text) {
-              // Handle text changes here
+              controller.commentController.text = text;
             },
           ),
           Container(

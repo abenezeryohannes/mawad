@@ -1,12 +1,15 @@
 import 'dart:developer';
 
+import 'package:mawad/src/core/constants/contants.dart';
 import 'package:mawad/src/core/models/user.dart';
 import 'package:mawad/src/data/services/api_serives.dart';
 import 'package:mawad/src/data/services/auth_token_service.dart';
+import 'package:mawad/src/data/services/localstorage_service.dart';
 
 class AuthRepo {
   final ApiService _apiService = ApiService();
   final AuthTokenService _authTokenService = AuthTokenService();
+  final LocalStorageService _localStorageService = LocalStorageService();
 
   Future<bool> registerWithPhone(String phone) async {
     const String recaptchaToken =
@@ -44,17 +47,6 @@ class AuthRepo {
     }
   }
 
-  Future<UserModel> addAccountDetail(UserModel user) async {
-    try {
-      final result =
-          await _apiService.postRequest('user/update-account', user.toJson());
-
-      return UserModel.fromJson(result['data']);
-    } catch (error) {
-      rethrow;
-    }
-  }
-
   //get user detail
   Future<UserModel> getUserDetail() async {
     try {
@@ -63,9 +55,7 @@ class AuthRepo {
       if (result['success'] && result['data'] != null) {
         return UserModel.fromJson(result['data']);
       }
-      return UserModel(
-        phone: '',
-      );
+      return UserModel.fromJson(result['data']);
     } catch (error) {
       log('Error fetching products getUserDetail: $error');
 
@@ -73,7 +63,26 @@ class AuthRepo {
     }
   }
 
+  //update account
+  Future<UserModel> updateAccount(UserModel user) async {
+    try {
+      final result = await _apiService.postRequest(
+          '/user/update-account', user.toJsonInput());
+      log("updateAccount: ${result['data']}");
+
+      return UserModel.fromJson(result['data']);
+    } catch (error) {
+      log('Error fetching products updateAccount: $error');
+      rethrow;
+    }
+  }
+
   Future<bool> isUserRegistered() async {
     return await _authTokenService.hasToken();
+  }
+
+  Future<void> logout() async {
+    await _authTokenService.logout();
+    _localStorageService.delete(AppConstants.CART_ITEMS);
   }
 }

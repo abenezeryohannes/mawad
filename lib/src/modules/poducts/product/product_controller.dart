@@ -1,5 +1,4 @@
-import 'dart:developer';
-
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:mawad/src/core/models/catagorie.dart';
 import 'package:mawad/src/core/models/country.dart';
@@ -7,17 +6,20 @@ import 'package:mawad/src/core/models/image_model.dart';
 import 'package:mawad/src/core/models/products.dart';
 import 'package:mawad/src/data/repositories/produact_category_repo.dart';
 import 'package:mawad/src/data/repositories/products.dart';
-import 'package:mawad/src/data/services/recaptcha_token.dart';
+import 'package:mawad/src/data/services/cashe_services.dart';
 import 'package:mawad/src/modules/poducts/product_catagory/product_categories_controller.dart';
 import 'package:mawad/src/utils/helpers/icon_routes.dart';
 
 class ProductController extends GetxController {
-  final recaptchaService = ReCaptchaV3Service(
-      '6Le73mIgAAAAAHAcNOnzqRHPsQVnS-EiTjG7KYQW', 'YOUR_ACTION');
   final ProductsRepo _productsRepo = ProductsRepo();
+
+  CacheService cacheService = CacheService();
   final ProductCategoryRepo _productCategoryRepo = ProductCategoryRepo();
   final ProductCategoryController productCategoryController =
       Get.put(ProductCategoryController());
+
+  final TextEditingController commentController = TextEditingController();
+
   final countries = <Country>[].obs;
   var selectedCountry = Rx<Country?>(null);
   final products = <Product>[].obs;
@@ -27,12 +29,6 @@ class ProductController extends GetxController {
 
   final isLeading = false.obs;
   final isLeadingDetail = false.obs;
-
-  Future<String?> getReca() async {
-    final token = await recaptchaService.getRecaptchaV3Token();
-    log(token.toString());
-    return token;
-  }
 
   @override
   void onReady() async {

@@ -21,6 +21,7 @@ class AddressController extends GetxController {
   final TextEditingController streetController = TextEditingController();
   final selectedAreaId = ''.obs;
   final selectedCityId = ''.obs;
+  final currentSelectedAddress = ''.obs;
   final isLeading = false.obs;
   Timer? _debounce;
 
@@ -42,7 +43,27 @@ class AddressController extends GetxController {
     super.onClose();
   }
 
+  void reset() {
+    currentSelectedAddress.value = '';
+    avenueController.text = '';
+    houseController.text = '';
+    blockController.text = '';
+    streetController.text = '';
+    selectedCityId.value = '';
+    selectedAreaId.value = '';
+  }
+
   bool get isFormValid => formKey.currentState?.validate() ?? false;
+
+  void setSelectedAddress(LocationDetail location) {
+    currentSelectedAddress.value = location.id ?? '';
+    avenueController.text = location.avenue ?? '';
+    houseController.text = location.house ?? '';
+    blockController.text = location.block ?? '';
+    streetController.text = location.street ?? '';
+    selectedCityId.value = location.city!.cityId ?? '';
+    selectedAreaId.value = location.area!.areaId ?? '';
+  }
 
   void onAreaSelected(String newAreaId) {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
@@ -83,6 +104,7 @@ class AddressController extends GetxController {
   Future<void> getLocationDetail() async {
     try {
       locationDetails.value = await _profileRepo.getLocationDetail();
+      log("getLocationDetail: ${locationDetails.toList().toString()}");
     } catch (error) {
       log('Error getting location details: $error');
     }
@@ -91,7 +113,10 @@ class AddressController extends GetxController {
   void addLocationDetail(LocationDetail location) async {
     try {
       final result = await _profileRepo.addLocationDetail(location);
-      log("addLocationDetail: $result");
+      if (result) {
+        getLocationDetail();
+        Get.back();
+      }
     } catch (error) {
       print(error);
     }
@@ -100,8 +125,10 @@ class AddressController extends GetxController {
   Future<void> updateLocationDetail(LocationDetail location) async {
     try {
       isLeading.value = true;
-      final result = await _profileRepo.updateLocationDetail(location);
-      log("updateLocationDetail: $result");
+      await _profileRepo.updateLocationDetail(location);
+
+      getLocationDetail();
+      Get.back();
       isLeading.value = false;
     } catch (error) {
       isLeading.value = false;

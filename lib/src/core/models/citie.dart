@@ -47,6 +47,7 @@ class LocationDetail {
 
   Map<String, dynamic> toJsonInput() {
     return {
+      'id': id,
       'avenue': avenue,
       'block': block,
       'house': house,

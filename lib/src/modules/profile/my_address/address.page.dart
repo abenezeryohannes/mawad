@@ -1,11 +1,13 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mawad/src/modules/profile/my_address/address_controller.dart';
+import 'package:mawad/src/presentation/routes/app_routes.dart';
 import 'package:mawad/src/presentation/theme/app_color.dart';
 import 'package:mawad/src/presentation/theme/textTheme.dart';
 
 import '../widgets/profile.item.card.dart';
-import 'address.add.dart';
 
 class AddressPage extends GetView<AddressController> {
   const AddressPage({super.key});
@@ -31,22 +33,30 @@ class AddressPage extends GetView<AddressController> {
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
                             final location = controller.locationDetails[index];
-                            return Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 20, right: 20.0),
-                              child: ProfileItemCard(
-                                title: location.city?.nameEng,
-                                backgroundColor:
-                                    Theme.of(context).scaffoldBackgroundColor,
-                                icon: Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 10.0, right: 10),
-                                  child: Image.asset(
-                                    'assets/icon/home_location.png',
-                                    width: 20,
-                                    height: 20,
-                                    color:
-                                        Theme.of(context).colorScheme.secondary,
+                            return Container(
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 20, right: 20.0),
+                                child: ProfileItemCard(
+                                  onClick: () {
+                                    log("message");
+                                    controller.setSelectedAddress(location);
+                                    Get.toNamed(AppRoutes.editAddress);
+                                  },
+                                  title: location.city?.nameEng,
+                                  backgroundColor:
+                                      Theme.of(context).scaffoldBackgroundColor,
+                                  icon: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 10.0, right: 10),
+                                    child: Image.asset(
+                                      'assets/icon/home_location.png',
+                                      width: 20,
+                                      height: 20,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -80,7 +90,7 @@ class AddressPage extends GetView<AddressController> {
                 )),
             Expanded(
               child: Text(
-                'This is title',
+                'Address',
                 textAlign: TextAlign.center,
                 style: AppTextTheme.dark18,
               ),
@@ -91,7 +101,10 @@ class AddressPage extends GetView<AddressController> {
                       MaterialStateProperty.all(AppColorTheme.yellow),
                   shape: MaterialStateProperty.all(const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10))))),
-              onPressed: () => Get.to(() => const AddAddress()),
+              onPressed: () {
+                controller.reset();
+                Get.toNamed(AppRoutes.addAddress);
+              },
               icon: const Icon(Icons.add),
             )
           ],

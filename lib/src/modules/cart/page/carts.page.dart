@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:mawad/src/core/models/cart_items.dart';
+import 'package:mawad/src/modules/auth/register/register_with_phone_controller.dart';
 import 'package:mawad/src/modules/cart/carts/cart.item.card.dart';
 import 'package:mawad/src/modules/cart/carts/cart.total.card.dart';
 import 'package:mawad/src/modules/cart/carts/cart_controller.dart';
@@ -11,6 +12,8 @@ import '../../../presentation/sharedwidgets/big.text.button.dart';
 
 class CartsPage extends StatelessWidget {
   final CartController _cartController = Get.put(CartController());
+  final RegisterWithPhoneController _authController =
+      Get.find<RegisterWithPhoneController>();
 
   CartsPage({super.key});
 
@@ -90,7 +93,12 @@ class CartsPage extends StatelessWidget {
                         textColor: Theme.of(context).colorScheme.onBackground,
                         padding: const EdgeInsets.all(15),
                         horizontalMargin: const EdgeInsets.all(30),
-                        onClick: () {
+                        onClick: () async {
+                          if (!await _authController.isAuth()) {
+                            Get.toNamed(AppRoutes.register);
+                            return;
+                          }
+
                           Get.toNamed(AppRoutes.checkout);
                         },
                       )
@@ -122,7 +130,7 @@ class CartsPage extends StatelessWidget {
             ),
             Expanded(
               child: Text(
-                'This is title',
+                'Cart',
                 textAlign: TextAlign.center,
                 style: Theme.of(context)
                     .textTheme

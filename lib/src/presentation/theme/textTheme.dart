@@ -18,6 +18,11 @@ class AppTextTheme {
         fontWeight: FontWeight.w500,
         color: AppColorTheme.brown,
       );
+  static TextStyle get brown20bold => TextStyle(
+        fontSize: 20.sp,
+        fontWeight: FontWeight.w700,
+        color: AppColorTheme.brown,
+      );
   static TextStyle get graysubtitle15 => TextStyle(
         fontSize: 15.sp,
         fontWeight: FontWeight.w400,
@@ -45,12 +50,21 @@ class AppTextTheme {
         fontWeight: FontWeight.w900,
         color: AppColorTheme.darkblue,
       );
+  static TextStyle get gray16 => TextStyle(
+        fontSize: 16.sp,
+        fontWeight: FontWeight.w700,
+        color: AppColorTheme.darkGray2,
+      );
   static TextStyle get dark18 => TextStyle(
         fontSize: 18.sp,
         fontWeight: FontWeight.w700,
         color: AppColorTheme.dark,
       );
-
+  static TextStyle get gray18 => TextStyle(
+        fontSize: 18.sp,
+        fontWeight: FontWeight.w400,
+        color: AppColorTheme.darkGray2,
+      );
   static TextStyle get brown14 => TextStyle(
         fontSize: 14.sp,
         fontWeight: FontWeight.w400,

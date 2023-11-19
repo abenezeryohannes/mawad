@@ -46,7 +46,7 @@
 		</data>
 		<key>Frameworks/App.framework/App</key>
 		<data>
-		1+pDYWOdSMB2V/HKfmOaCoCU3PM=
+		P7LXKn3vkWIWm2SqaJ/BhvcqFyA=
 		</data>
 		<key>Frameworks/App.framework/Info.plist</key>
 		<data>
@@ -54,7 +54,7 @@
 		</data>
 		<key>Frameworks/App.framework/_CodeSignature/CodeResources</key>
 		<data>
-		Nye9F+0UTUv6NXUP1DLfDta7ifE=
+		yqzEr/emwXVO0jRVT5oQifRyEZI=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.bin</key>
 		<data>
@@ -70,7 +70,7 @@
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/NOTICES.Z</key>
 		<data>
-		RPzb3lJMeM4i60+/RnWZXXM0XWI=
+		HVtYa95pm6hpvIl1BsOT2OSixM4=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/assets/font/FFShamelFamily-SansOneBold.ttf</key>
 		<data>
@@ -354,7 +354,7 @@
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/kernel_blob.bin</key>
 		<data>
-		U4FU738Uq5H54cPIEzloCjZ1Drk=
+		oMGy0sSNcXwk0AfthwGP1sdtEXw=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
 		<data>
@@ -452,22 +452,6 @@
 		<data>
 		nMTZkkm9uooDDa8A2YJSyK73oP8=
 		</data>
-		<key>Frameworks/PhoneNumberKit.framework/Info.plist</key>
-		<data>
-		4TSmnPlD4t5OIxQSF9XipMnYP68=
-		</data>
-		<key>Frameworks/PhoneNumberKit.framework/PhoneNumberKit</key>
-		<data>
-		FmceeeieRPYTt3JJ5xt69cZbKxQ=
-		</data>
-		<key>Frameworks/PhoneNumberKit.framework/PhoneNumberMetadata.json</key>
-		<data>
-		qpw2A0XuTy/C9PK/FCvrQ8X9Ylc=
-		</data>
-		<key>Frameworks/PhoneNumberKit.framework/_CodeSignature/CodeResources</key>
-		<data>
-		7zjB4MgQ7oLWc33lPGEcM3SKERY=
-		</data>
 		<key>Frameworks/Reachability.framework/Info.plist</key>
 		<data>
 		HS100Dt7awzJ7jRxkwomAoqVdLI=
@@ -516,18 +500,6 @@
 		<data>
 		1nSUTFHfnp8fA+6qIGiu2D+fXDI=
 		</data>
-		<key>Frameworks/libphonenumber_plugin.framework/Info.plist</key>
-		<data>
-		+hxavYfaFMgvJ5lHMDpbP3Sp47A=
-		</data>
-		<key>Frameworks/libphonenumber_plugin.framework/_CodeSignature/CodeResources</key>
-		<data>
-		/lecPQB7ZAYAF51TXFai3ZU8tbw=
-		</data>
-		<key>Frameworks/libphonenumber_plugin.framework/libphonenumber_plugin</key>
-		<data>
-		WsH/CX282BngMAE8QmVFNFyH/Eo=
-		</data>
 		<key>Frameworks/path_provider_foundation.framework/Info.plist</key>
 		<data>
 		a/V/lA2OTQSB9YIgDoK3FGrH5k8=
@@ -575,6 +547,18 @@
 		<key>Frameworks/url_launcher_ios.framework/url_launcher_ios</key>
 		<data>
 		RSQi0ARqZzY4q7sfw2+ghRdX53A=
+		</data>
+		<key>Frameworks/webview_flutter_wkwebview.framework/Info.plist</key>
+		<data>
+		pFuWTAoUKbQTluDMwvAE7GmtN7I=
+		</data>
+		<key>Frameworks/webview_flutter_wkwebview.framework/_CodeSignature/CodeResources</key>
+		<data>
+		XIgfA5o716SjkCafRjLX7BkSMag=
+		</data>
+		<key>Frameworks/webview_flutter_wkwebview.framework/webview_flutter_wkwebview</key>
+		<data>
+		GTuLbyZetMSnLjdYVSSOGmNR50s=
 		</data>
 		<key>Info.plist</key>
 		<data>
@@ -661,7 +645,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			bptfvj8ZmM1jOU3L9Oc0S3KlkDVY+/ygRji57/cSfmY=
+			4LJ+6w/4/CWjVfPBZO2nSnBv5eInvRdzVZi/r7M4oUs=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/Info.plist</key>
@@ -675,7 +659,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			ek9VxrhvdOhWIunPEkUusqLPozlbTk8IaAy0BoKkC8s=
+			QadVlxk3IfqwseknhuLJHYsRAIB+A5OPu8SBn61iyjA=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.bin</key>
@@ -703,7 +687,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			LzpwNFODs02JKkKBgXbYcjJjVY1fj87/vsr/mwK5wOM=
+			1aPztperzmYOQ7Tyg5QGSD+H0XKXBWDoNu9w+rZsyu4=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/assets/font/FFShamelFamily-SansOneBold.ttf</key>
@@ -1200,7 +1184,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			cpzRVPubVYqhXXf4GodW9hoS/iXMWln2lxjyp+PYB7s=
+			ggvJDjRo5Gv5qXQJlIlIyu8anPKJo6HU27bIs7f4dLY=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
@@ -1371,34 +1355,6 @@
 			rETMw/Yb9jC7IPuAQ9hs/kyJldBrRgCEQA20XXBJezA=
 			</data>
 		</dict>
-		<key>Frameworks/PhoneNumberKit.framework/Info.plist</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			8bfNMaM/gJWewNk85i87klKBD6hqGuKwM+dBPEm4ulU=
-			</data>
-		</dict>
-		<key>Frameworks/PhoneNumberKit.framework/PhoneNumberKit</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			I88/DO5lSPXSG/9YrMuJCa9bMkrn8u0wbFJN6x7hOCI=
-			</data>
-		</dict>
-		<key>Frameworks/PhoneNumberKit.framework/PhoneNumberMetadata.json</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			rJTsCo70k4zpI3wpKfScn/siXxZstezjr35FDPsEZYY=
-			</data>
-		</dict>
-		<key>Frameworks/PhoneNumberKit.framework/_CodeSignature/CodeResources</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			a4L+Mr2D4lEfAzr2LMyUIXBLbBrS2DmonDU1KIeikt4=
-			</data>
-		</dict>
 		<key>Frameworks/Reachability.framework/Info.plist</key>
 		<dict>
 			<key>hash2</key>
@@ -1483,27 +1439,6 @@
 			8DVI1du2kvVFbCpbHIqjzuoS6Dt2y9Zz1rt78bD527c=
 			</data>
 		</dict>
-		<key>Frameworks/libphonenumber_plugin.framework/Info.plist</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			NifWlZmdlmSA4Q9jO6fE9SrYaGFSZaOvKylaVHVO/dI=
-			</data>
-		</dict>
-		<key>Frameworks/libphonenumber_plugin.framework/_CodeSignature/CodeResources</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			dVdC6Tw98uSm2wvsbrveFm+T+EfpUe1c4Lss3l2Hass=
-			</data>
-		</dict>
-		<key>Frameworks/libphonenumber_plugin.framework/libphonenumber_plugin</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			lNHz0+OhbA9hmxtdfOoQVw6P88mZcvu3Ro/pqkM/GeA=
-			</data>
-		</dict>
 		<key>Frameworks/path_provider_foundation.framework/Info.plist</key>
 		<dict>
 			<key>hash2</key>
@@ -1586,6 +1521,27 @@
 			<key>hash2</key>
 			<data>
 			wTtqZN39oiEGL7OX5wctQIiiBBL++1XABFew1htyhuI=
+			</data>
+		</dict>
+		<key>Frameworks/webview_flutter_wkwebview.framework/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			QGBpIN0Sm4Fmzu+5iwU3FWXoYW2uwOwTAjxSq3Os1kQ=
+			</data>
+		</dict>
+		<key>Frameworks/webview_flutter_wkwebview.framework/_CodeSignature/CodeResources</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			eiporIMVmsfUdzKBdnAnGt5LGgIrutKcYzmdijNKzqQ=
+			</data>
+		</dict>
+		<key>Frameworks/webview_flutter_wkwebview.framework/webview_flutter_wkwebview</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			/1G6BAA8fEvbSrY7eKn6MRg52pH3Nr+QQoPfV6i/cCs=
 			</data>
 		</dict>
 	</dict>

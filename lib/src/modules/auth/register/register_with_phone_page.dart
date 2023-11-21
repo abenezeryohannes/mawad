@@ -61,7 +61,7 @@ class RegisterWithPhonePage extends GetView<RegisterWithPhoneController> {
                         },
                         hint: "XXXXXXXXXX",
                         inputColor: AppColorTheme.lightgray,
-                        phoneNumberMaxLength: 10,
+                        phoneNumberMaxLength: 8,
                         validator: (String? val) {
                           if (val == null || val.isEmpty) {
                             return 'Please enter phone number';

@@ -49,24 +49,28 @@ class RegisterWithPhoneController extends GetxController {
   }
 
   bool isPhoneNumberValid(String phoneNumber) {
-    final RegExp phoneRegExp =
-        RegExp(r'^(?:\+?\d{1,3})?\s?-?\(?\d{3}\)?\s?-?\d{3}\s?-?\d{4}$');
+    final RegExp phoneRegExp = RegExp(r'^(?:\+965\s?)?\d{8}$');
 
     return phoneRegExp.hasMatch(phoneNumber);
   }
 
   String convertToInternationalPhoneNumber(String phoneNumber,
-      [String countryCode = '251']) {
+      [String defaultCountryCode = '965']) {
     String numericOnly = phoneNumber.replaceAll(RegExp(r'[^0-9]'), '');
 
-    if (numericOnly.length == 10 && numericOnly.startsWith('0')) {
+    if (numericOnly.startsWith('965')) {
+      return numericOnly;
+    }
+
+    if (numericOnly.length == 8) {
+      return '$defaultCountryCode$numericOnly';
+    }
+
+    if (numericOnly.startsWith('0')) {
       numericOnly = numericOnly.substring(1);
     }
 
-    if (!numericOnly.startsWith('251')) {
-      return '$countryCode$numericOnly';
-    }
-    return numericOnly;
+    return '$defaultCountryCode$numericOnly';
   }
 
   void validateOTP(phone) async {
@@ -97,7 +101,6 @@ class RegisterWithPhoneController extends GetxController {
   }
 
   void updateUserDetail(UserModel user) async {
-    log("updateUserDetail:  ${user.toJson()}");
     try {
       isLoading.value = true;
       await _authRepo.updateAccount(user);

@@ -13,6 +13,7 @@ class MainBinding extends Bindings {
     Get.lazyPut<FavoritesController>(() => FavoritesController());
     Get.lazyPut<MainController>(() => MainController());
     Get.lazyPut<ProductController>(() => ProductController());
+
     Get.put(RegisterWithPhoneController());
   }
 }

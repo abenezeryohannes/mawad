@@ -59,6 +59,7 @@ class _CustomPhoneInputState extends State<CustomPhoneInput> {
         // maxLength: widget.phoneNumberMaxLength,
         // maxLengthEnforcement: MaxLengthEnforcement.truncateAfterCompositionEnds,
         decoration: InputDecoration(
+          hintTextDirection: TextDirection.rtl,
           hintText: widget.hint,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(25.r),
@@ -66,10 +67,11 @@ class _CustomPhoneInputState extends State<CustomPhoneInput> {
           ),
           fillColor: widget.inputColor,
           filled: true,
-          suffixIcon: _buildSuffixIcon(),
+          prefixIcon: _buildSuffixIcon(),
         ),
         keyboardType: TextInputType.phone,
         validator: widget.validator,
+        textDirection: TextDirection.rtl,
         textAlign: TextAlign.end);
   }
 
@@ -82,23 +84,21 @@ class _CustomPhoneInputState extends State<CustomPhoneInput> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(width: 12.sp),
+            CircleAvatar(
+              radius: 20.r,
+              backgroundColor: AppColorTheme.white,
+              child: Text(selectedCountry!.flag,
+                  style: TextStyle(fontSize: 27.sp, color: Colors.white)),
+            ),
+            SizedBox(width: 12.sp),
+            // const Icon(Icons.arrow_drop_down),
+            Text(selectedCountry!.dialCode,
+                style: AppTextTheme.darkblueTitle17),
+            SizedBox(width: 12.sp),
             Container(
               color: AppColorTheme.lightGray2,
               height: 55.h,
               width: 2,
-            ),
-            SizedBox(width: 12.sp),
-            const Icon(Icons.arrow_drop_down),
-            Text(selectedCountry!.dialCode,
-                style: AppTextTheme.darkblueTitle17),
-            SizedBox(width: 12.sp),
-            CircleAvatar(
-              radius: 20.r,
-              backgroundColor: AppColorTheme.darkGray,
-              child: Text(
-                selectedCountry!.flag,
-                style: AppTextTheme.darkblueTitle17,
-              ),
             ),
             SizedBox(width: 12.sp),
           ],

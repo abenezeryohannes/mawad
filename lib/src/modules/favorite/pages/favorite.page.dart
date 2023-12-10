@@ -13,14 +13,16 @@ class FavoritePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MainScaffold(
-      showBackButton: true,
+      // showBackButton: true,
       body: Container(
         child: Column(
           children: [
             Obx(() {
               if (favoritesController.favorites.isEmpty) {
-                return const Center(
-                  child: Text('No favorites added yet.'),
+                return Container(
+                  margin: EdgeInsets.only(top: Get.height * 0.3),
+                  alignment: Alignment.center,
+                  child: const Text('No favorites added yet.'),
                 );
               }
               return FavoriteProductsList(

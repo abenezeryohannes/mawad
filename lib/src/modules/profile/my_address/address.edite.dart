@@ -25,28 +25,28 @@ class EditAddress extends GetView<AddressController> {
                     label: 'Avenue',
                     placeholder: 'avenue',
                     onChange: (text) {
-                      controller.avenueController.text = text;
+                      // controller.avenueController.text = text;
                     }),
                 ProfileTextInput(
                     label: 'Block',
                     placeholder: 'block',
                     controller: controller.blockController,
                     onChange: (text) {
-                      controller.blockController.text = text;
+                      // controller.blockController.text = text;
                     }),
                 ProfileTextInput(
                     label: 'House',
                     placeholder: 'house',
                     controller: controller.houseController,
                     onChange: (text) {
-                      controller.houseController.text = text;
+                      // controller.houseController.text = text;
                     }),
                 ProfileTextInput(
                     label: 'Street',
                     placeholder: 'street',
                     controller: controller.streetController,
                     onChange: (text) {
-                      controller.streetController.text = text;
+                      // controller.streetController.text = text;
                     }),
                 Obx(() {
                   if (controller.cities.isNotEmpty) {

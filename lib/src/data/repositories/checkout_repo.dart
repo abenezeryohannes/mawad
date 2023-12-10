@@ -12,7 +12,6 @@ class CheckoutRepo {
   Future<List<PaymentPercentage>> getPaymentPercentage() async {
     try {
       final result = await _apiService.getRequest('/payment-percentage');
-      log('getPaymentPercentage==|||>: $result');
       return mapPaymentMode(result['data']);
     } catch (error) {
       rethrow;
@@ -29,7 +28,6 @@ class CheckoutRepo {
       log('makeOrder==>: ${order.toMap()}');
       final result = await _apiService.postRequest(
           '/website/order/make-order', order.toMap());
-      log('makeOrder==|||>: $result');
       return PaymentInfo.fromJson(result['data']);
     } catch (error) {
       log("makeOrder error $error");
@@ -45,5 +43,19 @@ class CheckoutRepo {
     } catch (error) {
       rethrow;
     }
+  }
+
+  Future<List<OrderModel>> getOrderList() async {
+    try {
+      final result = await _apiService.getRequest('/order/getOrder');
+      log('getOrderList==|||>: $result');
+      return mapOrderList(result['data']);
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  List<OrderModel> mapOrderList(List<dynamic> data) {
+    return data.map((json) => OrderModel.fromJson(json)).toList();
   }
 }

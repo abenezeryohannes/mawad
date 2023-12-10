@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mawad/src/modules/profile/order/orderdetail/order_detail_controller.dart';
 import 'package:mawad/src/modules/profile/widgets/tab.custom.dart';
 import 'package:mawad/src/presentation/routes/app_routes.dart';
 
@@ -44,33 +45,84 @@ class _OrderPageState extends State<OrderPage> {
             const SizedBox(
               height: 20,
             ),
-            Expanded(
-              child: ListView.builder(
-                  physics: const ClampingScrollPhysics(),
-                  itemCount: 3,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(left: 20, right: 20.0),
-                      child: ProfileItemCard(
-                        onClick: () {
-                          Get.toNamed(AppRoutes.orderDetail);
-                        },
-                        title: 'Sample text',
-                        backgroundColor:
-                            Theme.of(context).scaffoldBackgroundColor,
-                        icon: Padding(
-                          padding: const EdgeInsets.only(left: 10.0, right: 10),
-                          child: Image.asset(
-                            'assets/icon/box.png',
-                            width: 20,
-                            height: 20,
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
-                        ),
-                      ),
+            if (selectedTab == 0)
+              GetBuilder(
+                  id: 'oldOrders',
+                  builder: (OrderDetailController OrderController) {
+                    return Expanded(
+                      child: ListView.builder(
+                          physics: const ClampingScrollPhysics(),
+                          itemCount: OrderController.newOrdersItem.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 20, right: 20.0),
+                              child: Directionality(
+                                textDirection: TextDirection.rtl,
+                                child: ProfileItemCard(
+                                  onClick: () {
+                                    Get.toNamed(AppRoutes.orderDetail);
+                                  },
+                                  title: 'sad: 12/12/2021',
+                                  backgroundColor:
+                                      Theme.of(context).scaffoldBackgroundColor,
+                                  icon: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 10.0, right: 10),
+                                    child: Image.asset(
+                                      'assets/icon/box.png',
+                                      width: 20,
+                                      height: 20,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }),
                     );
                   }),
-            )
+            if (selectedTab == 1)
+              GetBuilder(
+                  id: 'newOrders',
+                  builder: (OrderDetailController OrderController) {
+                    return Expanded(
+                      child: ListView.builder(
+                          physics: const ClampingScrollPhysics(),
+                          itemCount: OrderController.oldOrdersItem.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 20, right: 20.0),
+                              child: Directionality(
+                                textDirection: TextDirection.rtl,
+                                child: ProfileItemCard(
+                                  onClick: () {
+                                    Get.toNamed(AppRoutes.orderDetail);
+                                  },
+                                  title: 'Date: 12/12/2021',
+                                  backgroundColor:
+                                      Theme.of(context).scaffoldBackgroundColor,
+                                  icon: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 10.0, right: 10),
+                                    child: Image.asset(
+                                      'assets/icon/box.png',
+                                      width: 20,
+                                      height: 20,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }),
+                    );
+                  })
           ],
         ),
       ),

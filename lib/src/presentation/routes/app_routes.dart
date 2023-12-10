@@ -12,4 +12,5 @@ class AppRoutes {
 
   static const editAddress = '/editedAddress';
   static const addAddress = '/addAddress';
+  static const orderPage = '/orderPage';
 }

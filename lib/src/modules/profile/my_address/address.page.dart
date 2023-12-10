@@ -63,7 +63,9 @@ class AddressPage extends GetView<AddressController> {
                             );
                           }),
                     )
-                  : const CircularProgressIndicator();
+                  : const Center(
+                      child: Text('No Address'),
+                    );
             })
           ],
         ),

@@ -32,16 +32,16 @@ class _FlagCardState extends State<FlagCard> {
         mainAxisSize: MainAxisSize.min,
         children: [
           SizedBox(
-            width: widget.size,
-            height: widget.size,
+            width: 90.r,
+            height: 90.r,
             child: Stack(
               children: [
                 if (widget.selected)
                   Align(
                     alignment: Alignment.center,
                     child: Container(
-                      width: widget.size,
-                      height: widget.size,
+                      width: 90.r,
+                      height: 90.r,
                       decoration: BoxDecoration(
                           borderRadius:
                               const BorderRadius.all(Radius.circular(100)),
@@ -50,20 +50,20 @@ class _FlagCardState extends State<FlagCard> {
                     ),
                   ),
                 Align(
-                    alignment: Alignment.center,
-                    child: CircleAvatar(
-                      radius: 26.r,
-                      child: ClipRRect(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(100)),
-                        child: SvgPicture.network(
-                          // widget.country.attachment.name,
-                          "${AppConstants.IMAGER_URL}/${widget.country.attachment.id}",
-                          width: widget.size - 12,
-                          height: widget.size - 12,
-                        ),
+                  alignment: Alignment.center,
+                  child: CircleAvatar(
+                    radius: 40.r,
+                    backgroundColor: Colors.transparent,
+                    child: ClipOval(
+                      child: SvgPicture.network(
+                        "${AppConstants.IMAGER_URL}/${widget.country.attachment.id}",
+                        fit: BoxFit.cover,
+                        width: 78.r,
+                        height: 78.r,
                       ),
-                    )),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

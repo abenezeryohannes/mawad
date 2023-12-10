@@ -72,41 +72,38 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _appBarBackground(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.ltr,
-      child: Container(
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Container(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                child: Container(
-                  child: SearchInput(
-                    controller: searchController,
-                    placeholder: 'Search',
-                    hintStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          color: Theme.of(context).highlightColor,
-                          fontWeight: FontWeight.bold,
-                        ),
-                    fillColor: Colors.white,
-                    prefixIcon: Icon(
-                      Icons.search,
-                      color: Theme.of(context).highlightColor,
-                    ),
-                    contentPadding: const EdgeInsets.only(top: 10),
-                    onChanged: (val) {
-                      searchController.text = val;
-                    },
+    return Container(
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: Container(
+                child: SearchInput(
+                  controller: searchController,
+                  placeholder: 'Search',
+                  hintStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        color: Theme.of(context).highlightColor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                  fillColor: Colors.white,
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: Theme.of(context).highlightColor,
                   ),
+                  contentPadding: const EdgeInsets.only(top: 10),
+                  onChanged: (val) {
+                    // searchController.text = val;
+                  },
                 ),
               ),
             ),
-            const ProductCategoryList()
-          ],
-        ),
+          ),
+          const ProductCategoryList()
+        ],
       ),
     );
   }

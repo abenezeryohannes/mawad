@@ -31,6 +31,7 @@ class CheckoutController extends GetxController {
     super.onInit();
     getPaymentPercentage();
     getPaymentAvailability();
+    getOrderList();
   }
 
   void getPaymentPercentage() async {
@@ -38,6 +39,15 @@ class CheckoutController extends GetxController {
       final result = await _checkoutRepo.getPaymentPercentage();
       log('getPaymentPercentage==>: $result');
       paymentPercentageItems.value = result;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  void getOrderList() async {
+    try {
+      final result = await _checkoutRepo.getOrderList();
+      log('getOrderList==>: $result');
     } catch (error) {
       rethrow;
     }

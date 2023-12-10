@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mawad/src/modules/auth/register/register_with_phone_controller.dart';
 import 'package:mawad/src/modules/profile/widgets/profile.item.card.dart';
-import 'package:mawad/src/modules/profile/order/order.page.dart';
 import 'package:mawad/src/modules/profile/account_detail/profile.manager.page.dart';
 import 'package:mawad/src/modules/profile/widgets/profile.avatar.dart';
 import 'package:mawad/src/presentation/routes/app_routes.dart';
@@ -111,7 +110,7 @@ class ProfilePage extends GetView<RegisterWithPhoneController> {
             color: Theme.of(context).colorScheme.secondary,
           ),
         ),
-        onClick: () => Get.to(() => const OrderPage()),
+        onClick: () => Get.toNamed(AppRoutes.orderPage),
       ),
       ProfileItemCard(
         title: 'Privacy Terms',

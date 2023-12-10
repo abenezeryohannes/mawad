@@ -88,7 +88,6 @@ class CartController extends GetxController {
   }
 
   void updateItemQuantity(String id, int newQuantity) {
-    // Find the item and update its quantity directly without finding the index
     final cartItem =
         _cartItems.firstWhereOrNull((item) => item.product.id == id);
     if (cartItem != null && newQuantity > 0) {

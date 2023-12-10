@@ -159,6 +159,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             _addressController.locationDetails.isNotEmpty
                                 ? _addressController.locationDetails.first
                                 : null;
+                        if (firstLocationDetail == null) {
+                          Get.snackbar('', 'Please add address for delivery');
+                          return;
+                        }
                         _checkoutcontroller.makeOrder(OrderModel(
                           products: _cartController.cartItems,
                           orderTimeType: "AS_SOON_AS_POSSIBLE",
@@ -168,7 +172,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           services: [],
                           userData: UserData(
                               user: _authController.userDetail.value!,
-                              address: firstLocationDetail!),
+                              address: firstLocationDetail),
                           userId: _authController.userDetail.value!.userId
                               .toString(),
                           deliveryArea: firstLocationDetail.area!.areaId,

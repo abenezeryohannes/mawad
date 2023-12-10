@@ -38,7 +38,7 @@ class _OtpInputState extends State<OtpInput> {
         fontWeight: FontWeight.w900,
       ),
       decoration: BoxDecoration(
-        color: Colors.yellow,
+        color: AppColorTheme.yellow,
         borderRadius: BorderRadius.circular(66.0),
         border: Border.all(color: Colors.transparent),
       ),

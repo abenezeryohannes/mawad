@@ -11,8 +11,6 @@ import 'package:mawad/src/modules/main_binding.dart';
 import 'package:mawad/src/presentation/routes/app_pages.dart';
 import 'package:mawad/src/presentation/routes/app_routes.dart';
 import 'package:mawad/src/presentation/theme/theme.dart';
-import 'package:mawad/src/presentation/appcore/language/localizations.dart'
-    as localizations;
 import 'package:mawad/src/modules/main.page.dart';
 
 import 'injectable/getit.dart';
@@ -69,14 +67,14 @@ class MyApp extends StatelessWidget {
           GlobalCupertinoLocalizations.delegate,
         ],
         debugShowCheckedModeBanner: false,
-        translations: localizations.Localizations(),
-        fallbackLocale: const Locale('ar', 'KW'),
-        supportedLocales: const [
-          Locale('ar', 'KW'), // Spanish
-          Locale('en', 'US'), // English
-        ],
-        locale:
-            lang == 'en' ? const Locale('en', 'US') : const Locale('ar', 'KW'),
+        // translations: localizations.Localizations(),
+        // fallbackLocale: const Locale('ar', 'KW'),
+        // supportedLocales: const [
+        //   Locale('ar', 'KW'), // Spanish
+        //   Locale('en', 'US'), // English
+        // ],
+        // locale:
+        //     lang == 'en' ? const Locale('en', 'US') : const Locale('ar', 'KW'),
         theme: LightThemeData,
         // home: const RegisterPage(),
         home: const MainPage(),

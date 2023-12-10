@@ -43,7 +43,22 @@ class CartsPage extends StatelessWidget {
                           item: item,
                           onValueChange: (val) {
                             if (val == 0) {
-                              _cartController.removeItem(item.product.id);
+                              Get.defaultDialog(
+                                title: 'Remove Item',
+                                content: const Text(
+                                    'Do you want to remove this item'),
+                                textConfirm: 'Yes',
+                                textCancel: 'No',
+                                onConfirm: () {
+                                  _cartController.removeItem(item.product.id);
+                                  Get.back();
+                                },
+                                onCancel: () {
+                                  _cartController.updateItemQuantity(
+                                      item.product.id, 1);
+                                },
+                              );
+
                               return;
                             }
                             _cartController.updateItemQuantity(
@@ -140,7 +155,23 @@ class CartsPage extends StatelessWidget {
             ),
             IconButton(
               onPressed: () {
-                _cartController.clearCart();
+                if (_cartController.cartItems.length > 1) {
+                  Get.defaultDialog(
+                    title: 'Clear cart',
+                    content: const Text('Are you sure you want to clear cart?'),
+                    textConfirm: 'Yes',
+                    textCancel: 'No',
+                    onConfirm: () {
+                      _cartController.clearCart();
+                      Get.back();
+                    },
+                    onCancel: () {},
+                  );
+                  return;
+                } else {
+                  _cartController.clearCart();
+                  return;
+                }
               },
               icon: Image.asset(
                 'assets/icon/remove.png',

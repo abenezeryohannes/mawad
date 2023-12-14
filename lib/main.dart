@@ -68,6 +68,8 @@ class MyApp extends StatelessWidget {
               return GetMaterialApp(
                   debugShowCheckedModeBanner: false,
                   home: const SplashScreen(),
+                  initialBinding: MainBinding(),
+                  getPages: AppPages.pages,
                   theme: LightThemeData);
             } else {
               return GetMaterialApp(

@@ -105,15 +105,12 @@ class AddressController extends GetxController {
 
   Future<void> getCity(String id) async {
     try {
-      log("==============>id:getCity: $id");
       cities.value = await _profileRepo.getCity(id);
 
       selectedCityId.value = cities.first.cityId;
       log("cities.value${{cities}}");
       getArea(cities.first.cityId);
-    } catch (error) {
-      log('("==============>Error getting cities: $error');
-    }
+    } catch (error) {}
   }
 
   Future<void> getArea(String id) async {
@@ -128,9 +125,7 @@ class AddressController extends GetxController {
   Future<void> getLocationDetail() async {
     try {
       locationDetails.value = await _profileRepo.getLocationDetail();
-    } catch (error) {
-      log('Error getting location details: $error');
-    }
+    } catch (error) {}
   }
 
   void addLocationDetail(LocationDetail location, String type) async {

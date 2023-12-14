@@ -6,11 +6,13 @@ import 'package:mawad/src/core/models/user.dart';
 import 'package:mawad/src/data/services/api_serives.dart';
 import 'package:mawad/src/data/services/auth_token_service.dart';
 import 'package:mawad/src/data/services/localstorage_service.dart';
+import 'package:mawad/src/modules/favorite/fevorite_controller.dart';
 
 class AuthRepo {
   final ApiService _apiService = ApiService();
   final AuthTokenService _authTokenService = AuthTokenService();
   final LocalStorageService _localStorageService = LocalStorageService();
+  final FavoritesController favoritesController = FavoritesController();
 
   Future<bool> registerWithPhone(String phone) async {
     const String recaptchaToken =
@@ -67,7 +69,6 @@ class AuthRepo {
   //update account
   Future<bool> updateAccount(UserModel user) async {
     try {
-      log("updateAccount: ${user.toJsonInput()}");
       final result = await _apiService.postRequest(
           '/user/update-account', user.toJsonInput());
       log("updateAccount: $result");
@@ -99,5 +100,6 @@ class AuthRepo {
     await _authTokenService.logout();
     _localStorageService.delete(AppConstants.CART_ITEMS);
     _localStorageService.delete(AppConstants.ACCESS_TOKEN);
+    favoritesController.favorites.value = [];
   }
 }

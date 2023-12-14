@@ -12,6 +12,7 @@ class AddAddress extends StatelessWidget {
   final AddressController controller = Get.put(AddressController());
   @override
   Widget build(BuildContext context) {
+    final arguemnt = Get.arguments;
     controller.getCity(controller.productController.selectedCountry.value!.id);
     return Scaffold(
       backgroundColor: Colors.white,
@@ -92,13 +93,15 @@ class AddAddress extends StatelessWidget {
                             left: 30, right: 30, bottom: 10),
                         onClick: () {
                           if (controller.formKey.currentState!.validate()) {
-                            controller.addLocationDetail(LocationDetail(
-                                avenue: controller.avenueController.text,
-                                block: controller.blockController.text,
-                                house: controller.houseController.text,
-                                street: controller.streetController.text,
-                                cityId: controller.selectedCityId.value,
-                                areaId: controller.selectedAreaId.value));
+                            controller.addLocationDetail(
+                                LocationDetail(
+                                    avenue: controller.avenueController.text,
+                                    block: controller.blockController.text,
+                                    house: controller.houseController.text,
+                                    street: controller.streetController.text,
+                                    cityId: controller.selectedCityId.value,
+                                    areaId: controller.selectedAreaId.value),
+                                arguemnt ?? "");
                           }
                         });
                   })

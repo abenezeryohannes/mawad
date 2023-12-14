@@ -20,7 +20,7 @@ class UserModel {
     return UserModel(
       userId: json['userId'] ?? '',
       avatar: json['avatar'] ?? '',
-      phone: json['email'] as String,
+      phone: json['email'] ?? '',
       userEmail: json['userEmail'] ?? '',
       name: json['name'] ?? '',
     );

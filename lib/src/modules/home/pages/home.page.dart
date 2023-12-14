@@ -215,8 +215,8 @@ class _HomePageState extends State<HomePage> {
             ),
           if (!productController.isLeading.value &&
               productController.products.isEmpty)
-            const Expanded(
-              child: Text("No Products Found"),
+            Expanded(
+              child: Container(),
             ),
         ],
       );

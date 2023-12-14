@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:mawad/src/core/constants/contants.dart';
 import 'package:mawad/src/core/enums/paymentType.dart';
 import 'package:mawad/src/core/models/cart_items.dart';
 import 'package:mawad/src/core/models/order.dart';
@@ -178,7 +179,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                               backgroundColor: AppColorTheme.bg);
                           return;
                         } else if (firstLocationDetail == null) {
-                          Get.toNamed(AppRoutes.addAddress);
+                          Get.toNamed(AppRoutes.addAddress,
+                              arguments: AppConstants.PAGE_TYPE_CECKOUT);
                           showCustomSnackbar(
                               title: '',
                               message: 'Please add address for delivery',

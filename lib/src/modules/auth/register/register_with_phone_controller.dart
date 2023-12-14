@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mawad/src/core/constants/contants.dart';
 import 'package:mawad/src/core/models/user.dart';
 import 'package:mawad/src/data/repositories/auth_repo.dart';
 import 'package:mawad/src/modules/poducts/product/product_controller.dart';
@@ -103,12 +104,12 @@ class RegisterWithPhoneController extends GetxController {
       if (OTP.value.toString().length == 4) {
         final result = await _authRepo.validateOTP(
             convertToInternationalPhoneNumber(phone), OTP.value.toString());
-        getUserDetail();
-        log("userDetail.value?.name${userDetail.value?.name}");
+        final userd = await getUserDetail();
+
+        log("userDetail.value${userDetail.value?.toJsonInput()}");
+
         isOtpLoading.value = false;
-        if (userDetail.value?.name != "" &&
-            userDetail.value?.userEmail != "" &&
-            userDetail.value?.phone != "") {
+        if (userd.name != "" && userd.userEmail != "" && userd.phone != "") {
           Get.toNamed(AppRoutes.main);
         } else {
           showCustomSnackbar(
@@ -125,7 +126,7 @@ class RegisterWithPhoneController extends GetxController {
     }
   }
 
-  Future<void> getUserDetail() async {
+  Future<UserModel> getUserDetail() async {
     final user = await _authRepo.getUserDetail();
     update();
     userDetail.value = user;
@@ -133,17 +134,20 @@ class RegisterWithPhoneController extends GetxController {
     nameController.text = user.name ?? '';
     emailController.text = user.userEmail ?? '';
     phonecontroller.text = user.phone ?? '';
+
+    return user;
   }
 
   void updateUserDetail(UserModel user) async {
-    log("userDetail.value${userDetail.value?.toJsonInput()}");
     try {
       isLoading.value = true;
       await _authRepo.updateAccount(user);
       isLoading.value = false;
       getUserDetail();
+
       if (addressController.locationDetails.isEmpty) {
-        Get.toNamed(AppRoutes.addAddress);
+        Get.toNamed(AppRoutes.addAddress,
+            arguments: AppConstants.PAGE_TYPE_PROFILE);
         addressController
             .getCity(productController.selectedCountry.value?.id ?? '');
       } else {

@@ -3,9 +3,13 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mawad/src/core/constants/contants.dart';
 import 'package:mawad/src/core/models/citie.dart';
 import 'package:mawad/src/data/repositories/profile_repo.dart';
+import 'package:mawad/src/modules/auth/register/register_with_phone_controller.dart';
+import 'package:mawad/src/modules/main.page.dart';
 import 'package:mawad/src/modules/poducts/product/product_controller.dart';
+import 'package:mawad/src/modules/profile/account_detail/profile.manager.page.dart';
 
 class AddressController extends GetxController {
   final ProfileRepo _profileRepo = ProfileRepo();
@@ -124,21 +128,29 @@ class AddressController extends GetxController {
   Future<void> getLocationDetail() async {
     try {
       locationDetails.value = await _profileRepo.getLocationDetail();
-      log("getLocationDetail: ${locationDetails.toJson()}");
     } catch (error) {
       log('Error getting location details: $error');
     }
   }
 
-  void addLocationDetail(LocationDetail location) async {
+  void addLocationDetail(LocationDetail location, String type) async {
+    final user = Get.find<RegisterWithPhoneController>();
     try {
       isLeading.value = true;
       final result = await _profileRepo.addLocationDetail(location);
-      if (result) {
-        isLeading.value = false;
+      isLeading.value = false;
+      if (user.userDetail.value!.name == "" &&
+          user.userDetail.value!.userEmail == "") {
         getLocationDetail();
         reset();
-        Get.back();
+        Get.to(const ProfileManagerPage());
+      } else {
+        if (type == AppConstants.PAGE_TYPE_PROFILE) {
+          Get.to(const MainPage());
+          return;
+        } else {
+          Get.back();
+        }
       }
     } catch (error) {
       isLeading.value = false;

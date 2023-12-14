@@ -132,7 +132,7 @@ class AddressController extends GetxController {
     final user = Get.find<RegisterWithPhoneController>();
     try {
       isLeading.value = true;
-      final result = await _profileRepo.addLocationDetail(location);
+      await _profileRepo.addLocationDetail(location);
       isLeading.value = false;
       if (user.userDetail.value!.name == "" &&
           user.userDetail.value!.userEmail == "") {

@@ -11,6 +11,7 @@ class ProfileRepo {
   Future<List<City>> getCity(String id) async {
     try {
       final result = await _apiService.getRequest('/country/city/get/$id');
+      log("==>getCity: $result");
       return mapCity(result['data']);
     } catch (error) {
       rethrow;

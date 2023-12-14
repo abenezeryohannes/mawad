@@ -6,34 +6,30 @@ class Product {
   final String id;
 
   final int? ordersCount;
-  final bool status;
-  final int salesCount;
+  final bool? status;
+  final int? salesCount;
   final String? label;
-  final List<CategoryModel> categories;
-
-  //todo what is showStock?
-  final bool showStock;
-  final List<ProductAddons> productAddons;
+  final List<CategoryModel>? categories;
+  final bool? showStock;
+  final List<ProductAddons>? productAddons;
   final String nameAr;
   final String nameEng;
-  final String detailsAr;
-  final String detailsEng;
+  final String? detailsAr;
+  final String? detailsEng;
   final double price;
-  //todo is this like if it's 0 so out of stock?
-  final int stock;
-  final double tax;
+  final int? stock;
+  final double? tax;
   final List<ImageModel> images;
   final String? itemCode;
-  final double oldPrice;
-  final String additionalInformationAr;
-  final String additionalInformationEng;
-  final bool allowStock;
-  final bool outOfStock;
-  final bool allowBaseTax;
-  final bool allowInstructions;
-  final List<Tag> tags;
-  //todo what is this one?
-  final List<dynamic> promotions;
+  final double? oldPrice;
+  final String? additionalInformationAr;
+  final String? additionalInformationEng;
+  final bool? allowStock;
+  final bool? outOfStock;
+  final bool? allowBaseTax;
+  final bool? allowInstructions;
+  final List<Tag>? tags;
+  final List<dynamic>? promotions;
 
   Product({
     required this.id,
@@ -138,7 +134,7 @@ class Product {
       'status': status,
       'salesCount': salesCount,
       'label': label,
-      'categories': categories.map((category) => category.toMap()).toList(),
+      'categories': categories?.map((category) => category.toMap()).toList(),
       'showStock': showStock,
 
       'nameAr': nameAr,

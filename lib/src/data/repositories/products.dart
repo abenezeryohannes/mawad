@@ -28,7 +28,6 @@ class ProductsRepo {
       final result = await _apiService.getRequest('/website/home-products/$id');
 
       List<Product> products = mapDataToProducts(result['data']['content']);
-      log(products.toString());
       return products;
     } catch (error) {
       log('Error fetching products getProductByCountry: $error');
@@ -40,9 +39,7 @@ class ProductsRepo {
     try {
       final result =
           await _apiService.getRequest('/product/by_category_id/$id');
-      log(result["data"]["content"].toString());
       List<Product> products = mapDataToProducts(result['data']["content"]);
-      log(products.toString());
       return products;
     } catch (error) {
       log('Error fetching products getProductByCategory: $error');
@@ -53,9 +50,7 @@ class ProductsRepo {
   Future<List<ImageModel>> getBanner() async {
     try {
       final result = await _apiService.getRequest('/big-banner/website');
-      log(result.toString());
       List<ImageModel> banners = mapBanner(result['data']);
-      log(banners.toString());
       return banners;
     } catch (error) {
       log('Error fetching products getBanner: $error');
@@ -76,11 +71,8 @@ class ProductsRepo {
       final result = await _apiService.getRequest('/product/$id');
 
       Product products = mapDataToProductDetail(result['data']);
-      if (products.productAddons.isNotEmpty) {
-        log("product===> ${products.productAddons.first.addonOption}");
-      } else {
-        log("productAddons is empty.");
-      }
+      if (products.productAddons!.isNotEmpty) {
+      } else {}
 
       return products;
     } catch (error) {
@@ -91,5 +83,18 @@ class ProductsRepo {
 
   Product mapDataToProductDetail(Map<String, dynamic> data) {
     return Product.fromJson(data);
+  }
+
+  //search product
+  Future<List<Product>> searchProduct(String id, String name) async {
+    try {
+      final result = await _apiService
+          .getRequest('/website/search?countryId=$id&name=$name');
+      List<Product> products = mapDataToProducts(result['data']);
+      return products;
+    } catch (error) {
+      log('Error fetching products searchProduct: $error');
+      rethrow;
+    }
   }
 }

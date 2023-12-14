@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mawad/src/modules/profile/my_address/address_controller.dart';
@@ -14,6 +12,7 @@ class AddressPage extends GetView<AddressController> {
 
   @override
   Widget build(BuildContext context) {
+    controller.getLocationDetail();
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -39,7 +38,6 @@ class AddressPage extends GetView<AddressController> {
                                     left: 20, right: 20.0),
                                 child: ProfileItemCard(
                                   onClick: () {
-                                    log("message");
                                     controller.setSelectedAddress(location);
                                     Get.toNamed(AppRoutes.editAddress);
                                   },

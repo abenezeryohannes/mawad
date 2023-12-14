@@ -148,7 +148,7 @@ class _OrderPageState extends State<OrderPage> {
                 )),
             Expanded(
               child: Text(
-                'This is title',
+                'Orders',
                 textAlign: TextAlign.center,
                 style: Theme.of(context)
                     .textTheme

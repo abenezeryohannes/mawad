@@ -70,12 +70,11 @@ class _ProfileAvatarState extends State<ProfileAvatar> {
     );
 
     if (_selectedFile != null) {
-      backgroundImage = FileImage(_selectedFile!); // Image from file
+      backgroundImage = FileImage(_selectedFile!);
     } else if (widget.imageUrl != null) {
-      backgroundImage = NetworkImage(widget.imageUrl!); // Image from network
+      backgroundImage = NetworkImage(widget.imageUrl!);
     }
 
-    // If there is a custom placeholder, it should be an ImageProvider
     if (_selectedFile == null && widget.placeholder is ImageProvider) {
       backgroundImage = widget.placeholder as ImageProvider;
     }
@@ -87,7 +86,7 @@ class _ProfileAvatarState extends State<ProfileAvatar> {
         children: [
           CustomPaint(
             painter: PartialCirclePainter(
-              color: _selectedFile != null
+              color: widget.imageUrl != null
                   ? AppColorTheme.yellow
                   : AppColorTheme.gray, // Border color
               strokeWidth: 4.0, // Border stroke width
@@ -103,21 +102,6 @@ class _ProfileAvatarState extends State<ProfileAvatar> {
               radius: widget.radius,
               backgroundColor: AppColorTheme.bg,
               backgroundImage: backgroundImage,
-              child: _selectedFile == null
-                  ? null
-                  : Align(
-                      alignment: Alignment.topRight,
-                      child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            _selectedFile = null;
-                          });
-                          widget.onImagePicked.call(_selectedFile!);
-                        },
-                        child: Icon(Icons.remove_circle,
-                            color: AppColorTheme.yellow, size: 20),
-                      ),
-                    ),
             ),
           ),
         ],
@@ -148,8 +132,8 @@ class PartialCirclePainter extends CustomPainter {
 
     canvas.drawArc(
       rect,
-      -math.pi / 2, // Starting from the top center of the circle
-      2 * math.pi * ratio, // 75% of the full circle
+      -math.pi / 2,
+      2 * math.pi * ratio,
       false,
       paint,
     );

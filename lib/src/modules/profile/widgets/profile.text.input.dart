@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mawad/src/presentation/sharedwidgets/text.input.form.dart';
+import 'package:mawad/src/presentation/theme/app_color.dart';
 
 class ProfileTextInput extends StatefulWidget {
   const ProfileTextInput({
@@ -8,15 +8,17 @@ class ProfileTextInput extends StatefulWidget {
     this.label,
     this.placeholder,
     this.initialText,
-    this.isEnabled = true,
+    this.readolny = false,
     this.controller,
+    this.validator,
   });
 
   final Function(String text) onChange;
   final String? label;
   final String? placeholder;
   final String? initialText;
-  final bool isEnabled;
+  final bool readolny;
+  final Function(String?)? validator;
   final TextEditingController? controller;
 
   @override
@@ -24,6 +26,17 @@ class ProfileTextInput extends StatefulWidget {
 }
 
 class _ProfileTextInputState extends State<ProfileTextInput> {
+  late TextEditingController _textController;
+
+  @override
+  void initState() {
+    super.initState();
+    _textController = widget.controller ?? TextEditingController();
+    if (widget.initialText != null) {
+      _textController.text = widget.initialText!;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -37,23 +50,32 @@ class _ProfileTextInputState extends State<ProfileTextInput> {
               child: Text(
                 widget.label ?? '',
                 style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                    color: Theme.of(context).colorScheme.secondary,
-                    fontWeight: FontWeight.bold),
+                    color: AppColorTheme.yellow, fontWeight: FontWeight.bold),
               ),
             ),
-          TextInputForm(
-            fillColor: Theme.of(context).scaffoldBackgroundColor,
-            placeholder: widget.placeholder ?? '',
-            initialValue: widget.initialText,
-            controller: widget.controller,
-            radius: 20,
+          TextFormField(
+            controller: _textController,
+            decoration: InputDecoration(
+              fillColor: AppColorTheme.lightgray,
+              filled: true,
+              hintText: widget.placeholder ?? '',
+              border: OutlineInputBorder(
+                borderSide: BorderSide.none,
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
+            style: Theme.of(context).textTheme.titleSmall,
             onChanged: (String text) {
-              if (widget.isEnabled) {
-                widget.onChange(text);
-              }
+              widget.onChange(text);
             },
-            enabled: widget.isEnabled,
-          )
+            validator: (value) {
+              if (widget.validator != null) {
+                return widget.validator!(value);
+              }
+              return null;
+            },
+            readOnly: widget.readolny,
+          ),
         ],
       ),
     );

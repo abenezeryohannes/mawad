@@ -2,129 +2,108 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mawad/src/core/models/citie.dart';
 import 'package:mawad/src/modules/profile/my_address/address_controller.dart';
+import 'package:mawad/src/modules/profile/widgets/cityandaria.dart';
 import 'package:mawad/src/presentation/sharedwidgets/big.text.button.dart';
-import 'package:mawad/src/presentation/sharedwidgets/input/dropdown_input.dart';
 
 import '../widgets/profile.text.input.dart';
 
-class AddAddress extends GetView<AddressController> {
-  const AddAddress({super.key});
-
+class AddAddress extends StatelessWidget {
+  AddAddress({super.key});
+  final AddressController controller = Get.put(AddressController());
   @override
   Widget build(BuildContext context) {
+    controller.getCity(controller.productController.selectedCountry.value!.id);
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Form(
-            key: controller.formKey,
-            child: Column(
-              children: [
-                _appBar(),
-                ProfileTextInput(
-                    controller: controller.avenueController,
-                    label: 'Avenue',
-                    placeholder: 'avenue',
-                    onChange: (text) {
-                      // controller.avenueController.text = text;
-                    }),
-                ProfileTextInput(
-                    label: 'Block',
-                    placeholder: 'block',
-                    controller: controller.blockController,
-                    onChange: (text) {
-                      // controller.blockController.text = text;
-                    }),
-                ProfileTextInput(
-                    label: 'House',
-                    placeholder: 'house',
-                    controller: controller.houseController,
-                    onChange: (text) {
-                      // controller.houseController.text = text;
-                    }),
-                ProfileTextInput(
-                    label: 'Street',
-                    placeholder: 'street',
-                    controller: controller.streetController,
-                    onChange: (text) {
-                      // controller.streetController.text = text;
-                    }),
-                Obx(() {
-                  if (controller.cities.isNotEmpty) {
-                    var initialCityId = controller.selectedCityId.value ??
-                        controller.cities.first.cityId;
-
-                    return DropdownInput<City>(
-                      label: 'Choose a City',
-                      placeholder: 'Select a city',
-                      items: controller.cities,
-                      initialValue: initialCityId,
-                      isEnabled: true,
-                      onChange: (City? city) {
-                        if (city != null) {
-                          controller.onCitySelected(city.cityId);
+          child: Directionality(
+            textDirection: TextDirection.ltr,
+            child: Form(
+              key: controller.formKey,
+              child: Column(
+                children: [
+                  _appBar(),
+                  ProfileTextInput(
+                      controller: controller.avenueController,
+                      label: 'Avenue',
+                      placeholder: 'avenue',
+                      validator: (p0) {
+                        if (p0!.isEmpty) {
+                          return 'Please enter valid avenue';
                         }
                       },
-                      getDisplayName: (City city) => city.nameEng,
-                      getValue: (City city) => city.cityId,
-                    );
-                  } else {
-                    return const CircularProgressIndicator();
-                  }
-                }),
-                Obx(() {
-                  if (controller.selectedAreaId.isNotEmpty) {
-                    var initialAreaId = controller.selectedAreaId.value ??
-                        controller.areas.first.areaId;
-
-                    return DropdownInput<Area>(
-                      key: ValueKey(controller.areas.length),
-                      label: 'Area',
-                      placeholder: 'Select an area',
-                      items: controller.areas,
-                      initialValue: initialAreaId,
-                      isEnabled: true,
-                      onChange: (Area? area) {
-                        if (area != null) {
-                          controller.onAreaSelected(area.areaId);
+                      onChange: (text) {
+                        // controller.avenueController.text = text;
+                      }),
+                  ProfileTextInput(
+                      label: 'Block',
+                      placeholder: 'block',
+                      validator: (p0) {
+                        if (p0!.isEmpty) {
+                          return 'Please enter valid block';
                         }
                       },
-                      getDisplayName: (Area area) => area.nameEng,
-                      getValue: (Area area) => area.areaId,
-                    );
-                  } else {
-                    return const SizedBox.shrink();
-                  }
-                }),
-                const SizedBox(
-                  height: 20,
-                ),
-                Obx(() {
-                  return BigTextButton(
-                      text: 'Save',
-                      fontWight: FontWeight.bold,
-                      cornerRadius: 24,
-                      elevation: 0,
-                      isLoading: controller.isLeading.value,
-                      backgroudColor: Theme.of(context).colorScheme.secondary,
-                      borderColor: Theme.of(context).cardColor,
-                      textColor: Theme.of(context).colorScheme.onBackground,
-                      padding: const EdgeInsets.only(top: 15, bottom: 15),
-                      horizontalMargin: const EdgeInsets.only(
-                          left: 30, right: 30, bottom: 10),
-                      onClick: () {
-                        if (controller.formKey.currentState!.validate()) {
-                          controller.addLocationDetail(LocationDetail(
-                              avenue: controller.avenueController.text,
-                              block: controller.blockController.text,
-                              house: controller.houseController.text,
-                              street: controller.streetController.text,
-                              cityId: controller.selectedCityId.value,
-                              areaId: controller.selectedAreaId.value));
+                      controller: controller.blockController,
+                      onChange: (text) {
+                        // controller.blockController.text = text;
+                      }),
+                  ProfileTextInput(
+                      label: 'House',
+                      placeholder: 'house',
+                      controller: controller.houseController,
+                      validator: (p0) {
+                        if (p0!.isEmpty) {
+                          return 'Please enter valid house';
                         }
-                      });
-                })
-              ],
+                      },
+                      onChange: (text) {
+                        // controller.houseController.text = text;
+                      }),
+                  ProfileTextInput(
+                      label: 'Street',
+                      placeholder: 'street',
+                      controller: controller.streetController,
+                      validator: (p0) {
+                        if (p0!.isEmpty) {
+                          return 'Please enter valid street';
+                        }
+                      },
+                      onChange: (text) {
+                        // controller.streetController.text = text;
+                      }),
+                  const CityAndArea(),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Obx(() {
+                    return BigTextButton(
+                        text: 'Save',
+                        fontWight: FontWeight.bold,
+                        cornerRadius: 24,
+                        elevation: 0,
+                        fontSize: 18,
+                        isLoading: controller.isLeading.value,
+                        backgroudColor: Theme.of(context).colorScheme.secondary,
+                        borderColor: Theme.of(context).cardColor,
+                        textColor: Theme.of(context).colorScheme.onBackground,
+                        padding: const EdgeInsets.only(top: 15, bottom: 15),
+                        horizontalMargin: const EdgeInsets.only(
+                            left: 30, right: 30, bottom: 10),
+                        onClick: () {
+                          if (controller.formKey.currentState!.validate()) {
+                            controller.addLocationDetail(LocationDetail(
+                                avenue: controller.avenueController.text,
+                                block: controller.blockController.text,
+                                house: controller.houseController.text,
+                                street: controller.streetController.text,
+                                cityId: controller.selectedCityId.value,
+                                areaId: controller.selectedAreaId.value));
+                          }
+                        });
+                  })
+                ],
+              ),
             ),
           ),
         ),

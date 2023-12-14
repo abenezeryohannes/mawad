@@ -1,9 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:mawad/src/core/constants/contants.dart';
-import 'package:mawad/src/modules/cart/payment/payment_view.dart';
 import 'package:mawad/src/modules/favorite/favorite_list.dart';
 import 'package:mawad/src/modules/home/widgets%20/product.catagory.dart';
 import 'package:mawad/src/modules/home/pages/change.country.bottom.sheet.dart';
@@ -13,6 +14,7 @@ import 'package:mawad/src/modules/poducts/product_catagory/product_catagory.dart
 import 'package:mawad/src/presentation/sharedwidgets/appbottomshet.dart';
 import 'package:mawad/src/presentation/sharedwidgets/input/search_input.dart';
 import 'package:mawad/src/presentation/theme/app_color.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../widgets /home_skeleton.dart';
 
@@ -25,9 +27,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final ProductController productController = Get.put(ProductController());
-
-  final TextEditingController searchController = TextEditingController();
-
+  final Uri _url = Uri.parse('http://ordermawad.com/');
+  Timer? debounceTimer;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,7 +84,7 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.only(left: 20, right: 20),
               child: Container(
                 child: SearchInput(
-                  controller: searchController,
+                  controller: productController.searchController,
                   placeholder: 'Search',
                   hintStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
                         color: Theme.of(context).highlightColor,
@@ -96,7 +97,14 @@ class _HomePageState extends State<HomePage> {
                   ),
                   contentPadding: const EdgeInsets.only(top: 10),
                   onChanged: (val) {
-                    // searchController.text = val;
+                    if (debounceTimer != null) {
+                      debounceTimer!.cancel();
+                    }
+                    debounceTimer =
+                        Timer(const Duration(milliseconds: 500), () {
+                      productController.searchProduct(
+                          productController.selectedCountry.value!.id, val);
+                    });
                   },
                 ),
               ),
@@ -159,11 +167,13 @@ class _HomePageState extends State<HomePage> {
                           () => ClipOval(
                             child:
                                 productController.selectedCountry.value != null
-                                    ? SvgPicture.network(
-                                        '${AppConstants.IMAGER_URL}/${productController.selectedCountry.value!.attachment.id}',
-                                        fit: BoxFit.cover,
-                                        width: 40,
-                                        height: 40,
+                                    ? ClipOval(
+                                        child: SvgPicture.network(
+                                          '${AppConstants.IMAGER_URL}/${productController.selectedCountry.value!.attachment.id}',
+                                          fit: BoxFit.cover,
+                                          width: 78.r,
+                                          height: 78.r,
+                                        ),
                                       )
                                     : const SizedBox(),
                           ),
@@ -188,17 +198,13 @@ class _HomePageState extends State<HomePage> {
         children: [
           ImageBanner(
             onButtonPressed: () {
-              Get.to(const PaymentWebViewScreen(
-                paymentUrl: 'http://ordermawad.com',
-                title: "",
-              ));
+              _launchUrl();
             },
             imagePath: productController.banners,
           ),
           if (productController.isLeading.value)
             Expanded(
               child: SingleChildScrollView(
-                // Make sure this is scrollable
                 child: buildFavoriteProductsListSkeleton(context),
               ),
             ),
@@ -209,9 +215,17 @@ class _HomePageState extends State<HomePage> {
             ),
           if (!productController.isLeading.value &&
               productController.products.isEmpty)
-            Expanded(child: buildFavoriteProductsListSkeleton(context)),
+            const Expanded(
+              child: Text("No Products Found"),
+            ),
         ],
       );
     });
+  }
+
+  Future<void> _launchUrl() async {
+    if (!await launchUrl(_url)) {
+      throw Exception('Could not launch $_url');
+    }
   }
 }

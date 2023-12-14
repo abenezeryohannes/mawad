@@ -90,6 +90,7 @@ class OtpPage extends GetView<RegisterWithPhoneController> {
                   return BigTextButton(
                     isLoading: controller.isOtpLoading.value,
                     text: 'Confirm',
+                    fontSize: 18,
                     fontWight: FontWeight.bold,
                     cornerRadius: isKeyboardOpen ? 0.r : 22.r,
                     elevation: 0,

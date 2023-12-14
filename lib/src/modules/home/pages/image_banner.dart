@@ -22,20 +22,15 @@ class ImageBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     return CarouselSlider(
       options: CarouselOptions(
-        enlargeCenterPage: true, // Set to true to show one image at a time
-        aspectRatio: 16 / 3, // Adjust the aspect ratio as needed
+        enlargeCenterPage: true,
+        aspectRatio: 16 / 3,
         viewportFraction: 1.0,
-
         enlargeStrategy: CenterPageEnlargeStrategy.zoom,
         scrollPhysics: const ScrollPhysics(
           parent: BouncingScrollPhysics(),
         ),
         height: 174.0.h,
-        onPageChanged: (index, reason) {
-          // setState(() {
-          //   currentSlide = index;
-          // });
-        },
+        onPageChanged: (index, reason) {},
       ),
       items: imagePath.isNotEmpty
           ? banner(imagePath)

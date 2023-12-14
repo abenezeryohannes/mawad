@@ -7,6 +7,7 @@ import 'package:mawad/src/modules/cart/carts/cart.item.card.dart';
 import 'package:mawad/src/modules/cart/carts/cart.total.card.dart';
 import 'package:mawad/src/modules/cart/carts/cart_controller.dart';
 import 'package:mawad/src/presentation/routes/app_routes.dart';
+import 'package:mawad/src/presentation/theme/app_color.dart';
 
 import '../../../presentation/sharedwidgets/big.text.button.dart';
 
@@ -49,6 +50,9 @@ class CartsPage extends StatelessWidget {
                                     'Do you want to remove this item'),
                                 textConfirm: 'Yes',
                                 textCancel: 'No',
+                                buttonColor: AppColorTheme.yellow,
+                                confirmTextColor: AppColorTheme.brown,
+                                cancelTextColor: AppColorTheme.brown,
                                 onConfirm: () {
                                   _cartController.removeItem(item.product.id);
                                   Get.back();
@@ -64,7 +68,7 @@ class CartsPage extends StatelessWidget {
                             _cartController.updateItemQuantity(
                                 item.product.id, val);
                           },
-                          countable: !item.product.allowInstructions),
+                          countable: !item.product.allowInstructions!),
                     );
                   },
                 );
@@ -102,6 +106,7 @@ class CartsPage extends StatelessWidget {
                         text: 'Complete the payment',
                         fontWight: FontWeight.bold,
                         cornerRadius: 24,
+                        fontSize: 18,
                         elevation: 0,
                         backgroudColor: Theme.of(context).colorScheme.secondary,
                         borderColor: Theme.of(context).cardColor,
@@ -161,6 +166,9 @@ class CartsPage extends StatelessWidget {
                     content: const Text('Are you sure you want to clear cart?'),
                     textConfirm: 'Yes',
                     textCancel: 'No',
+                    buttonColor: AppColorTheme.yellow,
+                    confirmTextColor: AppColorTheme.brown,
+                    cancelTextColor: AppColorTheme.brown,
                     onConfirm: () {
                       _cartController.clearCart();
                       Get.back();

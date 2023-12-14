@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:mawad/src/data/services/auth_token_service.dart';
 import 'package:mawad/src/data/services/localstorage_service.dart';
 import 'package:mawad/src/modules/auth/register/register_with_phone_controller.dart';
+import 'package:mawad/src/modules/main.page.dart';
 import 'package:mawad/src/modules/main_binding.dart';
+import 'package:mawad/src/modules/splash_screen.dart';
 import 'package:mawad/src/presentation/routes/app_pages.dart';
 import 'package:mawad/src/presentation/routes/app_routes.dart';
 import 'package:mawad/src/presentation/theme/theme.dart';
-import 'package:mawad/src/modules/main.page.dart';
 
 import 'injectable/getit.dart';
 
@@ -26,7 +26,7 @@ void main() async {
   await GetStorage.init();
 
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-
+  await LocalStorageService().initialize();
   await SystemChrome.setEnabledSystemUIMode(
     SystemUiMode.manual,
     overlays: [SystemUiOverlay.bottom, SystemUiOverlay.top],
@@ -60,28 +60,52 @@ class MyApp extends StatelessWidget {
     final lang = GetStorage().read('lang');
     return ScreenUtilInit(
       designSize: const Size(428, 926),
-      child: GetMaterialApp(
-        localizationsDelegates: const [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        debugShowCheckedModeBanner: false,
-        // translations: localizations.Localizations(),
-        // fallbackLocale: const Locale('ar', 'KW'),
-        // supportedLocales: const [
-        //   Locale('ar', 'KW'), // Spanish
-        //   Locale('en', 'US'), // English
-        // ],
-        // locale:
-        //     lang == 'en' ? const Locale('en', 'US') : const Locale('ar', 'KW'),
-        theme: LightThemeData,
-        // home: const RegisterPage(),
-        home: const MainPage(),
-        initialRoute: AppRoutes.main,
-        initialBinding: MainBinding(),
-        getPages: AppPages.pages,
+      child: FutureBuilder<bool>(
+        future: isFirstInstall(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.data == true) {
+              return GetMaterialApp(
+                  debugShowCheckedModeBanner: false,
+                  home: const SplashScreen(),
+                  theme: LightThemeData);
+            } else {
+              return GetMaterialApp(
+                // localizationsDelegates: const [
+                //   GlobalMaterialLocalizations.delegate,
+                //   GlobalWidgetsLocalizations.delegate,
+                //   GlobalCupertinoLocalizations.delegate,
+                // ],
+                debugShowCheckedModeBanner: false,
+                // fallbackLocale: const Locale('ar', 'KW'),
+                // supportedLocales: const [
+                //   Locale('ar', 'KW'), // Spanish
+                //   Locale('en', 'US'), // English
+                // ],
+                // locale: lang == 'en'
+                //     ? const Locale('en', 'US')
+                //     : const Locale('ar', 'KW'),
+                home: const MainPage(),
+                initialRoute: AppRoutes.main,
+                initialBinding: MainBinding(),
+                getPages: AppPages.pages,
+                theme: LightThemeData,
+              );
+            }
+          } else {
+            // Loading indicator or splash screen while checking the first install
+            return const CircularProgressIndicator();
+          }
+        },
       ),
     );
+  }
+
+  Future<bool> isFirstInstall() async {
+    bool isFirstInstall = LocalStorageService().getInt('first_install') == null;
+    if (isFirstInstall) {
+      LocalStorageService().saveInt('first_install', 1);
+    }
+    return isFirstInstall;
   }
 }

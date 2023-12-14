@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:mawad/src/core/constants/contants.dart';
 import 'package:mawad/src/core/models/user.dart';
@@ -39,7 +40,6 @@ class AuthRepo {
       });
 
       String accessToken = result['data']['accessToken'];
-      log("accessToken: $accessToken");
       await _authTokenService.saveToken(accessToken);
       return accessToken;
     } catch (error) {
@@ -52,25 +52,27 @@ class AuthRepo {
     try {
       final result = await _apiService.getRequest('/user/me');
 
-      if (result['success'] && result['data'] != null) {
-        return UserModel.fromJson(result['data']);
+      final data = result['data'];
+      if (data == null) {
+        return UserModel.fromJson({});
       }
-      return UserModel.fromJson(result['data']);
-    } catch (error) {
-      log('Error fetching products getUserDetail: $error');
+      UserModel user = UserModel.fromJson(result['data']);
 
+      return user;
+    } catch (error) {
       rethrow;
     }
   }
 
   //update account
-  Future<UserModel> updateAccount(UserModel user) async {
+  Future<bool> updateAccount(UserModel user) async {
     try {
+      log("updateAccount: ${user.toJsonInput()}");
       final result = await _apiService.postRequest(
           '/user/update-account', user.toJsonInput());
-      log("updateAccount: ${result['data']}");
+      log("updateAccount: $result");
 
-      return UserModel.fromJson(result['data']);
+      return result['success'];
     } catch (error) {
       log('Error fetching products updateAccount: $error');
       rethrow;
@@ -81,8 +83,21 @@ class AuthRepo {
     return await _authTokenService.hasToken();
   }
 
+  Future<String> addAvatar(File avatar) async {
+    try {
+      final result =
+          await _apiService.uploadImage('/file/img/saveAttachments', avatar);
+      String id = result['data'][0]['id'];
+
+      return id;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
   Future<void> logout() async {
     await _authTokenService.logout();
     _localStorageService.delete(AppConstants.CART_ITEMS);
+    _localStorageService.delete(AppConstants.ACCESS_TOKEN);
   }
 }

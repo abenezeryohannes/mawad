@@ -9,9 +9,12 @@ import 'package:mawad/src/modules/auth/register/register_with_phone_controller.d
 import 'package:mawad/src/modules/cart/carts/cart_controller.dart';
 import 'package:mawad/src/modules/cart/checkout/checkout_controller.dart';
 import 'package:mawad/src/modules/cart/checkout/widgets/loading.dart';
+import 'package:mawad/src/modules/profile/account_detail/profile.manager.page.dart';
 import 'package:mawad/src/modules/profile/my_address/address_controller.dart';
+import 'package:mawad/src/presentation/routes/app_routes.dart';
 import 'package:mawad/src/presentation/sharedwidgets/big.text.button.dart';
 import 'package:mawad/src/presentation/sharedwidgets/cards/primery_cards.dart';
+import 'package:mawad/src/presentation/sharedwidgets/custome_snack.dart';
 import 'package:mawad/src/presentation/sharedwidgets/scaffold/main_scaffold.dart';
 import 'package:mawad/src/presentation/theme/app_color.dart';
 import 'package:mawad/src/presentation/theme/textTheme.dart';
@@ -36,6 +39,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
   void initState() {
     super.initState();
     _downPayment = _checkoutcontroller.downPayment;
+    _checkoutcontroller.getPaymentPercentage();
+    _addressController.getLocationDetail();
   }
 
   @override
@@ -147,8 +152,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           "Click to pay ${_downPayment == 0 ? '' : '$_downPayment KWD'} ",
                       fontWight: FontWeight.bold,
                       cornerRadius: 24,
+                      fontSize: 18,
                       isLoading: _checkoutcontroller.isLoading.value,
                       elevation: 0,
+                      enabled: !_checkoutcontroller.isLoading.value,
                       backgroudColor: Theme.of(context).colorScheme.secondary,
                       borderColor: Theme.of(context).cardColor,
                       textColor: Theme.of(context).colorScheme.onBackground,
@@ -159,24 +166,41 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             _addressController.locationDetails.isNotEmpty
                                 ? _addressController.locationDetails.first
                                 : null;
-                        if (firstLocationDetail == null) {
-                          Get.snackbar('', 'Please add address for delivery');
+
+                        if (_authController.userDetail.value!.name!.isEmpty ||
+                            _authController
+                                .userDetail.value!.userEmail!.isEmpty) {
+                          Get.to(const ProfileManagerPage());
+                          showCustomSnackbar(
+                              title: '',
+                              message: 'Please add name and email',
+                              colorText: AppColorTheme.brown,
+                              backgroundColor: AppColorTheme.bg);
                           return;
+                        } else if (firstLocationDetail == null) {
+                          Get.toNamed(AppRoutes.addAddress);
+                          showCustomSnackbar(
+                              title: '',
+                              message: 'Please add address for delivery',
+                              colorText: AppColorTheme.brown,
+                              backgroundColor: AppColorTheme.bg);
+                          return;
+                        } else {
+                          _checkoutcontroller.makeOrder(OrderModel(
+                            products: _cartController.cartItems,
+                            orderTimeType: "AS_SOON_AS_POSSIBLE",
+                            status: "DELIVERY",
+                            payType: paymentTypeToString(_checkoutcontroller
+                                .selectedPaymentTypeId.value),
+                            services: [],
+                            userData: UserData(
+                                user: _authController.userDetail.value!,
+                                address: firstLocationDetail),
+                            userId: _authController.userDetail.value!.userId
+                                .toString(),
+                            deliveryArea: firstLocationDetail.area!.areaId,
+                          ));
                         }
-                        _checkoutcontroller.makeOrder(OrderModel(
-                          products: _cartController.cartItems,
-                          orderTimeType: "AS_SOON_AS_POSSIBLE",
-                          status: "DELIVERY",
-                          payType: paymentTypeToString(
-                              _checkoutcontroller.selectedPaymentTypeId.value),
-                          services: [],
-                          userData: UserData(
-                              user: _authController.userDetail.value!,
-                              address: firstLocationDetail),
-                          userId: _authController.userDetail.value!.userId
-                              .toString(),
-                          deliveryArea: firstLocationDetail.area!.areaId,
-                        ));
                       },
                     );
                   })

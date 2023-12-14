@@ -55,7 +55,7 @@ class RegisterWithPhonePage extends GetView<RegisterWithPhoneController> {
                           vertical: 57.38.h, horizontal: 33.12.w),
                       child: CustomPhoneInput(
                         onChanged: (p0) {
-                          controller.controller.text = p0;
+                          controller.phonecontroller.text = p0;
 
                           return p0;
                         },
@@ -82,6 +82,7 @@ class RegisterWithPhonePage extends GetView<RegisterWithPhoneController> {
                           return BigTextButton(
                             isLoading: controller.isLoading.value,
                             text: 'Continue',
+                            fontSize: 18,
                             fontWight: FontWeight.bold,
                             cornerRadius: isKeyboardOpen ? 0.r : 22.r,
                             elevation: 0,
@@ -91,9 +92,9 @@ class RegisterWithPhonePage extends GetView<RegisterWithPhoneController> {
                             padding: EdgeInsets.only(top: 15.h, bottom: 15.h),
                             onClick: () {
                               if (controller.formKey.currentState!.validate() &&
-                                  controller.controller.text.isNotEmpty &&
+                                  controller.phonecontroller.text.isNotEmpty &&
                                   controller.isPhoneNumberValid(
-                                      controller.controller.text)) {
+                                      controller.phonecontroller.text)) {
                                 controller.registerWithPhone();
                               }
                             },

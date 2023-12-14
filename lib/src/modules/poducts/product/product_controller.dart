@@ -22,6 +22,7 @@ class ProductController extends GetxController {
       Get.put(ProductCategoryController());
 
   final TextEditingController commentController = TextEditingController();
+  final TextEditingController searchController = TextEditingController();
 
   final countries = <Country>[].obs;
   var selectedCountry = Rx<Country?>(null);
@@ -118,5 +119,16 @@ class ProductController extends GetxController {
       countries.value = countriesData.obs;
       selectedCountry.value = countries[1];
     } catch (error) {}
+  }
+
+  void searchProduct(String id, String search) async {
+    try {
+      isLeading.value = true;
+      products.value = (await _productsRepo.searchProduct(id, search)).obs;
+    } catch (error) {
+      // Handle error here
+    } finally {
+      isLeading.value = false;
+    }
   }
 }

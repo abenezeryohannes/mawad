@@ -95,6 +95,7 @@ class _ChangeCountryBottomSheetState extends State<ChangeCountryBottomSheet> {
             BigTextButton(
                 text: 'Select country',
                 fontWight: FontWeight.bold,
+                fontSize: 18,
                 cornerRadius: 24,
                 elevation: 0,
                 backgroudColor: Theme.of(context).colorScheme.primaryContainer,

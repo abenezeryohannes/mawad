@@ -34,11 +34,13 @@ class _DropdownInputState<T> extends State<DropdownInput<T>> {
   void initState() {
     super.initState();
     if (widget.initialValue != null) {
-      // Find the item with the initial value
-      selectedValue = widget.items.firstWhere(
-        (item) => widget.getValue(item) == widget.initialValue,
-        orElse: () => widget.items.first,
-      );
+      if (widget.items.isNotEmpty) {
+        selectedValue = widget.items.firstWhere(
+          (item) => widget.getValue(item) == widget.initialValue,
+          orElse: () => widget.items.first,
+        );
+      }
+      selectedValue = widget.items.isNotEmpty ? widget.items.first : null;
     } else {
       selectedValue = widget.items.isNotEmpty ? widget.items.first : null;
     }
@@ -46,6 +48,7 @@ class _DropdownInputState<T> extends State<DropdownInput<T>> {
 
   @override
   Widget build(BuildContext context) {
+    Key dropdownKey = UniqueKey();
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 1),
       child: Column(
@@ -63,6 +66,7 @@ class _DropdownInputState<T> extends State<DropdownInput<T>> {
               ),
             ),
           DropdownButtonFormField<T>(
+            key: dropdownKey,
             decoration: InputDecoration(
               contentPadding:
                   const EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
@@ -85,6 +89,7 @@ class _DropdownInputState<T> extends State<DropdownInput<T>> {
                 ? (T? newValue) {
                     setState(() {
                       selectedValue = newValue;
+                      dropdownKey = UniqueKey(); // A
                     });
                     widget.onChange(newValue);
                   }

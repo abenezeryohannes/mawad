@@ -26,21 +26,32 @@ class AddressController extends GetxController {
   Timer? _debounce;
 
   @override
+  void onReady() {
+    getCity(productController.selectedCountry.value?.id ?? '');
+
+    super.onReady();
+  }
+
+  @override
   void onInit() {
     super.onInit();
-    getCity(productController.selectedCountry.value?.id ?? '');
+
     getLocationDetail();
   }
 
   @override
   void onClose() {
     _debounce?.cancel();
+    disposeControllers();
+    super.onClose();
+  }
+
+  void disposeControllers() {
     avenueController.dispose();
     houseController.dispose();
     blockController.dispose();
     floorController.dispose();
     streetController.dispose();
-    super.onClose();
   }
 
   void reset() {
@@ -65,6 +76,13 @@ class AddressController extends GetxController {
     selectedAreaId.value = location.area!.areaId ?? '';
   }
 
+  void onAreaOrCitySelected(String newValue, Function(String) setValue) {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      setValue(newValue);
+    });
+  }
+
   void onAreaSelected(String newAreaId) {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () {
@@ -74,21 +92,23 @@ class AddressController extends GetxController {
 
   void onCitySelected(String newCityId) {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
-    _debounce = Timer(const Duration(milliseconds: 500), () {
+    _debounce = Timer(const Duration(milliseconds: 500), () async {
       selectedCityId.value = newCityId;
+      areas.value = []; // Clear existing areas
       getArea(newCityId);
     });
   }
 
   Future<void> getCity(String id) async {
     try {
+      log("==============>id:getCity: $id");
       cities.value = await _profileRepo.getCity(id);
-      if (cities.isNotEmpty) {
-        selectedCityId.value = cities.first.cityId;
-        getArea(cities.first.cityId);
-      }
+
+      selectedCityId.value = cities.first.cityId;
+      log("cities.value${{cities}}");
+      getArea(cities.first.cityId);
     } catch (error) {
-      log('Error getting cities: $error');
+      log('("==============>Error getting cities: $error');
     }
   }
 
@@ -104,7 +124,7 @@ class AddressController extends GetxController {
   Future<void> getLocationDetail() async {
     try {
       locationDetails.value = await _profileRepo.getLocationDetail();
-      log("getLocationDetail: ${locationDetails.toList().toString()}");
+      log("getLocationDetail: ${locationDetails.toJson()}");
     } catch (error) {
       log('Error getting location details: $error');
     }
@@ -112,12 +132,16 @@ class AddressController extends GetxController {
 
   void addLocationDetail(LocationDetail location) async {
     try {
+      isLeading.value = true;
       final result = await _profileRepo.addLocationDetail(location);
       if (result) {
+        isLeading.value = false;
         getLocationDetail();
+        reset();
         Get.back();
       }
     } catch (error) {
+      isLeading.value = false;
       print(error);
     }
   }

@@ -1,35 +1,28 @@
 class UserModel {
   String? userId;
   String? avatar;
-  String phone;
+  String? phone;
 
-  List<String>? privileges;
-  bool? unreadAvailable;
-  bool? notificationSound;
-  String? email;
+  String? userEmail;
   String? name;
+  String? fileId;
 
   UserModel({
     this.avatar,
     required this.phone,
-    this.email,
-    this.privileges,
-    this.unreadAvailable,
-    this.notificationSound,
+    this.userEmail,
     this.name,
     this.userId,
+    this.fileId,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
       userId: json['userId'] ?? '',
       avatar: json['avatar'] ?? '',
-      phone: json['phone'] as String,
-      email: json['email'] ?? '',
-      privileges: List<String>.from(json['privileges']) ?? [],
-      unreadAvailable: json['unreadAvailable'] ?? false,
-      notificationSound: json['notificationSound'] ?? false,
-      name: json['fullName'] ?? '',
+      phone: json['email'] as String,
+      userEmail: json['userEmail'] ?? '',
+      name: json['name'] ?? '',
     );
   }
 
@@ -37,19 +30,18 @@ class UserModel {
     return {
       'userId': userId,
       'avatar': avatar,
-      'phone': phone,
-      'email': email,
-      'privileges': privileges,
-      'unreadAvailable': unreadAvailable,
-      'notificationSound': notificationSound,
-      'fullName': name,
+      'mobile': phone,
+      'email': userEmail,
+      'name': name,
     };
   }
 
   Map<String, dynamic> toJsonInput() {
     return {
+      'fileId': fileId,
       'phone': phone,
       'fullName': name,
+      'email': userEmail,
     };
   }
 }

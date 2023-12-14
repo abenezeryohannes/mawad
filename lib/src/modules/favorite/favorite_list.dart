@@ -10,7 +10,7 @@ import 'package:mawad/src/presentation/routes/app_routes.dart';
 
 class FavoriteProductsList extends StatelessWidget {
   final FavoritesController favoritesController =
-      Get.find<FavoritesController>();
+      Get.put(FavoritesController());
   final RegisterWithPhoneController authController =
       Get.put(RegisterWithPhoneController());
   final RxList<Product>

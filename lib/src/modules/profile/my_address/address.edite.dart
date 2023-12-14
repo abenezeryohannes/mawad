@@ -72,7 +72,7 @@ class EditAddress extends GetView<AddressController> {
                   }
                 }),
                 Obx(() {
-                  if (controller.selectedAreaId.isNotEmpty) {
+                  if (controller.areas.isNotEmpty) {
                     var initialAreaId = controller.selectedAreaId.value ??
                         controller.areas.first.areaId;
 
@@ -104,6 +104,7 @@ class EditAddress extends GetView<AddressController> {
                     fontWight: FontWeight.bold,
                     cornerRadius: 24,
                     elevation: 0,
+                    fontSize: 18,
                     backgroudColor: Theme.of(context).colorScheme.secondary,
                     borderColor: Theme.of(context).cardColor,
                     textColor: Theme.of(context).colorScheme.onBackground,
@@ -149,7 +150,7 @@ class EditAddress extends GetView<AddressController> {
                 )),
             Expanded(
               child: Text(
-                'This is title',
+                'Edit Address',
                 textAlign: TextAlign.center,
                 style: Theme.of(Get.context!)
                     .textTheme

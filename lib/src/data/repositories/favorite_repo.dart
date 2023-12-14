@@ -11,9 +11,7 @@ class FavoritesRepository {
   Future<List<Product>> getFavorites() async {
     try {
       final result = await _apiService.getRequest('/user/favourites');
-      log(result["data"]["content"].toString());
       List<Product> products = mapDataToProducts(result['data']["content"]);
-      log(products.toString());
       return products;
     } catch (error) {
       _authTokenService.logout();
@@ -43,7 +41,6 @@ class FavoritesRepository {
     try {
       final result =
           await _apiService.deleteRequest('/user/favourites/$productId');
-      log(result.toString());
       return result['success'];
     } catch (e) {
       // Log the error

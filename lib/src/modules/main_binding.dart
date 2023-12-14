@@ -10,10 +10,10 @@ class MainBinding extends Bindings {
   void dependencies() {
     Get.put<AuthTokenService>(AuthTokenService());
 
-    Get.lazyPut<FavoritesController>(() => FavoritesController());
     Get.lazyPut<MainController>(() => MainController());
     Get.lazyPut<ProductController>(() => ProductController());
-
+    Get.lazyPut<FavoritesController>(() => FavoritesController());
+    // Get.lazyPut(() => AddressController());
     Get.put(RegisterWithPhoneController());
   }
 }

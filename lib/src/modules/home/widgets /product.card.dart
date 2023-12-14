@@ -95,7 +95,7 @@ class ProductCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 3),
                     Text(
-                      product.detailsEng,
+                      product.detailsEng!,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context)
                           .textTheme

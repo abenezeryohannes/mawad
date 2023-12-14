@@ -55,7 +55,7 @@ class ApiService {
     request.headers.addAll(_headers);
     final mimeTypeData = lookupMimeType(imageFile.path)!.split('/');
     final multipartFile = await http.MultipartFile.fromPath(
-      'image',
+      'files',
       imageFile.path,
       contentType: MediaType(mimeTypeData[0], mimeTypeData[1]),
     );

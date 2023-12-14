@@ -27,7 +27,6 @@ class ProductCategoryList extends GetView<ProductController> {
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 itemBuilder: (context, index) {
                   final category = controller.categories[index];
-
                   return Container(
                     padding: EdgeInsets.all(10.r),
                     child: Obx(() {

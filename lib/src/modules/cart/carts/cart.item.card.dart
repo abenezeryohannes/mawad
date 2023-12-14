@@ -71,9 +71,9 @@ class _CartItemCardState extends State<CartItemCard> {
                     Padding(
                       padding: const EdgeInsets.only(top: 3, bottom: 0),
                       child: Text(
-                        widget.item.product.detailsEng.isNotEmpty
-                            ? widget.item.product.detailsEng.substring(0,
-                                min(50, widget.item.product.detailsEng.length))
+                        widget.item.product.detailsEng!.isNotEmpty
+                            ? widget.item.product.detailsEng!.substring(0,
+                                min(50, widget.item.product.detailsEng!.length))
                             : "",
                         style: Theme.of(context).textTheme.bodyMedium!,
                       ),
@@ -101,7 +101,7 @@ class _CartItemCardState extends State<CartItemCard> {
                               padding: const EdgeInsets.only(),
                               child: ItemCountController(
                                   initialValue: widget.item.quantity,
-                                  maxCount: widget.item.product.stock,
+                                  maxCount: widget.item.product.stock!,
                                   minCount: 0,
                                   iconSize: 14,
                                   onChange: (val) {

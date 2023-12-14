@@ -5,67 +5,77 @@ import 'package:mawad/src/modules/profile/widgets/profile.item.card.dart';
 import 'package:mawad/src/modules/profile/account_detail/profile.manager.page.dart';
 import 'package:mawad/src/modules/profile/widgets/profile.avatar.dart';
 import 'package:mawad/src/presentation/routes/app_routes.dart';
+import 'package:mawad/src/presentation/theme/textTheme.dart';
 
 class ProfilePage extends GetView<RegisterWithPhoneController> {
   const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    controller.getUserDetail();
     return Scaffold(
       body: SafeArea(
         child: Container(
           color: Theme.of(context).colorScheme.onPrimary,
-          child: Column(children: [
-            Obx(() {
-              return Expanded(
-                child: controller.userDetail.value != null
-                    ? Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          ProfileAvatar(
-                            radius: 50,
-                            onImagePicked: (p0) {},
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 12.0),
-                            child: Text(
-                              controller.userDetail.value!.name.toString(),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge!
-                                  .copyWith(fontWeight: FontWeight.bold),
+          child: Column(
+            children: [
+              Obx(() {
+                return Expanded(
+                  child: controller.userDetail.value != null
+                      ? Column(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            ProfileAvatar(
+                              imageUrl: controller.userDetail.value?.avatar ==
+                                      null
+                                  ? null
+                                  : "http://ordermawad.com/api/v1/file/get/${controller.userDetail.value?.avatar}",
+                              radius: 50,
+                              onImagePicked: (p0) {
+                                controller.addAvatar(p0);
+                              },
                             ),
-                          ),
-                          Directionality(
-                            textDirection: TextDirection.ltr,
-                            child: Padding(
+                            Padding(
                               padding: const EdgeInsets.only(top: 12.0),
                               child: Text(
-                                controller.userDetail.value!.phone.toString(),
+                                controller.userDetail.value!.name.toString(),
                                 style: Theme.of(context)
                                     .textTheme
-                                    .bodySmall!
+                                    .titleLarge!
                                     .copyWith(fontWeight: FontWeight.bold),
                               ),
                             ),
-                          )
-                        ],
-                      )
-                    : Container(),
-              );
-            }),
-            Container(
-              color: Theme.of(context).scaffoldBackgroundColor,
-              padding: const EdgeInsets.only(
-                  bottom: 24.0, left: 10, right: 10, top: 20),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [..._bottomList(context)],
+                            Directionality(
+                              textDirection: TextDirection.ltr,
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 12.0),
+                                child: Text(
+                                  controller.userDetail.value!.phone.toString(),
+                                  style: AppTextTheme.darkGray14bold,
+                                ),
+                              ),
+                            )
+                          ],
+                        )
+                      : Container(),
+                );
+              }),
+              Container(
+                color: Theme.of(context).scaffoldBackgroundColor,
+                padding: const EdgeInsets.only(
+                    bottom: 40.0, left: 10, right: 10, top: 20),
+                child: Directionality(
+                  textDirection: TextDirection.rtl,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [..._bottomList(context)],
+                  ),
+                ),
               ),
-            )
-          ]),
+            ],
+          ),
         ),
       ),
     );

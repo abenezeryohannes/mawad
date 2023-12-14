@@ -45,6 +45,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   void initState() {
     super.initState();
     productController.getProductDetail(productID);
+
     int currentQuantity = cartController.getQuantityOfProductInCart(productID);
     setState(() {
       initialQuantity = currentQuantity;
@@ -77,7 +78,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   buildProductInfo(),
                   buildProductPriceAndDescription(),
                   buildDescriptions(),
-                  ...productController.productDetail.value!.productAddons
+                  ...productController.productDetail.value!.productAddons!
                       .map((addon) => AddonHandlerFactory.create(
                             addon,
                             onAddonChanged: cartController.handleAddon,
@@ -86,7 +87,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   const SizedBox(height: 10),
                   Visibility(
                       visible: productController
-                          .productDetail.value!.allowInstructions,
+                          .productDetail.value!.allowInstructions!,
                       child: const InputAddonHandler()),
                   const SizedBox(height: 10),
                   buildButton(),
@@ -158,7 +159,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      ...productController.productDetail.value!.tags.map(
+                      ...productController.productDetail.value!.tags!.map(
                         (tg) => AdditionalProductData(tg.title, tg.url),
                       )
                     ],
@@ -282,7 +283,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(),
                   child: ItemCountController(
-                    maxCount: productController.productDetail.value!.stock,
+                    maxCount: productController.productDetail.value!.stock!,
                     initialValue: initialQuantity,
                     onChange: (value) {
                       if (value == 0) {
@@ -294,7 +295,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     },
                     backgroundColor: AppColorTheme.lightGray3,
                     iconColor: Colors.white,
-                    canAdd: productController.productDetail.value!.allowStock,
+                    canAdd: productController.productDetail.value!.allowStock!,
                     canSubtract: true,
                   ),
                 ),
@@ -327,7 +328,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           cornerRadius: 24,
           enabled:
               productController.productDetail.value!.allowInstructions == true
-                  ? productController.productDetail.value!.allowInstructions &&
+                  ? productController.productDetail.value!.allowInstructions! &&
                       productController.commentController.text.isNotEmpty
                   : true,
           elevation: 0,

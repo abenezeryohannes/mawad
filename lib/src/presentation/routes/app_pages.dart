@@ -8,6 +8,7 @@ import 'package:mawad/src/modules/cart/checkout/checkout_page.dart';
 import 'package:mawad/src/modules/cart/page/carts.page.dart';
 import 'package:mawad/src/modules/favorite/favorite_product_binding.dart';
 import 'package:mawad/src/modules/favorite/pages/favorite.page.dart';
+import 'package:mawad/src/modules/main_binding.dart';
 import 'package:mawad/src/modules/poducts/product_catagory/product_catagory.dart';
 import 'package:mawad/src/modules/poducts/product_catagory/product_categories_binding.dart';
 import 'package:mawad/src/modules/poducts/productdetail/productdetail.dart';
@@ -47,7 +48,8 @@ class AppPages {
         RegisterWithPhoneBinding(),
         ProductCategoriesBinding(),
         FavoriteProductBinding(),
-        CartBinding()
+        CartBinding(),
+        MainBinding()
       ],
     ),
     GetPage(
@@ -89,7 +91,7 @@ class AppPages {
         binding: AddressBinding()),
     GetPage(
         name: AppRoutes.addAddress,
-        page: () => const AddAddress(),
+        page: () => AddAddress(),
         binding: AddressBinding()),
     GetPage(
         name: AppRoutes.orderPage,

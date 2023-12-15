@@ -188,14 +188,13 @@ class RegisterWithPhoneController extends GetxController {
   }
 
   void logout() async {
-    await _authRepo.logout();
-    //clear all cash and refresh the app
-    userDetail.value = null;
-    addressController.reset();
-    // locationDetails
-    addressController.locationDetails.value = [];
-
-    update();
-    Get.toNamed(AppRoutes.main);
+    final res = await _authRepo.logout();
+    if (res) {
+      userDetail.value = null;
+      addressController.reset();
+      addressController.locationDetails.value = [];
+      update();
+      Get.toNamed(AppRoutes.main);
+    }
   }
 }

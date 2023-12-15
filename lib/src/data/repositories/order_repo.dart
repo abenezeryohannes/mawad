@@ -9,12 +9,10 @@ class OrderRepo {
   Future<List<OrderItem>> getNewOrderItemList() async {
     try {
       final result = await _apiService.getRequest('/order/getNewOrder');
-      log("====>aaaa=why$result");
+
       var x = result['data'];
-      log("====>aaaa=xxxx$x");
       List<OrderItem> countries =
           x.map((json) => OrderItem.fromJson(json)).toList();
-      log("====>aaaa=getNewOrder$result");
       return countries;
     } catch (error) {
       log('Error fetching products getNewOrderItemList: $error');

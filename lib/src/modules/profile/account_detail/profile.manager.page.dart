@@ -6,6 +6,7 @@ import 'package:mawad/src/modules/auth/register/register_with_phone_controller.d
 import 'package:mawad/src/modules/profile/widgets/profile.avatar.dart';
 import 'package:mawad/src/modules/profile/widgets/profile.text.input.dart';
 import 'package:mawad/src/presentation/sharedwidgets/custome_snack.dart';
+import 'package:mawad/src/presentation/theme/textTheme.dart';
 
 import '../../../presentation/sharedwidgets/big.text.button.dart';
 
@@ -130,7 +131,7 @@ class ProfileManagerPage extends GetView<RegisterWithPhoneController> {
                     height: 40.h,
                   ),
                   BigTextButton(
-                      text: 'Log out',
+                      text: 'Delete Account',
                       fontWight: FontWeight.bold,
                       cornerRadius: 16,
                       elevation: 0,
@@ -142,7 +143,35 @@ class ProfileManagerPage extends GetView<RegisterWithPhoneController> {
                       horizontalMargin: const EdgeInsets.only(
                           left: 30, right: 30, bottom: 10),
                       onClick: () {
-                        controller.logout();
+                        //check if user need to delete account
+                        Get.dialog(
+                          AlertDialog(
+                            title: const Text('Delete Account'),
+                            content: const Text(
+                                'Are you sure you want to delete your account?'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Get.back();
+                                },
+                                child: Text(
+                                  'Cancel',
+                                  style: AppTextTheme.yellow14,
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  controller.logout();
+                                  Get.back();
+                                },
+                                child: Text(
+                                  'Delete',
+                                  style: AppTextTheme.yellow14,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
                       })
                 ],
               ),

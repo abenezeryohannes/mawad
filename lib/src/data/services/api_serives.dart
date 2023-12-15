@@ -43,11 +43,6 @@ class ApiService {
         body: json.encode(body), headers: _headers));
   }
 
-  Future<Map<String, dynamic>> deleteRequest(String endpoint) async {
-    return await _makeRequest(
-        () => http.delete(Uri.parse('$_baseUrl$endpoint'), headers: _headers));
-  }
-
   Future<Map<String, dynamic>> uploadImage(
       String endpoint, File imageFile) async {
     final request =
@@ -65,6 +60,20 @@ class ApiService {
     return json.decode(response.body);
   }
 
+  Future<Map<String, dynamic>> deleteRequest(String endpoint) async {
+    return await _makeRequest(
+        () => http.delete(Uri.parse('$_baseUrl$endpoint'), headers: _headers));
+  }
+
+  Future<Map<String, dynamic>> deleteAccountRequest(String endpoint) async {
+    log("deleteAccountRequest: $_token");
+    final headers = {
+      'Authorization': 'Bearer $_token',
+    };
+    return await _makeRequest(
+        () => http.delete(Uri.parse('$_baseUrl$endpoint'), headers: headers));
+  }
+
   Future<Map<String, dynamic>> _makeRequest(
       Future<http.Response> Function() requestFn) async {
     try {
@@ -74,6 +83,7 @@ class ApiService {
         return json.decode(response.body);
       } else {
         final Map<String, dynamic> errorData = json.decode(response.body);
+        log("=================>$errorData");
         throw ApiException(errorData['message'] ?? 'Unknown error occurred.');
       }
     } catch (e) {

@@ -96,10 +96,27 @@ class AuthRepo {
     }
   }
 
-  Future<void> logout() async {
-    await _authTokenService.logout();
-    _localStorageService.delete(AppConstants.CART_ITEMS);
-    _localStorageService.delete(AppConstants.ACCESS_TOKEN);
-    favoritesController.favorites.value = [];
+  // delete account
+  Future<bool> deleteAccount() async {
+    try {
+      final result = await _apiService.deleteAccountRequest('/user/delete');
+
+      return result['success'];
+    } catch (error) {
+      log('Error fetching products deleteAccount: $error');
+      rethrow;
+    }
+  }
+
+  Future<bool> logout() async {
+    final res = await deleteAccount();
+    if (res) {
+      await _authTokenService.logout();
+      _localStorageService.delete(AppConstants.CART_ITEMS);
+      _localStorageService.delete(AppConstants.ACCESS_TOKEN);
+      favoritesController.favorites.value = [];
+      return true;
+    }
+    return false;
   }
 }

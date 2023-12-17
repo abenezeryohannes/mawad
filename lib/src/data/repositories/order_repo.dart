@@ -10,10 +10,9 @@ class OrderRepo {
     try {
       final result = await _apiService.getRequest('/order/getNewOrder');
 
-      var x = result['data'];
-      List<OrderItem> countries =
-          x.map((json) => OrderItem.fromJson(json)).toList();
-      return countries;
+      List<OrderItem> orders = mapDataToOrderDetail(result['data']);
+
+      return orders;
     } catch (error) {
       log('Error fetching products getNewOrderItemList: $error');
       rethrow;
@@ -23,8 +22,8 @@ class OrderRepo {
   Future<List<OrderItem>> getOldOrderItemList() async {
     try {
       final result = await _apiService.getRequest('/order/getOldOrder');
-      List<OrderItem> countries = mapDataToOrderDetail(result['data']);
-      return countries;
+      List<OrderItem> orders = mapDataToOrderDetail(result['data']);
+      return orders;
     } catch (error) {
       log('Error fetching products getOldOrderItemList: $error');
       rethrow;
@@ -33,5 +32,17 @@ class OrderRepo {
 
   List<OrderItem> mapDataToOrderDetail(List<dynamic> data) {
     return data.map((json) => OrderItem.fromJson(json)).toList();
+  }
+
+  Future<OrderDetail> getOrderItem(String id) async {
+    try {
+      final response = await _apiService.getRequest('/order/getOne/$id');
+
+      final orderDetail = OrderDetail.fromJson(response["data"]);
+      return orderDetail;
+    } catch (error) {
+      log('Error fetching products getOrderItem: $error');
+      rethrow;
+    }
   }
 }

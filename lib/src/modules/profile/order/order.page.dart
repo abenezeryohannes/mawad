@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:mawad/src/modules/profile/order/orderdetail/order_detail_controller.dart';
 import 'package:mawad/src/modules/profile/widgets/tab.custom.dart';
 import 'package:mawad/src/presentation/routes/app_routes.dart';
+import 'package:mawad/src/utils/utils.dart';
 
 import '../widgets/profile.item.card.dart';
 
@@ -34,7 +35,10 @@ class _OrderPageState extends State<OrderPage> {
                     backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                     radius: 20,
                     selectedIndex: selectedTab,
-                    items: const ['Previous requests', 'New applications'],
+                    items: const [
+                      'New applications',
+                      'Previous requests',
+                    ],
                     onItemSelected: (int index) {
                       setState(() {
                         selectedTab = index;
@@ -47,13 +51,14 @@ class _OrderPageState extends State<OrderPage> {
             ),
             if (selectedTab == 0)
               GetBuilder(
-                  id: 'oldOrders',
+                  id: 'newOrders',
                   builder: (OrderDetailController OrderController) {
                     return Expanded(
                       child: ListView.builder(
                           physics: const ClampingScrollPhysics(),
                           itemCount: OrderController.newOrdersItem.length,
                           itemBuilder: (context, index) {
+                            final order = OrderController.newOrdersItem[index];
                             return Padding(
                               padding:
                                   const EdgeInsets.only(left: 20, right: 20.0),
@@ -61,9 +66,15 @@ class _OrderPageState extends State<OrderPage> {
                                 textDirection: TextDirection.rtl,
                                 child: ProfileItemCard(
                                   onClick: () {
-                                    Get.toNamed(AppRoutes.orderDetail);
+                                    Get.toNamed(AppRoutes.orderDetail,
+                                        arguments: {
+                                          'id': order.id,
+                                          'date':
+                                              Util.formatDate(order.createdAt)
+                                        });
                                   },
-                                  title: 'sad: 12/12/2021',
+                                  title:
+                                      'Order: ${Util.formatDate(order.createdAt)}',
                                   backgroundColor:
                                       Theme.of(context).scaffoldBackgroundColor,
                                   icon: Padding(
@@ -86,13 +97,14 @@ class _OrderPageState extends State<OrderPage> {
                   }),
             if (selectedTab == 1)
               GetBuilder(
-                  id: 'newOrders',
+                  id: 'olderOrders',
                   builder: (OrderDetailController OrderController) {
                     return Expanded(
                       child: ListView.builder(
                           physics: const ClampingScrollPhysics(),
                           itemCount: OrderController.oldOrdersItem.length,
                           itemBuilder: (context, index) {
+                            final order = OrderController.oldOrdersItem[index];
                             return Padding(
                               padding:
                                   const EdgeInsets.only(left: 20, right: 20.0),
@@ -100,9 +112,15 @@ class _OrderPageState extends State<OrderPage> {
                                 textDirection: TextDirection.rtl,
                                 child: ProfileItemCard(
                                   onClick: () {
-                                    Get.toNamed(AppRoutes.orderDetail);
+                                    Get.toNamed(AppRoutes.orderDetail,
+                                        arguments: {
+                                          'id': order.id,
+                                          'date':
+                                              Util.formatDate(order.createdAt)
+                                        });
                                   },
-                                  title: 'Date: 12/12/2021',
+                                  title:
+                                      'Order: ${Util.formatDate(order.createdAt)}',
                                   backgroundColor:
                                       Theme.of(context).scaffoldBackgroundColor,
                                   icon: Padding(

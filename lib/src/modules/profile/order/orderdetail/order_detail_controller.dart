@@ -8,10 +8,13 @@ class OrderDetailController extends GetxController {
   RxBool isLoading = false.obs;
   final _newOrdersItem = <OrderItem>[].obs;
   final _oldOrdersItem = <OrderItem>[].obs;
+  final _orderDetail = OrderDetail.empty().obs;
   final _selectedTab = 0.obs;
 
   List<OrderItem> get newOrdersItem => _newOrdersItem;
   List<OrderItem> get oldOrdersItem => _oldOrdersItem;
+  //single order
+  OrderDetail get orderDetail => _orderDetail.value;
   final OrderRepo _orderRepo = OrderRepo();
 
   int get selectedTab => _selectedTab.value;
@@ -47,6 +50,20 @@ class OrderDetailController extends GetxController {
       update(['oldOrders']);
     } catch (error) {
       Get.snackbar('Error', 'Error fetching old orders');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  //get one order
+  void getOrderItem(String id) async {
+    isLoading.value = true;
+    try {
+      final result = await _orderRepo.getOrderItem(id);
+      _orderDetail.value = result;
+      update(['orderDetail']);
+    } catch (error) {
+      Get.snackbar('Error', 'Error fetching order detail');
     } finally {
       isLoading.value = false;
     }

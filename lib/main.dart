@@ -73,20 +73,7 @@ class MyApp extends StatelessWidget {
                   theme: LightThemeData);
             } else {
               return GetMaterialApp(
-                // localizationsDelegates: const [
-                //   GlobalMaterialLocalizations.delegate,
-                //   GlobalWidgetsLocalizations.delegate,
-                //   GlobalCupertinoLocalizations.delegate,
-                // ],
                 debugShowCheckedModeBanner: false,
-                // fallbackLocale: const Locale('ar', 'KW'),
-                // supportedLocales: const [
-                //   Locale('ar', 'KW'), // Spanish
-                //   Locale('en', 'US'), // English
-                // ],
-                // locale: lang == 'en'
-                //     ? const Locale('en', 'US')
-                //     : const Locale('ar', 'KW'),
                 home: const MainPage(),
                 initialRoute: AppRoutes.main,
                 initialBinding: MainBinding(),

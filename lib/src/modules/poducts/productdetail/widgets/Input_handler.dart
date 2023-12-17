@@ -19,7 +19,7 @@ class InputAddonHandler extends GetView<ProductController> {
             padding: EdgeInsets.only(bottom: 10.h),
             alignment: Alignment.centerRight,
             child: Text(
-              "هل لديك مواصفات خاصة؟",
+              "Do you have special specifications?",
               style: AppTextTheme.darkblueTitle16,
             ),
           ),
@@ -27,15 +27,13 @@ class InputAddonHandler extends GetView<ProductController> {
             controller: controller
                 .commentController, // You need to create a TextEditingController
             hintText: '',
-            onChanged: (text) {
-              controller.commentController.text = text;
-            },
+            onChanged: (text) {},
           ),
           Container(
             padding: EdgeInsets.only(top: 10.h),
             alignment: Alignment.centerRight,
             child: Text(
-              "* سيتم الرد على الطلب الخاص خلال يومان عمل.",
+              "Special request will be answered within two business days",
               style: AppTextTheme.graysubtitle12,
             ),
           ),

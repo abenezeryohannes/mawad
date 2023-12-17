@@ -36,12 +36,16 @@ class _CheckoutPageState extends State<CheckoutPage> {
   final AddressController _addressController = Get.find<AddressController>();
   double _downPayment = 0;
   double total = 0;
+  var availablePaymentTypes;
   @override
   void initState() {
     super.initState();
     _downPayment = _checkoutcontroller.downPayment;
     _checkoutcontroller.getPaymentPercentage();
     _addressController.getLocationDetail();
+    availablePaymentTypes = _checkoutcontroller.paymentType
+        .where((type) => type.isAvailable)
+        .toList();
   }
 
   @override
@@ -94,7 +98,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         height: 56.h,
                         margin: EdgeInsets.only(top: 20.h),
                         child: Obx(() {
-                          var availablePaymentTypes = _checkoutcontroller
+                          availablePaymentTypes = _checkoutcontroller
                               .paymentType
                               .where((type) => type.isAvailable)
                               .toList();

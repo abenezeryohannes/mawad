@@ -130,4 +130,11 @@ class Util {
     double result = number * percentageValue;
     return result.toStringAsFixed(2);
   }
+
+  static String formatDate(String dateString) {
+    DateTime date = DateTime.parse(dateString);
+    final dateFormat = DateFormat('M/d/y');
+
+    return dateFormat.format(date);
+  }
 }

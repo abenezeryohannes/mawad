@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mawad/src/core/models/cart_items.dart';
 import 'package:mawad/src/modules/cart/widgets/item.count.controller.dart';
 import 'package:mawad/src/presentation/theme/textTheme.dart';
@@ -49,6 +50,15 @@ class _CartItemCardState extends State<CartItemCard> {
                     fit: BoxFit.cover,
                     height: 80,
                     width: 80,
+                    errorBuilder: (context, error, stackTrace) {
+                      // Return a placeholder widget when an error occurs
+                      return Image.network(
+                        'https://fakeimg.pl/600x400/f4cf47/ffffff?text=mawad&font=museo',
+                        fit: BoxFit.cover,
+                        height: 80,
+                        width: 80,
+                      );
+                    },
                   ),
                 ),
               ),
@@ -88,8 +98,8 @@ class _CartItemCardState extends State<CartItemCard> {
                             padding: const EdgeInsets.only(),
                             child: Text(
                               widget.countable
-                                  ? "KWD ${widget.item.product.price * widget.item.quantity}"
-                                  : 'Special request',
+                                  ? "${"KWD".tr}${widget.item.product.price * widget.item.quantity}"
+                                  : 'Special request'.tr,
                               style: widget.countable
                                   ? AppTextTheme.darkGray14bold
                                   : AppTextTheme.yellow14,
@@ -120,7 +130,7 @@ class _CartItemCardState extends State<CartItemCard> {
                                     .secondary
                                     .withOpacity(0.5)),
                             child: Text(
-                              'Waiting for approval',
+                              'Waiting for approval'.tr,
                               style: AppTextTheme.brown12,
                             ),
                           )

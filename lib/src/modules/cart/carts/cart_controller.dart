@@ -4,13 +4,18 @@ import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:mawad/src/core/constants/contants.dart';
 import 'package:mawad/src/core/models/cart_items.dart';
+import 'package:mawad/src/core/models/products.dart';
+import 'package:mawad/src/data/repositories/products.dart';
 import 'package:mawad/src/data/services/localstorage_service.dart';
 import 'package:mawad/src/data/services/message_services.dart';
 
 class CartController extends GetxController {
   final RxList<CartItem> _cartItems = RxList<CartItem>();
-  final LocalStorageService _localStorageService = LocalStorageService();
+  final LocalStorageService _localStorageService = LocalStorageService.instance;
   final MessageService messageService = MessageService();
+  final _otherServices = <OtherServices>[].obs;
+  final ProductsRepo _productsRepo = ProductsRepo();
+  final _listOfOtherServices = <String>[].obs;
 
   final selectedAddons = <Addon>[].obs;
 
@@ -22,6 +27,16 @@ class CartController extends GetxController {
   final double freeShippingThreshold = 100.0;
 
   List<CartItem> get cartItems => _cartItems.toList();
+  List<OtherServices> get otherServices => _otherServices.toList();
+  List<String> get listOfOtherServices => _listOfOtherServices.toList();
+
+  void toggleOtherService(String serviceId, bool isChecked) {
+    if (isChecked) {
+      _listOfOtherServices.add(serviceId);
+    } else {
+      _listOfOtherServices.remove(serviceId);
+    }
+  }
 
   @override
   void onInit() {
@@ -53,19 +68,17 @@ class CartController extends GetxController {
 
       if (index != -1) {
         _cartItems[index].quantity = item.quantity; // Set the new quantity
-        log('Item quantity updated in cart: ${item.product.nameEng}');
         messageService.showTopUpMessage(
-            'Info', 'Item quantity updated in cart.');
+            'Info'.tr, 'Item quantity updated in cart.'.tr);
       } else {
         _cartItems.add(item);
-        log('New item added to cart: ${item.product.nameEng}');
-        messageService.showTopUpMessage('Success', 'New item added to cart');
+        messageService.showTopUpMessage(
+            'Success'.tr, 'New item added to cart'.tr);
       }
       saveToLocalStorage();
       update();
     } catch (e) {
       log('Error adding item to cart: $e');
-      messageService.showTopUpMessage('Error', 'Error adding item to cart: $e');
     } finally {
       isLoading.value = false;
     }
@@ -131,6 +144,8 @@ class CartController extends GetxController {
         }).toList();
 
         _cartItems.assignAll(loadedItems);
+
+        getOtherServices(_cartItems.map((item) => item.product.id).toList());
         calculateTotals();
       }
     } catch (e) {
@@ -141,6 +156,17 @@ class CartController extends GetxController {
     } finally {
       isLoading.value = false;
       update();
+    }
+  }
+
+  //get the other services
+  void getOtherServices(List<String> ids) async {
+    try {
+      final result = await _productsRepo.getOtherServices(ids);
+      _otherServices.value = result;
+    } catch (error) {
+      log('Error fetching products getOtherServices: $error');
+      rethrow;
     }
   }
 

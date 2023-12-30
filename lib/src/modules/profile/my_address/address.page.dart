@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mawad/src/core/constants/contants.dart';
+import 'package:mawad/src/data/services/localization_service.dart';
 import 'package:mawad/src/modules/profile/my_address/address_controller.dart';
 import 'package:mawad/src/presentation/routes/app_routes.dart';
 import 'package:mawad/src/presentation/theme/app_color.dart';
@@ -41,7 +43,11 @@ class AddressPage extends GetView<AddressController> {
                                     controller.setSelectedAddress(location);
                                     Get.toNamed(AppRoutes.editAddress);
                                   },
-                                  title: location.city?.nameEng,
+                                  title: LocalizationService
+                                              .instance.currentLocaleLangCode ==
+                                          AppConstants.ENG
+                                      ? location.city?.nameEng
+                                      : location.city?.nameAr,
                                   backgroundColor:
                                       Theme.of(context).scaffoldBackgroundColor,
                                   icon: Padding(
@@ -61,8 +67,8 @@ class AddressPage extends GetView<AddressController> {
                             );
                           }),
                     )
-                  : const Center(
-                      child: Text('No Address'),
+                  : Center(
+                      child: Text('Add your address'.tr),
                     );
             })
           ],
@@ -90,7 +96,7 @@ class AddressPage extends GetView<AddressController> {
                 )),
             Expanded(
               child: Text(
-                'Address',
+                'Address'.tr,
                 textAlign: TextAlign.center,
                 style: AppTextTheme.dark18,
               ),

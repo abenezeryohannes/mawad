@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mawad/src/modules/cart/carts/cart_controller.dart';
+import 'package:mawad/src/presentation/theme/textTheme.dart';
 
 class CartTotalCard extends StatefulWidget {
   const CartTotalCard(
@@ -29,12 +30,8 @@ class _CartTotalCardState extends State<CartTotalCard> {
         Padding(
           padding: const EdgeInsets.only(bottom: 12.0, left: 5, right: 5),
           child: Text(
-            widget.title ?? 'Total',
-            style: widget.textStyle ??
-                Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .copyWith(fontWeight: FontWeight.bold),
+            widget.title ?? 'Total'.tr,
+            style: widget.textStyle ?? AppTextTheme.gray16,
           ),
         ),
         Container(
@@ -47,14 +44,14 @@ class _CartTotalCardState extends State<CartTotalCard> {
             return Column(
               children: [
                 ..._items(
-                    title: "subTotal",
-                    value: widget.controller.subtotal.toString()),
+                    title: "SubTotal".tr,
+                    value: '${widget.controller.subtotal}${'KWD'.tr}'),
                 ..._items(
-                    title: 'shippingFees',
-                    value: widget.controller.shippingFees.toString()),
+                    title: 'ShippingFees'.tr,
+                    value: '${widget.controller.shippingFees} ${'KWD'.tr}'),
                 ..._items(
-                    title: 'Total',
-                    value: widget.controller.total.toString(),
+                    title: 'Total'.tr,
+                    value: '${widget.controller.total} ${'KWD'.tr}',
                     valueBig: true,
                     separator: false),
               ],

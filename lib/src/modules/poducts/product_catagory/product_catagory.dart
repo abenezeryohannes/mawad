@@ -13,6 +13,8 @@ import 'package:mawad/src/presentation/sharedwidgets/big.text.button.dart';
 import 'package:mawad/src/presentation/theme/app_color.dart';
 import 'package:mawad/src/presentation/theme/textTheme.dart';
 
+import '../../../data/services/localization_service.dart';
+
 class ProductCategory extends GetView<ProductController> {
   const ProductCategory({super.key});
 
@@ -85,31 +87,36 @@ class ProductCategory extends GetView<ProductController> {
               itemCount: catagories.length,
               itemBuilder: (context, index) {
                 final category = catagories[index];
-                return SelectableCard(
-                  backgroundColor: catController.isSelected
-                      ? AppColorTheme.yellow
-                      : AppColorTheme.white,
-                  isSelected: catController.selectedIndex == index,
-                  onTap: () {
-                    catController.selectedIndex = index;
-                    controller.getProductByCategory(category.id);
-                    controller.isCategory(false);
-                  },
-                  label: category.nameEng,
-                  icon: index == 0
-                      ? SvgPicture.asset(
-                          category.image.url,
-                          color: catController.isSelected
-                              ? AppColorTheme.white
-                              : AppColorTheme.gray,
-                        )
-                      : SvgPicture.network(
-                          category.image.url,
-                          color: catController.isSelected
-                              ? AppColorTheme.white
-                              : AppColorTheme.gray,
-                        ),
-                );
+                return Obx(() {
+                  return SelectableCard(
+                    backgroundColor: catController.isSelected
+                        ? AppColorTheme.yellow
+                        : AppColorTheme.white,
+                    isSelected: catController.selectedIndex == index,
+                    onTap: () {
+                      catController.selectedIndex = index;
+                      controller.getProductByCategory(category.id);
+                      controller.isCategory(false);
+                    },
+                    label: LocalizationService.instance.currentLocaleLangCode ==
+                            AppConstants.ENG
+                        ? category.nameEng
+                        : category.nameAr,
+                    icon: index == 0
+                        ? SvgPicture.asset(
+                            category.image.url,
+                            color: catController.isSelected
+                                ? AppColorTheme.white
+                                : AppColorTheme.gray,
+                          )
+                        : SvgPicture.network(
+                            category.image.url,
+                            color: catController.isSelected
+                                ? AppColorTheme.white
+                                : AppColorTheme.gray,
+                          ),
+                  );
+                });
               },
             );
           }),
@@ -127,7 +134,7 @@ class ProductCategory extends GetView<ProductController> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'Selected country',
+                  'Selected country'.tr,
                   style: AppTextTheme.dark18,
                 ),
                 SizedBox(

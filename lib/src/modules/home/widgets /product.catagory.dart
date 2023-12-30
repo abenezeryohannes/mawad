@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:mawad/src/core/constants/contants.dart';
+import 'package:mawad/src/data/services/localization_service.dart';
 import 'package:mawad/src/modules/home/widgets%20/home.tab.cards.dart';
 import 'package:mawad/src/modules/home/widgets%20/home_skeleton.dart';
 import 'package:mawad/src/modules/poducts/product/product_controller.dart';
@@ -68,7 +70,11 @@ class ProductCategoryList extends GetView<ProductController> {
                                         ? AppColorTheme.white
                                         : AppColorTheme.gray,
                                   )),
-                        label: category.nameEng,
+                        label: LocalizationService
+                                    .instance.currentLocaleLangCode ==
+                                AppConstants.ENG
+                            ? category.nameEng
+                            : category.nameAr,
                       );
                     }),
                   );

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:mawad/src/core/constants/contants.dart';
+import 'package:mawad/src/data/services/localization_service.dart';
 import 'package:mawad/src/modules/auth/register/register_with_phone_controller.dart';
 import 'package:mawad/src/modules/cart/checkout/checkout_controller.dart';
 import 'package:mawad/src/modules/profile/order/orderdetail/order_detail_controller.dart';
@@ -39,7 +41,7 @@ class _OrderDetailState extends State<OrderDetail> {
     return MainScaffold(
         backgroundColor: AppColorTheme.bg,
         haveTitle: true,
-        title: 'Order Detail',
+        title: 'Order Detail'.tr,
         showBackButton: true,
         body: Expanded(
           child: SingleChildScrollView(
@@ -59,9 +61,9 @@ class _OrderDetailState extends State<OrderDetail> {
                         borderRadius: BorderRadius.circular(12)),
                     child: Column(
                       children: [
-                        buildDetail("Invoice",
-                            " KD ${controller.orderDetail.totalPrice}"),
-                        buildDetail("Order Date", " ${order["date"]}"),
+                        buildDetail("Invoice".tr,
+                            "${"KWD".tr} ${controller.orderDetail.totalPrice}"),
+                        buildDetail("Order Date".tr, " ${order["date"]}"),
                         buildDetail(
                             registerController.userDetail.value!.name
                                 .toString(),
@@ -74,7 +76,7 @@ class _OrderDetailState extends State<OrderDetail> {
                   SizedBox(
                     height: 15.h,
                   ),
-                  _buildTitle("Order Details"),
+                  _buildTitle("Order Details".tr),
                   Container(
                     margin: const EdgeInsets.symmetric(
                         vertical: 10, horizontal: 20),
@@ -95,8 +97,13 @@ class _OrderDetailState extends State<OrderDetail> {
                             return SingleChildScrollView(
                               child: Column(
                                 children: [
-                                  buildDetailWithPrice(product.nameEng,
-                                      product.price.toString()),
+                                  buildDetailWithPrice(
+                                      LocalizationService.instance
+                                                  .currentLocaleLangCode ==
+                                              AppConstants.ENG
+                                          ? product.nameEng
+                                          : product.nameAr,
+                                      product.price.toString() + "KWD".tr),
                                   SizedBox(
                                     height: 10.h,
                                   ),
@@ -106,7 +113,7 @@ class _OrderDetailState extends State<OrderDetail> {
                           },
                         ),
                         buildDetailWithPrice(
-                          "Total",
+                          "Total".tr,
                           controller.orderDetail.totalPrice.toString(),
                           hasDiv: false,
                           isBold: true,
@@ -114,7 +121,7 @@ class _OrderDetailState extends State<OrderDetail> {
                       ],
                     ),
                   ),
-                  buildSeparatorWithText('Payment'),
+                  buildSeparatorWithText('Payment'.tr),
                   SizedBox(
                     height: 10.h,
                   ),
@@ -122,7 +129,7 @@ class _OrderDetailState extends State<OrderDetail> {
                   SizedBox(
                     height: 10.h,
                   ),
-                  buildSeparatorWithText('Payment Method'),
+                  buildSeparatorWithText('Payment Method'.tr),
                   SizedBox(
                     height: 30.h,
                   ),
@@ -173,7 +180,8 @@ class _OrderDetailState extends State<OrderDetail> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Expanded(
-                    child: Text("KWD $price", style: AppTextTheme.brown20)),
+                    child:
+                        Text("${"KWD".tr}$price", style: AppTextTheme.brown20)),
                 Expanded(
                     child: Text(title,
                         style: isBold
@@ -284,22 +292,22 @@ class _OrderDetailState extends State<OrderDetail> {
   String _getTitleForIndex(int index) {
     switch (index) {
       case 1:
-        return 'Down Payment';
+        return 'Down Payment'.tr;
       case 2:
-        return 'Second Payment';
+        return 'Second Payment'.tr;
       default:
-        return 'Payment $index';
+        return '${'Payment'.tr} $index';
     }
   }
 
   String _getTitleForIndexBtn(int index) {
     switch (index) {
       case 1:
-        return 'Paid';
+        return 'Paid'.tr;
       case 2:
-        return 'Pay Later';
+        return 'Pay Later'.tr;
       default:
-        return 'Pay Later';
+        return 'Pay Later'.tr;
     }
   }
 

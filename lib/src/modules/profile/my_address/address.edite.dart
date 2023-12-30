@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mawad/src/core/models/citie.dart';
 import 'package:mawad/src/modules/profile/my_address/address_controller.dart';
+import 'package:mawad/src/modules/profile/widgets/cityandaria.dart';
 import 'package:mawad/src/modules/profile/widgets/profile.text.input.dart';
 import 'package:mawad/src/presentation/sharedwidgets/big.text.button.dart';
-import 'package:mawad/src/presentation/sharedwidgets/input/dropdown_input.dart';
 
 class EditAddress extends GetView<AddressController> {
   const EditAddress({super.key});
 
   @override
   Widget build(BuildContext context) {
+    controller.getCity(controller.productController.selectedCountry.value!.id);
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -22,85 +24,39 @@ class EditAddress extends GetView<AddressController> {
                 _appBar(),
                 ProfileTextInput(
                     controller: controller.avenueController,
-                    label: 'Avenue',
-                    placeholder: 'avenue',
+                    label: 'Avenue'.tr,
+                    placeholder: 'Avenue'.tr,
                     onChange: (text) {
                       // controller.avenueController.text = text;
                     }),
                 ProfileTextInput(
-                    label: 'Block',
-                    placeholder: 'block',
+                    label: 'Block'.tr,
+                    placeholder: 'Block'.tr,
                     controller: controller.blockController,
                     onChange: (text) {
                       // controller.blockController.text = text;
                     }),
                 ProfileTextInput(
-                    label: 'House',
-                    placeholder: 'house',
+                    label: 'House'.tr,
+                    placeholder: 'House'.tr,
                     controller: controller.houseController,
                     onChange: (text) {
                       // controller.houseController.text = text;
                     }),
                 ProfileTextInput(
-                    label: 'Street',
-                    placeholder: 'street',
+                    label: 'Street'.tr,
+                    placeholder: 'Street'.tr,
                     controller: controller.streetController,
                     onChange: (text) {
                       // controller.streetController.text = text;
                     }),
-                Obx(() {
-                  if (controller.cities.isNotEmpty) {
-                    var initialCityId = controller.selectedCityId.value;
-
-                    return DropdownInput<City>(
-                      label: 'Choose a City',
-                      placeholder: 'Select a city',
-                      items: controller.cities,
-                      initialValue: initialCityId,
-                      isEnabled: true,
-                      onChange: (City? city) {
-                        if (city != null) {
-                          controller.onCitySelected(city.cityId);
-                          controller.selectedAreaId.value = '';
-                        }
-                      },
-                      getDisplayName: (City city) => city.nameEng,
-                      getValue: (City city) => city.cityId,
-                    );
-                  } else {
-                    return const CircularProgressIndicator();
-                  }
-                }),
-                Obx(() {
-                  if (controller.areas.isNotEmpty) {
-                    var initialAreaId = controller.selectedAreaId.value ??
-                        controller.areas.first.areaId;
-
-                    return DropdownInput<Area>(
-                      key: ValueKey(controller.areas.length),
-                      label: 'Area',
-                      placeholder: 'Select an area',
-                      items: controller.areas,
-                      initialValue: initialAreaId,
-                      isEnabled: true,
-                      onChange: (Area? area) {
-                        if (area != null) {
-                          controller.onAreaSelected(area.areaId);
-                        }
-                      },
-                      getDisplayName: (Area area) => area.nameEng,
-                      getValue: (Area area) => area.areaId,
-                    );
-                  } else {
-                    return const SizedBox.shrink();
-                  }
-                }),
+                const CityAndArea(),
                 const SizedBox(
                   height: 20,
                 ),
                 BigTextButton(
                     isLoading: controller.isLeading.value,
-                    text: 'Save',
+                    text: 'Save'.tr,
                     fontWight: FontWeight.bold,
                     cornerRadius: 24,
                     elevation: 0,
@@ -150,7 +106,7 @@ class EditAddress extends GetView<AddressController> {
                 )),
             Expanded(
               child: Text(
-                'Edit Address',
+                'Edit Address'.tr,
                 textAlign: TextAlign.center,
                 style: Theme.of(Get.context!)
                     .textTheme

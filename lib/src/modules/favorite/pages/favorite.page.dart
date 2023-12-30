@@ -14,7 +14,8 @@ class FavoritePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MainScaffold(
       // showBackButton: true,
-      body: Container(
+      body: Directionality(
+        textDirection: TextDirection.ltr,
         child: Column(
           children: [
             Obx(() {
@@ -22,7 +23,7 @@ class FavoritePage extends StatelessWidget {
                 return Container(
                   margin: EdgeInsets.only(top: Get.height * 0.3),
                   alignment: Alignment.center,
-                  child: const Text('No favorites added yet.'),
+                  child: Text('No favorites added yet.'.tr),
                 );
               }
               return FavoriteProductsList(

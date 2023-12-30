@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mawad/src/core/constants/contants.dart';
+import 'package:mawad/src/data/services/localization_service.dart';
 import 'package:mawad/src/modules/profile/my_address/address_controller.dart';
+import 'package:mawad/src/modules/profile/widgets/profile.text.input.dart';
+import 'package:mawad/src/presentation/theme/textTheme.dart';
 
 class CityAndArea extends GetView<AddressController> {
   const CityAndArea({super.key});
@@ -18,7 +22,7 @@ class CityAndArea extends GetView<AddressController> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    "City",
+                    "City".tr,
                     style: Theme.of(context).textTheme.titleSmall!.copyWith(
                           color: Theme.of(context).colorScheme.secondary,
                           fontWeight: FontWeight.bold,
@@ -35,7 +39,8 @@ class CityAndArea extends GetView<AddressController> {
                       borderRadius: BorderRadius.circular(20),
                       borderSide: BorderSide.none,
                     ),
-                    hintText: 'Select City',
+                    hintText: 'chose your city'.tr,
+                    hintStyle: AppTextTheme.lightGray17,
                   ),
                   value: controller.selectedCityId.isNotEmpty
                       ? controller.selectedCityId.value
@@ -43,7 +48,12 @@ class CityAndArea extends GetView<AddressController> {
                   items: controller.cities.map((city) {
                     return DropdownMenuItem<String>(
                       value: city.cityId,
-                      child: Text(city.nameEng),
+                      child: Text(
+                        LocalizationService.instance.currentLocaleLangCode ==
+                                AppConstants.ENG
+                            ? city.nameEng
+                            : city.nameAr,
+                      ),
                     );
                   }).toList(),
                   onChanged: (newValue) {
@@ -67,7 +77,7 @@ class CityAndArea extends GetView<AddressController> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          "Area",
+                          "Area".tr,
                           style: Theme.of(context)
                               .textTheme
                               .titleSmall!
@@ -87,7 +97,8 @@ class CityAndArea extends GetView<AddressController> {
                             borderRadius: BorderRadius.circular(20),
                             borderSide: BorderSide.none,
                           ),
-                          hintText: 'Select Area',
+                          hintText: 'Select Area'.tr,
+                          hintStyle: AppTextTheme.lightGray17,
                         ),
                         value: controller.selectedAreaId.isNotEmpty
                             ? controller.selectedAreaId.value
@@ -95,7 +106,13 @@ class CityAndArea extends GetView<AddressController> {
                         items: controller.areas.map((area) {
                           return DropdownMenuItem<String>(
                             value: area.areaId,
-                            child: Text(area.nameEng),
+                            child: Text(
+                              LocalizationService
+                                          .instance.currentLocaleLangCode ==
+                                      AppConstants.ENG
+                                  ? area.nameEng
+                                  : area.nameAr,
+                            ),
                           );
                         }).toList(),
                         onChanged: (newValue) {
@@ -107,7 +124,20 @@ class CityAndArea extends GetView<AddressController> {
                 )
               : const SizedBox.shrink(),
         ),
+
         const SizedBox(height: 20),
+        ProfileTextInput(
+            label: 'Block No.'.tr,
+            placeholder: 'your block number'.tr,
+            validator: (p0) {
+              if (p0!.isEmpty) {
+                return 'Please enter valid block'.tr;
+              }
+            },
+            controller: controller.blockController,
+            onChange: (text) {
+              // controller.blockController.text = text;
+            }),
       ],
     );
   }

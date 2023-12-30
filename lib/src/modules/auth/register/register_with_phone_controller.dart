@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
@@ -16,6 +17,9 @@ import '../../../presentation/sharedwidgets/custome_snack.dart';
 class RegisterWithPhoneController extends GetxController {
   final AuthRepo _authRepo = AuthRepo();
   final userDetail = Rx<UserModel?>(null);
+  final _avaterLoading = false.obs;
+  final _timer = (60).obs; // Initialize timer to 60 seconds
+  Timer? _countdownTimer;
 
   final _error = ''.obs;
 
@@ -24,9 +28,14 @@ class RegisterWithPhoneController extends GetxController {
 
   final isLoading = false.obs;
   final isOtpLoading = false.obs;
+  final isProfileLoading = false.obs;
+
+  int get timer => _timer.value;
 
   String get errorMessage => _error.value;
   set errorMessage(String value) => _error.value = value;
+
+  bool get avaterLoading => _avaterLoading.value;
 
   final TextEditingController phonecontroller = TextEditingController();
   final TextEditingController nameController = TextEditingController();
@@ -64,6 +73,7 @@ class RegisterWithPhoneController extends GetxController {
           isLoading.value = false;
           Get.toNamed(AppRoutes.otp,
               arguments: convertToInternationalPhoneNumber(phone));
+          startTimer();
         }
       }
     } catch (error) {
@@ -77,6 +87,29 @@ class RegisterWithPhoneController extends GetxController {
     final RegExp phoneRegExp = RegExp(r'^(?:\+965\s?)?\d{8}$');
 
     return phoneRegExp.hasMatch(phoneNumber);
+  }
+
+  void startTimer() {
+    const oneSec = Duration(seconds: 1);
+
+    _countdownTimer?.cancel(); // Cancel any previous timer
+
+    _timer.value = 60; // Reset timer value to 60 seconds
+
+    _countdownTimer = Timer.periodic(
+      oneSec,
+      (Timer timer) {
+        if (_timer.value <= 0) {
+          timer.cancel();
+        } else {
+          _timer.value--;
+        }
+      },
+    );
+  }
+
+  void stopTimer() {
+    _countdownTimer?.cancel();
   }
 
   String convertToInternationalPhoneNumber(String phoneNumber,
@@ -121,7 +154,7 @@ class RegisterWithPhoneController extends GetxController {
     } catch (error) {
       isOtpLoading.value = false;
       log(error.toString());
-      showCustomSnackbar(title: "", message: "Wrong OTP");
+      showCustomSnackbar(title: "", message: "Invalid OTP Please try again");
       // Handle error here
     }
   }
@@ -170,10 +203,12 @@ class RegisterWithPhoneController extends GetxController {
   }
 
 // add avatar
+
   Future<void> addAvatar(File path) async {
     try {
+      _avaterLoading.value = true;
       String result = await _authRepo.addAvatar(path);
-      log("userDetail=>$result");
+
       var x = await _authRepo.updateAccount(
         UserModel(
             phone: userDetail.value?.phone,
@@ -182,7 +217,9 @@ class RegisterWithPhoneController extends GetxController {
             fileId: result),
       );
       getUserDetail();
+      _avaterLoading.value = false;
     } catch (error) {
+      _avaterLoading.value = false;
       log(error.toString());
     }
   }

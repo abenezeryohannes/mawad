@@ -25,61 +25,49 @@ class AddAddress extends StatelessWidget {
               child: Column(
                 children: [
                   _appBar(),
+                  const CityAndArea(),
                   ProfileTextInput(
-                      controller: controller.avenueController,
-                      label: 'Avenue',
-                      placeholder: 'avenue',
+                      label: 'Street'.tr,
+                      placeholder: 'Your street number/name'.tr,
+                      controller: controller.streetController,
                       validator: (p0) {
                         if (p0!.isEmpty) {
-                          return 'Please enter valid avenue';
+                          return 'Please enter valid street'.tr;
+                        }
+                      },
+                      onChange: (text) {
+                        // controller.streetController.text = text;
+                      }),
+                  ProfileTextInput(
+                      controller: controller.avenueController,
+                      label: 'Avenue'.tr,
+                      placeholder: 'your avenue'.tr,
+                      validator: (p0) {
+                        if (p0!.isEmpty) {
+                          return 'Please enter valid avenue'.tr;
                         }
                       },
                       onChange: (text) {
                         // controller.avenueController.text = text;
                       }),
                   ProfileTextInput(
-                      label: 'Block',
-                      placeholder: 'block',
-                      validator: (p0) {
-                        if (p0!.isEmpty) {
-                          return 'Please enter valid block';
-                        }
-                      },
-                      controller: controller.blockController,
-                      onChange: (text) {
-                        // controller.blockController.text = text;
-                      }),
-                  ProfileTextInput(
-                      label: 'House',
-                      placeholder: 'house',
+                      label: 'House No.'.tr,
+                      placeholder: 'your house number'.tr,
                       controller: controller.houseController,
                       validator: (p0) {
                         if (p0!.isEmpty) {
-                          return 'Please enter valid house';
+                          return 'Please enter valid house'.tr;
                         }
                       },
                       onChange: (text) {
                         // controller.houseController.text = text;
                       }),
-                  ProfileTextInput(
-                      label: 'Street',
-                      placeholder: 'street',
-                      controller: controller.streetController,
-                      validator: (p0) {
-                        if (p0!.isEmpty) {
-                          return 'Please enter valid street';
-                        }
-                      },
-                      onChange: (text) {
-                        // controller.streetController.text = text;
-                      }),
-                  const CityAndArea(),
                   const SizedBox(
                     height: 20,
                   ),
                   Obx(() {
                     return BigTextButton(
-                        text: 'Save',
+                        text: 'Save'.tr,
                         fontWight: FontWeight.bold,
                         cornerRadius: 24,
                         elevation: 0,
@@ -133,7 +121,7 @@ class AddAddress extends StatelessWidget {
                 )),
             Expanded(
               child: Text(
-                'Add Address',
+                'Add Address'.tr,
                 textAlign: TextAlign.center,
                 style: Theme.of(Get.context!)
                     .textTheme

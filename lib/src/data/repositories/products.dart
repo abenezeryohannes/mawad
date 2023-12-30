@@ -97,4 +97,22 @@ class ProductsRepo {
       rethrow;
     }
   }
+
+  // get the other services
+  Future<List<OtherServices>> getOtherServices(List<String> ids) async {
+    try {
+      final result =
+          await _apiService.postRequest('/extra-service/by-ids', {"ids": ids});
+      List<OtherServices> products = mapDataToOtherServices(result['data']);
+
+      return products;
+    } catch (error) {
+      log('Error fetching products getOtherServices: $error');
+      rethrow;
+    }
+  }
+}
+
+List<OtherServices> mapDataToOtherServices(List<dynamic> data) {
+  return data.map((json) => OtherServices.fromJson(json)).toList();
 }

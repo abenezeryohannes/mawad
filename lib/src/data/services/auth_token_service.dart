@@ -5,7 +5,7 @@ import 'package:mawad/src/data/services/localstorage_service.dart';
 class AuthTokenService {
   static final AuthTokenService _singleton = AuthTokenService._internal();
   final ApiService _apiService = ApiService();
-  final LocalStorageService _localStorage = LocalStorageService();
+  final LocalStorageService _localStorage = LocalStorageService.instance;
 
   AuthTokenService._internal();
 

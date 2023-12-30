@@ -182,3 +182,31 @@ class Tag {
         'title': title,
       };
 }
+
+class OtherServices {
+  final String id;
+  final double price;
+  final String title;
+
+  OtherServices({
+    required this.id,
+    required this.price,
+    required this.title,
+  });
+
+  factory OtherServices.fromJson(Map<String, dynamic> json) {
+    return OtherServices(
+      id: json['id'] ?? '',
+      price: (json['price'] ?? 0).toDouble(),
+      title: json['title'] ?? '',
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'price': price,
+      'title': title,
+    };
+  }
+}

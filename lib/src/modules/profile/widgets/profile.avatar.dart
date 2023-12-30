@@ -5,6 +5,8 @@ import 'package:mawad/src/presentation/theme/app_color.dart';
 
 import 'dart:math' as math;
 
+import 'package:shimmer/shimmer.dart';
+
 class ProfileAvatar extends StatefulWidget {
   final Function(File) onImagePicked;
   final String? imageUrl;
@@ -102,6 +104,17 @@ class _ProfileAvatarState extends State<ProfileAvatar> {
               radius: widget.radius,
               backgroundColor: AppColorTheme.bg,
               backgroundImage: backgroundImage,
+              child: widget.imageUrl!.isEmpty
+                  ? Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Shimmer.fromColors(
+                        baseColor: Colors.grey[300]!,
+                        highlightColor: Colors.grey[100]!,
+                        child: const CircleAvatar(
+                          radius: 50.0,
+                        ),
+                      ))
+                  : null,
             ),
           ),
         ],

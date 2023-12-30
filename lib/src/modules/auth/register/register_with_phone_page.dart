@@ -26,18 +26,18 @@ class RegisterWithPhonePage extends GetView<RegisterWithPhoneController> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    'Enter a phone number',
+                    'Enter a phone number'.tr,
                     style: AppTextTheme.titleText26,
                   ),
                   SizedBox(
                     height: 30.h,
                   ),
                   Text(
-                    'A short message will be sent to you',
+                    'A short message will be sent to you'.tr,
                     style: AppTextTheme.graysubtitle15,
                   ),
                   Text(
-                    'to confirm your phone number',
+                    'to confirm your phone number'.tr,
                     style: AppTextTheme.graysubtitle15,
                   ),
                 ],
@@ -49,28 +49,31 @@ class RegisterWithPhonePage extends GetView<RegisterWithPhoneController> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Container(
-                      width: Get.width,
-                      padding: EdgeInsets.symmetric(
-                          vertical: 57.38.h, horizontal: 33.12.w),
-                      child: CustomPhoneInput(
-                        onChanged: (p0) {
-                          controller.phonecontroller.text = p0;
+                    Directionality(
+                      textDirection: TextDirection.ltr,
+                      child: Container(
+                        width: Get.width,
+                        padding: EdgeInsets.symmetric(
+                            vertical: 57.38.h, horizontal: 33.12.w),
+                        child: CustomPhoneInput(
+                          onChanged: (p0) {
+                            controller.phonecontroller.text = p0;
 
-                          return p0;
-                        },
-                        hint: "XXXXXXXXXX",
-                        inputColor: AppColorTheme.lightgray,
-                        phoneNumberMaxLength: 8,
-                        validator: (String? val) {
-                          if (val == null || val.isEmpty) {
-                            return 'Please enter phone number';
-                          }
-                          if (!controller.isPhoneNumberValid(val)) {
-                            return 'Please enter valid phone number';
-                          }
-                          return null;
-                        },
+                            return p0;
+                          },
+                          hint: "XXXXXXXXXX",
+                          inputColor: AppColorTheme.lightgray,
+                          phoneNumberMaxLength: 8,
+                          validator: (String? val) {
+                            if (val == null || val.isEmpty) {
+                              return 'Please enter phone number'.tr;
+                            }
+                            if (!controller.isPhoneNumberValid(val)) {
+                              return 'Please enter valid phone number'.tr;
+                            }
+                            return null;
+                          },
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -81,7 +84,7 @@ class RegisterWithPhonePage extends GetView<RegisterWithPhoneController> {
                         child: SizedBox(child: Obx(() {
                           return BigTextButton(
                             isLoading: controller.isLoading.value,
-                            text: 'Continue',
+                            text: 'Continue'.tr,
                             fontSize: 18,
                             fontWight: FontWeight.bold,
                             cornerRadius: isKeyboardOpen ? 0.r : 22.r,

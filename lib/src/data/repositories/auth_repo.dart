@@ -11,7 +11,7 @@ import 'package:mawad/src/modules/favorite/fevorite_controller.dart';
 class AuthRepo {
   final ApiService _apiService = ApiService();
   final AuthTokenService _authTokenService = AuthTokenService();
-  final LocalStorageService _localStorageService = LocalStorageService();
+  final LocalStorageService _localStorageService = LocalStorageService.instance;
   final FavoritesController favoritesController = FavoritesController();
 
   Future<bool> registerWithPhone(String phone) async {

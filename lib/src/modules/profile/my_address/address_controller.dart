@@ -17,6 +17,7 @@ class AddressController extends GetxController {
   final cities = <City>[].obs;
   final areas = <Area>[].obs;
   final locationDetails = <LocationDetail>[].obs;
+  final _selectedLocationDetail = LocationDetail.empty().obs;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController avenueController = TextEditingController();
   final TextEditingController houseController = TextEditingController();
@@ -28,6 +29,10 @@ class AddressController extends GetxController {
   final currentSelectedAddress = ''.obs;
   final isLeading = false.obs;
   Timer? _debounce;
+
+  LocationDetail get selectedLocation => _selectedLocationDetail.value;
+  set selectedLocation(LocationDetail value) =>
+      _selectedLocationDetail.value = value;
 
   @override
   void onReady() {
@@ -134,9 +139,11 @@ class AddressController extends GetxController {
       isLeading.value = true;
       await _profileRepo.addLocationDetail(location);
       isLeading.value = false;
+      getLocationDetail();
       if (user.userDetail.value!.name == "" &&
           user.userDetail.value!.userEmail == "") {
         getLocationDetail();
+        _selectedLocationDetail.value = locationDetails.first;
         reset();
         Get.to(const ProfileManagerPage());
       } else {

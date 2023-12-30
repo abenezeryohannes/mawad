@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:mawad/src/modules/main.page.dart';
-import 'package:mawad/src/presentation/routes/app_routes.dart';
 import 'package:mawad/src/presentation/sharedwidgets/button/app_button.dart';
 
 import '../presentation/theme/app_color.dart';
@@ -13,20 +11,30 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColorTheme.white,
-      body: SafeArea(
+      backgroundColor: AppColorTheme.yellow,
+      body: Container(
+        color: AppColorTheme.white,
         child: Column(
           children: [
             Expanded(
+              flex: 2,
               child: ClipPath(
                 clipper: CustomClipPath(),
                 child: Container(
+                  width: Get.width,
+                  padding: const EdgeInsets.only(top: 60, right: 30),
                   color: AppColorTheme.yellow,
-                  child: Center(
-                    child: SvgPicture.asset('assets/svg/splash.svg'),
+                  child: Image.asset(
+                    'assets/icon/splashi.png',
+                    width: Get.width,
+                    alignment: Alignment.topLeft,
+                    fit: BoxFit.fitWidth,
                   ),
                 ),
               ),
+            ),
+            SizedBox(
+              height: Get.height * 0.1,
             ),
             Expanded(
               child: Container(
@@ -58,6 +66,9 @@ class SplashScreen extends StatelessWidget {
                 ),
               ),
             ),
+            SizedBox(
+              height: Get.height * 0.1,
+            ),
           ],
         ),
       ),
@@ -80,7 +91,6 @@ class CustomClipPath extends CustomClipper<Path> {
 
     path.lineTo(0, height); // Start from the bottom-left corner
 
-    // Use negative value for the control point to make the curve outside
     path.quadraticBezierTo(width * 0.5, height - 100, width, height);
 
     path.lineTo(width, 0); // Draw a line to the top-right corner

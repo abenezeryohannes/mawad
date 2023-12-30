@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mawad/src/core/constants/contants.dart';
 import 'package:mawad/src/core/models/country.dart';
+import 'package:mawad/src/data/services/localization_service.dart';
 
 class FlagCard extends StatefulWidget {
   const FlagCard({
@@ -70,7 +71,10 @@ class _FlagCardState extends State<FlagCard> {
           Padding(
             padding: const EdgeInsets.only(top: .0, bottom: 5),
             child: Text(
-              widget.country.nameEng,
+              LocalizationService.instance.currentLocaleLangCode ==
+                      AppConstants.ENG
+                  ? widget.country.nameEng
+                  : widget.country.nameAr,
               textAlign: TextAlign.center,
               style: Theme.of(context)
                   .textTheme

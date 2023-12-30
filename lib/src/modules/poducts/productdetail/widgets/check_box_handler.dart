@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mawad/src/core/constants/contants.dart';
 import 'package:mawad/src/core/models/cart_items.dart';
 import 'package:mawad/src/core/models/product_addon.dart';
+import 'package:mawad/src/data/services/localization_service.dart';
 import 'package:mawad/src/modules/poducts/addon_handler_factory.dart';
 import 'package:mawad/src/modules/poducts/modifire_handler_factory.dart';
 import 'package:mawad/src/presentation/sharedwidgets/button/checkbox_button.dart';
@@ -81,7 +83,11 @@ class _CheckboxAddonHandlerState extends State<CheckboxAddonHandler> {
                     child: CheckboxIcon(
                       isDisabled: isDisabled(mod.id),
                       disabledTextStyle: AppTextTheme.lightGray17,
-                      title: mod.nameEng,
+                      title:
+                          LocalizationService.instance.currentLocaleLangCode ==
+                                  AppConstants.ENG
+                              ? mod.nameEng
+                              : mod.nameAr,
                       textStyle: AppTextTheme.darkblueTitle16,
                       onClicked: (_) => toggleModifierId(mod.id),
                       isClicked: selectedModifierIds.contains(mod.id),

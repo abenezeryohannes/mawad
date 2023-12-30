@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:mawad/src/data/services/localstorage_service.dart';
 
 class CacheService {
-  final LocalStorageService _localStorageService = LocalStorageService();
+  final LocalStorageService _localStorageService = LocalStorageService.instance;
 
   Future<void> addToCache(String key, dynamic value) async {
     String json = jsonEncode(value);

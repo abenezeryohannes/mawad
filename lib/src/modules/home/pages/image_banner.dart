@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:mawad/src/core/constants/contants.dart';
 import 'package:mawad/src/core/models/image_model.dart';
 import 'package:mawad/src/modules/home/widgets%20/home_skeleton.dart';
 import 'package:mawad/src/presentation/sharedwidgets/button/app_button.dart';
@@ -54,6 +55,15 @@ class ImageBanner extends StatelessWidget {
                             fit: BoxFit.cover,
                             height: 150,
                             width: Get.width * (11 / 12),
+                            errorBuilder: (context, error, stackTrace) {
+                              // Return a placeholder widget when an error occurs
+                              return Image.network(
+                                AppConstants.Placeholde,
+                                fit: BoxFit.cover,
+                                height: 150,
+                                width: Get.width * (11 / 12),
+                              );
+                            },
                           ),
                         ),
                         Positioned(
@@ -63,7 +73,7 @@ class ImageBanner extends StatelessWidget {
                             radius: 20.r,
                             height: 39.h,
                             width: 130.w,
-                            text: "See more",
+                            text: "See more".tr,
                             textStyle: AppTextTheme.brown12,
                             onPressed: () {
                               onButtonPressed!();

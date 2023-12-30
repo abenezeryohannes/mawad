@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mawad/src/core/constants/contants.dart';
 import 'package:mawad/src/core/models/cart_items.dart';
 import 'package:mawad/src/core/models/product_addon.dart';
+import 'package:mawad/src/data/services/localization_service.dart';
 import 'package:mawad/src/modules/cart/widgets/item.count.controller.dart';
 import 'package:mawad/src/modules/poducts/modifire_handler_factory.dart';
 import 'package:mawad/src/presentation/sharedwidgets/cards/primery_cards.dart';
@@ -93,7 +95,10 @@ class _CounterModifierState extends State<CounterModifier> {
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    modifier.nameEng,
+                    LocalizationService.instance.currentLocaleLangCode ==
+                            AppConstants.ENG
+                        ? modifier.nameEng
+                        : modifier.nameAr,
                     style: AppTextTheme.darkblueTitle16,
                   ),
                 ),

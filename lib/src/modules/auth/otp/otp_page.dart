@@ -25,18 +25,18 @@ class OtpPage extends GetView<RegisterWithPhoneController> {
             Column(
               children: [
                 Text(
-                  "Enter activation code",
+                  "Enter activation code".tr,
                   style: AppTextTheme.brown25,
                 ),
                 SizedBox(
                   height: 10.h,
                 ),
                 Text(
-                  "Enter the sent code",
+                  "Enter the sent code".tr,
                   style: AppTextTheme.graysubtitle15,
                 ),
                 Text(
-                  "On number $argument",
+                  "${"On number".tr} $argument",
                   style: AppTextTheme.graysubtitle15,
                 ),
                 SizedBox(
@@ -62,26 +62,39 @@ class OtpPage extends GetView<RegisterWithPhoneController> {
                 SizedBox(
                   height: 61.h,
                 ),
-                Directionality(
-                  textDirection: TextDirection.ltr,
-                  child: Column(
-                    children: [
-                      Text(
-                        "Activation code did not arrive?",
-                        style: AppTextTheme.lightGray17,
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      GestureDetector(
-                          onTap: () {},
-                          child: Text(
-                            "Click to resend.",
-                            style: AppTextTheme.yellow14,
-                          )),
-                    ],
-                  ),
-                ),
+                Obx(() {
+                  return Directionality(
+                    textDirection: TextDirection.ltr,
+                    child: controller.timer <= 0
+                        ? Column(
+                            children: [
+                              Text(
+                                "Activation code did not arrive?".tr,
+                                style: AppTextTheme.lightGray17,
+                              ),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              GestureDetector(
+                                  onTap: () {
+                                    controller.registerWithPhone();
+                                  },
+                                  child: Text(
+                                    "Click to resend.".tr,
+                                    style: AppTextTheme.yellow14,
+                                  )),
+                            ],
+                          )
+                        : Container(
+                            child: Text(
+                              "${"Resend code in".tr} ${controller.timer}"
+                                      "seconds"
+                                  .tr,
+                              style: AppTextTheme.lightGray17,
+                            ),
+                          ),
+                  );
+                }),
               ],
             ),
             SizedBox(
@@ -89,7 +102,7 @@ class OtpPage extends GetView<RegisterWithPhoneController> {
                 child: Obx(() {
                   return BigTextButton(
                     isLoading: controller.isOtpLoading.value,
-                    text: 'Confirm',
+                    text: 'Confirm'.tr,
                     fontSize: 18,
                     fontWight: FontWeight.bold,
                     cornerRadius: isKeyboardOpen ? 0.r : 22.r,

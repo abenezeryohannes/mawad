@@ -5,7 +5,7 @@ import 'package:mawad/src/data/services/localstorage_service.dart';
 
 class FavoritesService {
   static const _key = 'favorite_products';
-  final LocalStorageService _localStorage = LocalStorageService();
+  final LocalStorageService _localStorage = LocalStorageService.instance;
 
   Future<void> addFavorite(Product product) async {
     final currentFavs = await getFavorites();

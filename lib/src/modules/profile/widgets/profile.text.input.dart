@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mawad/src/presentation/theme/app_color.dart';
+import 'package:mawad/src/presentation/theme/textTheme.dart';
 
 class ProfileTextInput extends StatefulWidget {
   const ProfileTextInput({
@@ -59,6 +60,7 @@ class _ProfileTextInputState extends State<ProfileTextInput> {
               fillColor: AppColorTheme.lightgray,
               filled: true,
               hintText: widget.placeholder ?? '',
+              hintStyle: AppTextTheme.lightGray17,
               border: OutlineInputBorder(
                 borderSide: BorderSide.none,
                 borderRadius: BorderRadius.circular(20),

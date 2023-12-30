@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mawad/src/core/constants/contants.dart';
 import 'package:mawad/src/core/models/cart_items.dart';
 import 'package:mawad/src/core/models/product_addon.dart';
+import 'package:mawad/src/data/services/localization_service.dart';
 import 'package:mawad/src/modules/poducts/modifire_handler_factory.dart';
 import 'package:mawad/src/presentation/sharedwidgets/button/groupe_chip.dart';
 import 'package:mawad/src/presentation/sharedwidgets/cards/primery_cards.dart';
@@ -42,12 +44,18 @@ class _SelectionModifierHandlerState extends State<SelectionModifierHandler> {
                 textDirection: TextDirection.rtl,
                 child: ChipGroup(
                   labels: widget.addon.productModifierChoice
-                      .map((modifier) => modifier.nameEng)
+                      .map((modifier) =>
+                          LocalizationService.instance.currentLocaleLangCode ==
+                                  AppConstants.ENG
+                              ? modifier.nameEng
+                              : modifier.nameAr)
                       .toList(),
                   onSelectionChanged: (selectedLabel) {
                     var selectedModifierDetail =
                         widget.addon.productModifierChoice.firstWhere(
-                            (modifier) => modifier.nameEng == selectedLabel,
+                            (modifier) =>
+                                modifier.nameEng == selectedLabel ||
+                                modifier.nameAr == selectedLabel,
                             orElse: () =>
                                 widget.addon.productModifierChoice.first);
 
@@ -74,7 +82,7 @@ class _SelectionModifierHandlerState extends State<SelectionModifierHandler> {
             Directionality(
               textDirection: TextDirection.ltr,
               child: Text(
-                "${widget.addon.nameAr} :",
+                "${LocalizationService.instance.currentLocaleLangCode == AppConstants.ENG ? widget.addon.nameEng : widget.addon.nameAr} :",
                 style: AppTextTheme.darkblueTitle16,
               ),
             ),

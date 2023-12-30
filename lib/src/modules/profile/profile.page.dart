@@ -6,6 +6,8 @@ import 'package:mawad/src/modules/profile/account_detail/profile.manager.page.da
 import 'package:mawad/src/modules/profile/widgets/profile.avatar.dart';
 import 'package:mawad/src/presentation/routes/app_routes.dart';
 import 'package:mawad/src/presentation/theme/textTheme.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfilePage extends GetView<RegisterWithPhoneController> {
   const ProfilePage({super.key});
@@ -27,16 +29,28 @@ class ProfilePage extends GetView<RegisterWithPhoneController> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            ProfileAvatar(
-                              imageUrl: controller.userDetail.value?.avatar ==
-                                      null
-                                  ? null
-                                  : "http://ordermawad.com/api/v1/file/get/${controller.userDetail.value?.avatar}",
-                              radius: 50,
-                              onImagePicked: (p0) {
-                                controller.addAvatar(p0);
-                              },
-                            ),
+                            controller.userDetail.value?.avatar == null &&
+                                    controller.isProfileLoading.value
+                                ? Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: Shimmer.fromColors(
+                                      baseColor: Colors.grey[300]!,
+                                      highlightColor: Colors.grey[100]!,
+                                      child: const CircleAvatar(
+                                        radius: 50.0,
+                                      ),
+                                    ))
+                                : ProfileAvatar(
+                                    imageUrl: controller
+                                                .userDetail.value!.avatar ==
+                                            null
+                                        ? null
+                                        : "http://ordermawad.com/api/v1/file/get/${controller.userDetail.value?.avatar}",
+                                    radius: 50,
+                                    onImagePicked: (p0) {
+                                      controller.addAvatar(p0);
+                                    },
+                                  ),
                             Padding(
                               padding: const EdgeInsets.only(top: 12.0),
                               child: Text(
@@ -84,7 +98,7 @@ class ProfilePage extends GetView<RegisterWithPhoneController> {
   List<Widget> _bottomList(context) {
     return [
       ProfileItemCard(
-        title: 'Account Details',
+        title: 'Account Details'.tr,
         icon: Padding(
           padding: const EdgeInsets.only(left: 10.0, right: 10),
           child: Image.asset(
@@ -97,7 +111,7 @@ class ProfilePage extends GetView<RegisterWithPhoneController> {
         onClick: () => Get.to(() => const ProfileManagerPage()),
       ),
       ProfileItemCard(
-        title: 'My Addresses',
+        title: 'My Addresses'.tr,
         icon: Padding(
           padding: const EdgeInsets.only(left: 10.0, right: 10),
           child: Image.asset(
@@ -110,7 +124,7 @@ class ProfilePage extends GetView<RegisterWithPhoneController> {
         onClick: () => Get.toNamed(AppRoutes.address),
       ),
       ProfileItemCard(
-        title: 'My Orders',
+        title: 'My Orders'.tr,
         icon: Padding(
           padding: const EdgeInsets.only(left: 10.0, right: 10),
           child: Image.asset(
@@ -123,7 +137,8 @@ class ProfilePage extends GetView<RegisterWithPhoneController> {
         onClick: () => Get.toNamed(AppRoutes.orderPage),
       ),
       ProfileItemCard(
-        title: 'Privacy Terms',
+        title: 'Privacy Terms'.tr,
+        onClick: () => _launchUrl(),
         icon: Padding(
           padding: const EdgeInsets.only(left: 10.0, right: 10),
           child: Image.asset(
@@ -135,5 +150,13 @@ class ProfilePage extends GetView<RegisterWithPhoneController> {
         ),
       )
     ];
+  }
+
+  Future<void> _launchUrl() async {
+    final Uri url = Uri.parse('http://ordermawad.com/privacy-policy');
+
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch $url');
+    }
   }
 }

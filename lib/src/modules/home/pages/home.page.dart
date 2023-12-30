@@ -1,14 +1,15 @@
 import 'dart:async';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:mawad/src/core/constants/contants.dart';
 import 'package:mawad/src/modules/favorite/favorite_list.dart';
-import 'package:mawad/src/modules/home/widgets%20/product.catagory.dart';
 import 'package:mawad/src/modules/home/pages/change.country.bottom.sheet.dart';
 import 'package:mawad/src/modules/home/pages/image_banner.dart';
+import 'package:mawad/src/modules/home/widgets%20/product.catagory.dart';
 import 'package:mawad/src/modules/poducts/product/product_controller.dart';
 import 'package:mawad/src/modules/poducts/product_catagory/product_catagory.dart';
 import 'package:mawad/src/presentation/sharedwidgets/appbottomshet.dart';
@@ -36,7 +37,8 @@ class _HomePageState extends State<HomePage> {
       body: Obx(() {
         return SafeArea(
           child: productController.isCategory.value
-              ? const ProductCategory()
+              ? const Directionality(
+                  textDirection: TextDirection.ltr, child: ProductCategory())
               : NestedScrollView(
                   headerSliverBuilder:
                       (BuildContext context, bool innerBoxIsScrolled) {
@@ -50,8 +52,7 @@ class _HomePageState extends State<HomePage> {
                         iconTheme: const IconThemeData(size: 0),
                         leadingWidth: 0,
                         leading: null,
-                        collapsedHeight: 230.h,
-                        expandedHeight: 280.h,
+                        collapsedHeight: 130.h,
                         forceElevated: innerBoxIsScrolled,
                         flexibleSpace: FlexibleSpaceBar(
                           title: _appBarBackground(context),
@@ -62,6 +63,8 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ];
                   },
+                  physics: const BouncingScrollPhysics(),
+                  dragStartBehavior: DragStartBehavior.start,
                   body: Padding(
                     padding: const EdgeInsets.only(left: 8, right: 8, top: 10),
                     child: _body(context),
@@ -79,13 +82,14 @@ class _HomePageState extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Container(
+          Directionality(
+            textDirection: TextDirection.ltr,
             child: Padding(
               padding: const EdgeInsets.only(left: 20, right: 20),
               child: Container(
                 child: SearchInput(
                   controller: productController.searchController,
-                  placeholder: 'Search',
+                  placeholder: 'Search'.tr,
                   hintStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
                         color: Theme.of(context).highlightColor,
                         fontWeight: FontWeight.bold,
@@ -110,7 +114,6 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          const ProductCategoryList()
         ],
       ),
     );
@@ -131,7 +134,7 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   Expanded(
                     child: Text(
-                      'Products',
+                      'Products'.tr,
                       textAlign: TextAlign.center,
                       style: Theme.of(context)
                           .textTheme
@@ -139,43 +142,46 @@ class _HomePageState extends State<HomePage> {
                           .copyWith(fontWeight: FontWeight.bold),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 20),
-                    child: InkWell(
-                      onTap: () {
-                        showAppBottomSheet(
-                          Obx(() {
-                            return ChangeCountryBottomSheet(
-                              countries: productController.countries,
-                              initialSelectedCountry:
-                                  productController.selectedCountry.value,
-                              onCountrySelected: (selected) {
-                                productController
-                                    .getProductByCountry(selected.id);
-                                productController
-                                    .getCategoryByCountry(selected.id);
-                                productController.selectedCountry(selected);
-                              },
-                            );
-                          }),
-                        );
-                      },
-                      child: CircleAvatar(
-                        radius: 24.r,
-                        backgroundColor: Colors.transparent,
-                        child: Obx(
-                          () => ClipOval(
-                            child:
-                                productController.selectedCountry.value != null
-                                    ? ClipOval(
-                                        child: SvgPicture.network(
-                                          '${AppConstants.IMAGER_URL}/${productController.selectedCountry.value!.attachment.id}',
-                                          fit: BoxFit.cover,
-                                          width: 78.r,
-                                          height: 78.r,
-                                        ),
-                                      )
-                                    : const SizedBox(),
+                  Directionality(
+                    textDirection: TextDirection.ltr,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 20),
+                      child: InkWell(
+                        onTap: () {
+                          showAppBottomSheet(
+                            Obx(() {
+                              return ChangeCountryBottomSheet(
+                                countries: productController.countries,
+                                initialSelectedCountry:
+                                    productController.selectedCountry.value,
+                                onCountrySelected: (selected) {
+                                  productController
+                                      .getProductByCountry(selected.id);
+                                  productController
+                                      .getCategoryByCountry(selected.id);
+                                  productController.selectedCountry(selected);
+                                },
+                              );
+                            }),
+                          );
+                        },
+                        child: CircleAvatar(
+                          radius: 24.r,
+                          backgroundColor: Colors.transparent,
+                          child: Obx(
+                            () => ClipOval(
+                              child: productController.selectedCountry.value !=
+                                      null
+                                  ? ClipOval(
+                                      child: SvgPicture.network(
+                                        '${AppConstants.IMAGER_URL}/${productController.selectedCountry.value!.attachment.id}',
+                                        fit: BoxFit.cover,
+                                        width: 78.r,
+                                        height: 78.r,
+                                      ),
+                                    )
+                                  : const SizedBox(),
+                            ),
                           ),
                         ),
                       ),
@@ -193,9 +199,9 @@ class _HomePageState extends State<HomePage> {
   Widget _body(BuildContext context) {
     return Obx(() {
       return Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.end,
         children: [
+          const Directionality(
+              textDirection: TextDirection.ltr, child: ProductCategoryList()),
           ImageBanner(
             onButtonPressed: () {
               _launchUrl();
@@ -210,8 +216,11 @@ class _HomePageState extends State<HomePage> {
             ),
           if (!productController.isLeading.value &&
               productController.products.isNotEmpty)
-            FavoriteProductsList(
-              productList: productController.products,
+            Directionality(
+              textDirection: TextDirection.ltr,
+              child: FavoriteProductsList(
+                productList: productController.products,
+              ),
             ),
           if (!productController.isLeading.value &&
               productController.products.isEmpty)

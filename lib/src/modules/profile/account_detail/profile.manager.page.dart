@@ -6,7 +6,8 @@ import 'package:mawad/src/modules/auth/register/register_with_phone_controller.d
 import 'package:mawad/src/modules/profile/widgets/profile.avatar.dart';
 import 'package:mawad/src/modules/profile/widgets/profile.text.input.dart';
 import 'package:mawad/src/presentation/sharedwidgets/custome_snack.dart';
-import 'package:mawad/src/presentation/theme/textTheme.dart';
+import 'package:mawad/src/presentation/theme/app_color.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../presentation/sharedwidgets/big.text.button.dart';
 
@@ -28,48 +29,66 @@ class ProfileManagerPage extends GetView<RegisterWithPhoneController> {
                   Column(
                     children: [
                       _appBar(context),
-                      Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: ProfileAvatar(
-                          radius: 50,
-                          imageUrl: controller.userDetail.value?.avatar == null
-                              ? null
-                              : "http://ordermawad.com/api/v1/file/get/${controller.userDetail.value?.avatar}",
-                          onImagePicked: (p0) {
-                            controller.addAvatar(p0);
-                          },
-                        ),
-                      ),
+                      Obx(() {
+                        return controller.userDetail.value?.avatar == null
+                            ? Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Shimmer.fromColors(
+                                  baseColor: Colors.grey[300]!,
+                                  highlightColor: Colors.grey[100]!,
+                                  child: const CircleAvatar(
+                                    radius: 50.0,
+                                  ),
+                                ))
+                            : controller.isProfileLoading.value
+                                ? const Center(
+                                    child: CircularProgressIndicator(),
+                                  )
+                                : Padding(
+                                    padding: const EdgeInsets.all(20.0),
+                                    child: ProfileAvatar(
+                                      radius: 50,
+                                      imageUrl: controller
+                                                  .userDetail.value?.avatar ==
+                                              null
+                                          ? "https://fakeimg.pl/600x400/f4cf47/ffffff?text=mawad&font=museo"
+                                          : "http://ordermawad.com/api/v1/file/get/${controller.userDetail.value?.avatar}",
+                                      onImagePicked: (p0) {
+                                        controller.addAvatar(p0);
+                                      },
+                                    ),
+                                  );
+                      }),
                       ProfileTextInput(
-                          label: 'Full Name',
+                          label: 'Full Name'.tr,
                           controller: controller.nameController,
                           initialText:
                               controller.userDetail.value?.name.toString(),
                           validator: (p0) {
                             if (p0!.isEmpty) {
-                              return 'Please enter valid name';
+                              return 'Please enter valid name'.tr;
                             }
                           },
                           onChange: (text) {}),
                       ProfileTextInput(
-                          label: 'Phone',
+                          label: 'Phone'.tr,
                           readolny: true,
-                          placeholder: 'Phone',
+                          placeholder: 'Phone'.tr,
                           controller: controller.phonecontroller,
                           initialText:
                               controller.userDetail.value?.phone.toString(),
                           onChange: (text) {}),
                       ProfileTextInput(
                           controller: controller.emailController,
-                          label: 'Email',
-                          placeholder: 'Email',
+                          label: 'Email'.tr,
+                          placeholder: 'Email'.tr,
                           initialText:
                               controller.userDetail.value?.userEmail.toString(),
                           validator: (p0) {
                             if (p0!.isEmpty) {
-                              return 'Please enter valid email';
+                              return 'Please enter valid email'.tr;
                             } else if (!p0.isEmail) {
-                              return 'Please enter valid email';
+                              return 'Please enter valid email'.tr;
                             }
                             return null;
                           },
@@ -79,7 +98,7 @@ class ProfileManagerPage extends GetView<RegisterWithPhoneController> {
                       ),
                       Obx(() {
                         return BigTextButton(
-                            text: 'Save',
+                            text: 'Save'.tr,
                             fontWight: FontWeight.bold,
                             cornerRadius: 24,
                             fontSize: 18,
@@ -120,8 +139,8 @@ class ProfileManagerPage extends GetView<RegisterWithPhoneController> {
                                 }
                               } else {
                                 showCustomSnackbar(
-                                    title: "Error",
-                                    message: "Please fill all fields");
+                                    title: "Error".tr,
+                                    message: "Please fill all fields".tr);
                               }
                             });
                       })
@@ -131,7 +150,7 @@ class ProfileManagerPage extends GetView<RegisterWithPhoneController> {
                     height: 40.h,
                   ),
                   BigTextButton(
-                      text: 'Delete Account',
+                      text: 'Delete Account'.tr,
                       fontWight: FontWeight.bold,
                       cornerRadius: 16,
                       elevation: 0,
@@ -143,34 +162,26 @@ class ProfileManagerPage extends GetView<RegisterWithPhoneController> {
                       horizontalMargin: const EdgeInsets.only(
                           left: 30, right: 30, bottom: 10),
                       onClick: () {
-                        //check if user need to delete account
-                        Get.dialog(
-                          AlertDialog(
-                            title: const Text('Delete Account'),
-                            content: const Text(
-                                'Are you sure you want to delete your account?'),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Get.back();
-                                },
-                                child: Text(
-                                  'Cancel',
-                                  style: AppTextTheme.yellow14,
-                                ),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  controller.logout();
-                                  Get.back();
-                                },
-                                child: Text(
-                                  'Delete',
-                                  style: AppTextTheme.yellow14,
-                                ),
-                              ),
-                            ],
-                          ),
+                        Get.defaultDialog(
+                          titlePadding: const EdgeInsets.all(20),
+                          contentPadding: const EdgeInsets.all(10),
+                          backgroundColor: Colors.white,
+                          title: 'Delete Account'.tr,
+                          content: Text(
+                              'Are you sure you want to delete your account?'
+                                  .tr),
+                          textConfirm: 'Yes'.tr,
+                          textCancel: 'No'.tr,
+                          buttonColor: AppColorTheme.yellow,
+                          confirmTextColor: AppColorTheme.brown,
+                          cancelTextColor: AppColorTheme.brown,
+                          onConfirm: () {
+                            controller.logout();
+                            Get.back();
+                          },
+                          onCancel: () {
+                            Get.back();
+                          },
                         );
                       })
                 ],
@@ -200,7 +211,7 @@ class ProfileManagerPage extends GetView<RegisterWithPhoneController> {
                 )),
             Expanded(
               child: Text(
-                'Edit Profile',
+                'Edit Profile'.tr,
                 textAlign: TextAlign.center,
                 style: Theme.of(context)
                     .textTheme

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:mawad/src/core/models/country.dart';
+import 'package:mawad/src/data/services/localization_service.dart';
 import 'package:mawad/src/modules/home/widgets%20/flag.cards.dart';
 
 import '../../../presentation/sharedwidgets/big.text.button.dart';
@@ -56,44 +58,64 @@ class _ChangeCountryBottomSheetState extends State<ChangeCountryBottomSheet> {
                     color: Theme.of(context).colorScheme.onPrimary, width: 3),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 5, bottom: 20),
-              child: Text(
-                'Browse products from other countries',
-                textAlign: TextAlign.center,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge!
-                    .copyWith(fontWeight: FontWeight.bold),
+            GestureDetector(
+              onTap: () {
+                if (LocalizationService.instance.currentLocaleLangCode ==
+                    'eg') {
+                  LocalizationService.instance.changeLocale('ar');
+                } else {
+                  LocalizationService.instance.changeLocale('eg');
+                }
+              },
+              child: Container(
+                  margin: const EdgeInsets.only(left: 30),
+                  alignment: Alignment.bottomLeft,
+                  child: SvgPicture.asset('assets/svg/lang.svg')),
+            ),
+            Directionality(
+              textDirection: TextDirection.ltr,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 5, bottom: 20),
+                child: Text(
+                  'Select another country product'.tr,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge!
+                      .copyWith(fontWeight: FontWeight.bold),
+                ),
               ),
             ),
-            GridView.builder(
-              physics: const ClampingScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: widget.countries.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                childAspectRatio: 0.9,
+            Directionality(
+              textDirection: TextDirection.ltr,
+              child: GridView.builder(
+                physics: const ClampingScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: widget.countries.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  childAspectRatio: 0.9,
+                ),
+                padding: const EdgeInsets.only(left: 20, right: 20),
+                itemBuilder: (context, index) {
+                  final country = widget.countries[index];
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FlagCard(
+                      country: country,
+                      selected: country == _selectedCountry,
+                      onFlagSelected: (selectedCountry) {
+                        setState(() {
+                          _selectedCountry = selectedCountry;
+                        });
+                      },
+                    ),
+                  );
+                },
               ),
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              itemBuilder: (context, index) {
-                final country = widget.countries[index];
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: FlagCard(
-                    country: country,
-                    selected: country == _selectedCountry,
-                    onFlagSelected: (selectedCountry) {
-                      setState(() {
-                        _selectedCountry = selectedCountry;
-                      });
-                    },
-                  ),
-                );
-              },
             ),
             BigTextButton(
-                text: 'Select country',
+                text: 'Select country'.tr,
                 fontWight: FontWeight.bold,
                 fontSize: 18,
                 cornerRadius: 24,

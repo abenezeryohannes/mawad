@@ -103,7 +103,7 @@ class ProductController extends GetxController {
         CategoryModel(
           id: 'all',
           status: true,
-          nameAr: 'الكل',
+          nameAr: 'All',
           nameEng: 'All',
           image: ImageModel(id: "2", url: IconRoutes.menu),
         )

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mawad/src/core/constants/contants.dart';
 import 'package:mawad/src/core/models/cart_items.dart';
 import 'package:mawad/src/core/models/product_addon.dart';
+import 'package:mawad/src/data/services/localization_service.dart';
 import 'package:mawad/src/modules/poducts/addon_handler_factory.dart';
 import 'package:mawad/src/modules/poducts/modifire_handler_factory.dart';
 import 'package:mawad/src/presentation/sharedwidgets/button/groupe_chip.dart';
@@ -62,12 +64,18 @@ class _SelectionAddonHandlerState extends State<SelectionAddonHandler> {
               children: [
                 ChipGroup(
                   labels: widget.addon.modifiers
-                      .map((modifier) => modifier.nameEng)
+                      .map((modifier) =>
+                          LocalizationService.instance.currentLocaleLangCode ==
+                                  AppConstants.ENG
+                              ? modifier.nameEng
+                              : modifier.nameAr)
                       .toList(),
                   onSelectionChanged: (selectedLabel) {
                     setState(() {
                       var selectedModifier = widget.addon.modifiers.firstWhere(
-                        (modifier) => modifier.nameEng == selectedLabel,
+                        (modifier) =>
+                            modifier.nameEng == selectedLabel ||
+                            modifier.nameAr == selectedLabel,
                       );
                       selectedModifierId = selectedModifier.id;
 
@@ -90,7 +98,7 @@ class _SelectionAddonHandlerState extends State<SelectionAddonHandler> {
                 Directionality(
                   textDirection: TextDirection.rtl,
                   child: Text(
-                    "${widget.addon.nameAr} :",
+                    "${LocalizationService.instance.currentLocaleLangCode == AppConstants.ENG ? widget.addon.nameEng : widget.addon.nameAr} :",
                     style: AppTextTheme.darkblueTitle16,
                   ),
                 ),

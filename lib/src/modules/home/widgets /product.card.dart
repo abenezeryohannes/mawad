@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mawad/src/core/constants/contants.dart';
 
 import 'package:mawad/src/core/models/products.dart';
+import 'package:mawad/src/data/services/localization_service.dart';
 import 'package:mawad/src/utils/utils.dart';
 
 class ProductCard extends StatelessWidget {
@@ -41,9 +43,19 @@ class ProductCard extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: const BorderRadius.all(Radius.circular(8)),
                     child: Image.network(
-                      product.images.first.url,
+                      product.images.isNotEmpty
+                          ? product.images.first.url
+                          : AppConstants.Placeholde,
                       fit: BoxFit.cover,
                       height: Get.width * (5 / 12),
+                      errorBuilder: (context, error, stackTrace) {
+                        // Return a placeholder widget when an error occurs
+                        return Image.network(
+                          AppConstants.Placeholde,
+                          fit: BoxFit.cover,
+                          height: Get.width * (5 / 12),
+                        );
+                      },
                     ),
                   ),
                 ),
@@ -86,7 +98,10 @@ class ProductCard extends StatelessWidget {
                   children: [
                     const SizedBox(height: 10),
                     Text(
-                      product.nameEng,
+                      LocalizationService.instance.currentLocaleLangCode ==
+                              AppConstants.ENG
+                          ? product.nameEng
+                          : product.nameAr,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context)
                           .textTheme
@@ -95,7 +110,10 @@ class ProductCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 3),
                     Text(
-                      product.detailsEng!,
+                      LocalizationService.instance.currentLocaleLangCode ==
+                              AppConstants.ENG
+                          ? product.detailsEng ?? ''
+                          : product.detailsAr ?? '',
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context)
                           .textTheme
@@ -108,7 +126,7 @@ class ProductCard extends StatelessWidget {
                       children: [
                         Flexible(
                           child: Text(
-                            'KWD ${Util.formatNumberWithCommas(product.price.toString())}',
+                            '${'KWD'.tr} ${Util.formatNumberWithCommas(product.price.toString())}',
                             overflow: TextOverflow.ellipsis,
                             style: Theme.of(context)
                                 .textTheme

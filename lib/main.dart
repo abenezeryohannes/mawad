@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:mawad/src/data/services/auth_token_service.dart';
+import 'package:mawad/src/data/services/localization_service.dart';
 import 'package:mawad/src/data/services/localstorage_service.dart';
 import 'package:mawad/src/modules/auth/register/register_with_phone_controller.dart';
 import 'package:mawad/src/modules/main.page.dart';
@@ -17,7 +18,7 @@ import 'injectable/getit.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  final localStorage = LocalStorageService();
+  final localStorage = LocalStorageService.instance;
 
   await localStorage.initialize();
   final authService = AuthTokenService();
@@ -26,12 +27,20 @@ void main() async {
   await GetStorage.init();
 
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  await LocalStorageService().initialize();
+  await LocalStorageService.instance.initialize();
   await SystemChrome.setEnabledSystemUIMode(
     SystemUiMode.manual,
     overlays: [SystemUiOverlay.bottom, SystemUiOverlay.top],
   );
-  //Setting SysemUIOverlay
+  Future<bool> isFirstInstall() async {
+    bool isFirstInstall =
+        LocalStorageService.instance.getInt('first_install') == null;
+    if (isFirstInstall) {
+      LocalStorageService.instance.saveInt('first_install', 1);
+    }
+    return isFirstInstall;
+  }
+
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       systemStatusBarContrastEnforced: true,
       systemNavigationBarColor: Colors.grey.shade200,
@@ -46,55 +55,33 @@ void main() async {
       overlays: [SystemUiOverlay.top]);
 
   configureDependencies();
+  bool isFirst = await isFirstInstall();
   // Loads contents from .env into memory.
 
-  runApp(const MyApp());
+  runApp(MyApp(isFirstInstall: isFirst));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final bool isFirstInstall;
+
+  const MyApp({super.key, required this.isFirstInstall});
 
   @override
   Widget build(BuildContext context) {
     Get.put(() => RegisterWithPhoneController());
-    final lang = GetStorage().read('lang');
     return ScreenUtilInit(
       designSize: const Size(428, 926),
-      child: FutureBuilder<bool>(
-        future: isFirstInstall(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.data == true) {
-              return GetMaterialApp(
-                  debugShowCheckedModeBanner: false,
-                  home: const SplashScreen(),
-                  initialBinding: MainBinding(),
-                  getPages: AppPages.pages,
-                  theme: LightThemeData);
-            } else {
-              return GetMaterialApp(
-                debugShowCheckedModeBanner: false,
-                home: const MainPage(),
-                initialRoute: AppRoutes.main,
-                initialBinding: MainBinding(),
-                getPages: AppPages.pages,
-                theme: LightThemeData,
-              );
-            }
-          } else {
-            // Loading indicator or splash screen while checking the first install
-            return const CircularProgressIndicator();
-          }
-        },
+      child: GetMaterialApp(
+        translations: LocalizationService.instance,
+        locale: LocalizationService.instance.currentLocale,
+        fallbackLocale: LocalizationService.instance.fallbackLocale,
+        debugShowCheckedModeBanner: false,
+        home: isFirstInstall ? const SplashScreen() : const MainPage(),
+        initialRoute: isFirstInstall ? null : AppRoutes.main,
+        initialBinding: MainBinding(),
+        getPages: AppPages.pages,
+        theme: LightThemeData,
       ),
     );
-  }
-
-  Future<bool> isFirstInstall() async {
-    bool isFirstInstall = LocalStorageService().getInt('first_install') == null;
-    if (isFirstInstall) {
-      LocalStorageService().saveInt('first_install', 1);
-    }
-    return isFirstInstall;
   }
 }

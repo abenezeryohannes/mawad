@@ -35,9 +35,9 @@ class _OrderPageState extends State<OrderPage> {
                     backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                     radius: 20,
                     selectedIndex: selectedTab,
-                    items: const [
-                      'New applications',
-                      'Previous requests',
+                    items: [
+                      'New Order'.tr,
+                      'Previous Order'.tr,
                     ],
                     onItemSelected: (int index) {
                       setState(() {
@@ -166,7 +166,7 @@ class _OrderPageState extends State<OrderPage> {
                 )),
             Expanded(
               child: Text(
-                'Orders',
+                'Orders'.tr,
                 textAlign: TextAlign.center,
                 style: Theme.of(context)
                     .textTheme

@@ -21,6 +21,19 @@ class LocationDetail {
     this.cityId,
   });
 
+  //empty constructor
+
+  LocationDetail.empty(
+      {this.id,
+      this.area,
+      this.city,
+      this.avenue = '',
+      this.block = '',
+      this.house = '',
+      this.street = '',
+      this.areaId,
+      this.cityId});
+
   factory LocationDetail.fromJson(Map<String, dynamic> json) {
     return LocationDetail(
       id: json['id'] ?? '',

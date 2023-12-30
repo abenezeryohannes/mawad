@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:mawad/src/core/constants/contants.dart';
 import 'package:mawad/src/core/models/cart_items.dart';
 import 'package:mawad/src/core/models/products.dart';
+import 'package:mawad/src/data/services/localization_service.dart';
 import 'package:mawad/src/modules/auth/register/register_with_phone_controller.dart';
 import 'package:mawad/src/modules/cart/carts/cart_controller.dart';
 import 'package:mawad/src/modules/cart/widgets/item.count.controller.dart';
@@ -57,7 +59,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     return MainScaffold(
       // backgroundColor: AppColorTheme.lightGray3,
       showBackButton: true,
-      title: "Product Detail",
+      title: "Product Detail".tr,
       haveTitle: true,
       body: buildProductDetailBody(),
     );
@@ -99,8 +101,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             return Container(
               alignment: Alignment.center,
               margin: EdgeInsets.only(top: Get.height * 0.4),
-              child: const Center(
-                child: Text('Product details are not available at the moment.'),
+              child: Center(
+                child:
+                    Text('Product details are not available at the moment.'.tr),
               ),
             );
           }
@@ -136,63 +139,77 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   List<Widget> carouselList(Product product) {
     return product.images.map((prod) {
-      return Builder(
-        builder: (BuildContext context) {
-          return SizedBox(
-            child: Stack(
-              children: [
-                // Image
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 15.w),
-                  width: Get.width,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(6.r),
-                    child: Image.network(
-                      prod.url,
-                      fit: BoxFit.fill,
-                      repeat: ImageRepeat.noRepeat,
+      return Directionality(
+        textDirection: TextDirection.rtl,
+        child: Builder(
+          builder: (BuildContext context) {
+            return SizedBox(
+              child: Stack(
+                children: [
+                  // Image
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 15.w),
+                    width: Get.width,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(6.r),
+                      child: Image.network(
+                        prod.url,
+                        fit: BoxFit.fill,
+                        repeat: ImageRepeat.noRepeat,
+                        errorBuilder: (context, error, stackTrace) {
+                          // Return a placeholder widget when an error occurs
+                          return Image.network(
+                            AppConstants.Placeholde,
+                            fit: BoxFit.fill,
+                            repeat: ImageRepeat.noRepeat,
+                          );
+                        },
+                      ),
                     ),
                   ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 10, right: 25.w),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ...productController.productDetail.value!.tags!.map(
-                        (tg) => AdditionalProductData(tg.title, tg.url),
-                      )
-                    ],
-                  ),
-                ),
-                Positioned(
-                  bottom: 10,
-                  left: 10,
-                  right: 10,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: List.generate(product.images.length, (index) {
-                        return Container(
-                          width: index == currentSlide ? 30.0 : 24,
-                          height: 4.0,
-                          margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(2.0),
-                            color: currentSlide == index
-                                ? Colors.black
-                                : Colors.grey,
-                          ),
-                        );
-                      }),
+                  Directionality(
+                    textDirection: TextDirection.ltr,
+                    child: Container(
+                      margin: EdgeInsets.only(top: 10, right: 25.w),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ...productController.productDetail.value!.tags!.map(
+                            (tg) => AdditionalProductData(tg.title, tg.url),
+                          )
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          );
-        },
+                  Positioned(
+                    bottom: 10,
+                    left: 10,
+                    right: 10,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: List.generate(product.images.length, (index) {
+                          return Container(
+                            width: index == currentSlide ? 30.0 : 24,
+                            height: 4.0,
+                            margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(2.0),
+                              color: currentSlide == index
+                                  ? Colors.black
+                                  : Colors.grey,
+                            ),
+                          );
+                        }),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
       );
     }).toList();
   }
@@ -223,6 +240,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   }
 
   Widget buildProductInfo() {
+    final info = productController.productDetail.value;
     return Container(
       padding: EdgeInsets.all(25.w),
       child: Row(
@@ -231,7 +249,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           Container(
             child: Expanded(
               child: Text(
-                  productController.productDetail.value!.nameEng.toString(),
+                  LocalizationService.instance.currentLocaleLangCode ==
+                          AppConstants.ENG
+                      ? info!.nameEng.toString()
+                      : info!.nameAr.toString(),
                   style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -270,7 +291,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               Directionality(
                 textDirection: TextDirection.ltr,
                 child: Text(
-                    ("KWD " +
+                    ("${"KWD".tr} " +
                             Util.formatNumberWithCommas(
                                 (productController.productDetail.value!.price *
                                         initialQuantity)
@@ -310,10 +331,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   }
 
   Widget buildDescriptions() {
+    final prod = productController.productDetail.value!;
     return Container(
       padding: const EdgeInsets.all(15),
       child: Text(
-        productController.productDetail.value!.detailsEng.toString(),
+        LocalizationService.instance.currentLocaleLangCode == AppConstants.ENG
+            ? prod.detailsEng.toString()
+            : prod.detailsAr.toString(),
         textAlign: TextAlign.start,
       ),
     );
@@ -323,7 +347,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     return SizedBox(
       child: Obx(() {
         return BigTextButton(
-          text: 'Add to cart',
+          text: 'Add to cart'.tr,
           fontWight: FontWeight.bold,
           cornerRadius: 24,
           enabled:

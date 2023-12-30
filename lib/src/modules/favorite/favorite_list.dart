@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mawad/src/core/models/products.dart';
@@ -23,7 +21,7 @@ class FavoriteProductsList extends StatelessWidget {
     return Expanded(
       child: Obx(() {
         return GridView.count(
-          physics: const ClampingScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           crossAxisCount: 2,
           childAspectRatio: 0.68,
@@ -49,7 +47,6 @@ class FavoriteProductsList extends StatelessWidget {
                             if (snapshot.data!) {
                               favoritesController.toggleFavorite(product);
                             } else {
-                              log('not auth');
                               Get.toNamed(AppRoutes.register);
                             }
                           },

@@ -41,11 +41,8 @@ class ProfilePage extends GetView<RegisterWithPhoneController> {
                                       ),
                                     ))
                                 : ProfileAvatar(
-                                    imageUrl: controller
-                                                .userDetail.value!.avatar ==
-                                            null
-                                        ? null
-                                        : "http://ordermawad.com/api/v1/file/get/${controller.userDetail.value?.avatar}",
+                                    imageUrl:
+                                        "http://ordermawad.com/api/v1/file/get/${controller.userDetail.value?.avatar}",
                                     radius: 50,
                                     onImagePicked: (p0) {
                                       controller.addAvatar(p0);

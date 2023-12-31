@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mawad/src/presentation/sharedwidgets/text.input.form.dart';
+import 'package:mawad/src/presentation/theme/app_color.dart';
 
 class EditableTextForm extends StatefulWidget {
   const EditableTextForm(this.text,
@@ -116,7 +117,7 @@ class _EditableTextFormState extends State<EditableTextForm> {
         icon: Icon(
           Icons.edit,
           size: widget.iconSize ?? 18,
-          color: Theme.of(context).colorScheme.primary,
+          color: AppColorTheme.red,
         ));
   }
 

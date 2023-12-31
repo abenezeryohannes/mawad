@@ -258,6 +258,7 @@ class _CartsPageState extends State<CartsPage> {
                     .copyWith(fontWeight: FontWeight.bold),
               ),
             ),
+            //todod check the pink color again
             IconButton(
               onPressed: () {
                 if (_cartController.cartItems.length > 1) {

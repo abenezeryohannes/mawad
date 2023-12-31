@@ -4,6 +4,7 @@ import 'package:mawad/src/core/constants/contants.dart';
 
 import 'package:mawad/src/core/models/products.dart';
 import 'package:mawad/src/data/services/localization_service.dart';
+import 'package:mawad/src/presentation/theme/app_color.dart';
 import 'package:mawad/src/utils/utils.dart';
 
 class ProductCard extends StatelessWidget {
@@ -78,7 +79,7 @@ class ProductCard extends StatelessWidget {
                         isFavorite ? Icons.favorite : Icons.favorite_outline,
                         size: 20,
                         color: isFavorite
-                            ? Theme.of(context).colorScheme.primary
+                            ? AppColorTheme.red
                             : Theme.of(context).disabledColor,
                       ),
                     ),

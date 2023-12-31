@@ -18,55 +18,52 @@ class FavoriteProductsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Obx(() {
-        return GridView.count(
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          crossAxisCount: 2,
-          childAspectRatio: 0.68,
-          children: productList.map((product) {
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: FutureBuilder<bool>(
-                future:
-                    authController.isAuth(), // Here you call the async method
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    if (snapshot.hasData) {
-                      return Obx(() {
-                        return ProductCard(
-                          isEnabled: snapshot.data!,
-                          isFavorite: favoritesController.isFavorite(product),
-                          product: product,
-                          onTap: () {
-                            Get.toNamed(AppRoutes.productDetail,
-                                arguments: product.id);
-                          },
-                          onFavoriteChanged: (isFav) {
-                            if (snapshot.data!) {
-                              favoritesController.toggleFavorite(product);
-                            } else {
-                              Get.toNamed(AppRoutes.register);
-                            }
-                          },
-                        );
-                      });
-                    } else if (snapshot.hasError) {
+    return Obx(() {
+      return GridView.count(
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        crossAxisCount: 2,
+        childAspectRatio: 0.68,
+        children: productList.map((product) {
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FutureBuilder<bool>(
+              future: authController.isAuth(), // Here you call the async method
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasData) {
+                    return Obx(() {
                       return ProductCard(
-                        isEnabled: false,
+                        isEnabled: snapshot.data!,
+                        isFavorite: favoritesController.isFavorite(product),
                         product: product,
+                        onTap: () {
+                          Get.toNamed(AppRoutes.productDetail,
+                              arguments: product.id);
+                        },
+                        onFavoriteChanged: (isFav) {
+                          if (snapshot.data!) {
+                            favoritesController.toggleFavorite(product);
+                          } else {
+                            Get.toNamed(AppRoutes.register);
+                          }
+                        },
                       );
-                    }
+                    });
+                  } else if (snapshot.hasError) {
+                    return ProductCard(
+                      isEnabled: false,
+                      product: product,
+                    );
                   }
-                  // While waiting for the Future, show a loading indicator or a disabled ProductCard
-                  return const CircularProgressIndicator(); // or ProductCard with isEnabled: false
-                },
-              ),
-            );
-          }).toList(),
-        );
-      }),
-    );
+                }
+                // While waiting for the Future, show a loading indicator or a disabled ProductCard
+                return const CircularProgressIndicator(); // or ProductCard with isEnabled: false
+              },
+            ),
+          );
+        }).toList(),
+      );
+    });
   }
 }

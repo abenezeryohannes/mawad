@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -67,20 +68,21 @@ class _ProfileAvatarState extends State<ProfileAvatar> {
 
   @override
   Widget build(BuildContext context) {
+    const nullValue = 'http://ordermawad.com/api/v1/file/get/';
     ImageProvider backgroundImage = const AssetImage(
       'assets/icon/image_placeholder.png',
     );
 
     if (_selectedFile != null) {
       backgroundImage = FileImage(_selectedFile!);
-    } else if (widget.imageUrl != null) {
+    } else if (widget.imageUrl != null && widget.imageUrl != nullValue) {
       backgroundImage = NetworkImage(widget.imageUrl!);
     }
 
     if (_selectedFile == null && widget.placeholder is ImageProvider) {
       backgroundImage = widget.placeholder as ImageProvider;
     }
-
+    log("widget.imageUrl ${widget.imageUrl}");
     return GestureDetector(
       onTap: _selectImage,
       child: Stack(
@@ -88,7 +90,7 @@ class _ProfileAvatarState extends State<ProfileAvatar> {
         children: [
           CustomPaint(
             painter: PartialCirclePainter(
-              color: widget.imageUrl != null
+              color: widget.imageUrl != null && widget.imageUrl != nullValue
                   ? AppColorTheme.yellow
                   : AppColorTheme.gray, // Border color
               strokeWidth: 4.0, // Border stroke width
@@ -108,8 +110,8 @@ class _ProfileAvatarState extends State<ProfileAvatar> {
                   ? Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Shimmer.fromColors(
-                        baseColor: Colors.grey[300]!,
-                        highlightColor: Colors.grey[100]!,
+                        baseColor: Colors.black,
+                        highlightColor: Colors.red,
                         child: const CircleAvatar(
                           radius: 50.0,
                         ),

@@ -198,7 +198,8 @@ class _HomePageState extends State<HomePage> {
 
   Widget _body(BuildContext context) {
     return Obx(() {
-      return Column(
+      return ListView(
+        shrinkWrap: true,
         children: [
           const Directionality(
               textDirection: TextDirection.ltr, child: ProductCategoryList()),
@@ -209,10 +210,8 @@ class _HomePageState extends State<HomePage> {
             imagePath: productController.banners,
           ),
           if (productController.isLeading.value)
-            Expanded(
-              child: SingleChildScrollView(
-                child: buildFavoriteProductsListSkeleton(context),
-              ),
+            SingleChildScrollView(
+              child: buildFavoriteProductsListSkeleton(context),
             ),
           if (!productController.isLeading.value &&
               productController.products.isNotEmpty)
@@ -224,9 +223,7 @@ class _HomePageState extends State<HomePage> {
             ),
           if (!productController.isLeading.value &&
               productController.products.isEmpty)
-            Expanded(
-              child: Container(),
-            ),
+            Container(),
         ],
       );
     });

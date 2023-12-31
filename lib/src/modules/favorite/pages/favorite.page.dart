@@ -16,7 +16,7 @@ class FavoritePage extends StatelessWidget {
       // showBackButton: true,
       body: Directionality(
         textDirection: TextDirection.ltr,
-        child: Column(
+        child: ListView(
           children: [
             Obx(() {
               if (favoritesController.favorites.isEmpty) {

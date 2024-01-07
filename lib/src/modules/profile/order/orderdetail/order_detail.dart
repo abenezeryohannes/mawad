@@ -43,107 +43,107 @@ class _OrderDetailState extends State<OrderDetail> {
         haveTitle: true,
         title: 'Order Detail'.tr,
         showBackButton: true,
-        body: Expanded(
-          child: SingleChildScrollView(
-            child: Obx(() {
-              if (controller.isLoading.value) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              return Column(
-                children: [
-                  Container(
-                    margin: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 20),
-                    decoration: BoxDecoration(
-                        color: AppColorTheme.white,
-                        borderRadius: BorderRadius.circular(12)),
-                    child: Column(
-                      children: [
-                        buildDetail("Invoice".tr,
-                            "${"KWD".tr} ${controller.orderDetail.totalPrice}"),
-                        buildDetail("Order Date".tr, " ${order["date"]}"),
-                        buildDetail(
-                            registerController.userDetail.value!.name
-                                .toString(),
-                            registerController.userDetail.value!.userEmail
-                                .toString(),
-                            isBold: true),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 15.h,
-                  ),
-                  _buildTitle("Order Details".tr),
-                  Container(
-                    margin: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 20),
-                    decoration: BoxDecoration(
-                        color: AppColorTheme.white,
-                        borderRadius: BorderRadius.circular(12)),
-                    child: Column(
-                      children: [
-                        ListView.builder(
-                          itemCount: controller.orderDetail.product.length,
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            final product =
-                                controller.orderDetail.product[index];
-                            //total price
-
-                            return SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  buildDetailWithPrice(
-                                      LocalizationService.instance
-                                                  .currentLocaleLangCode ==
-                                              AppConstants.ENG
-                                          ? product.nameEng
-                                          : product.nameAr,
-                                      product.price.toString() + "KWD".tr),
-                                  SizedBox(
-                                    height: 10.h,
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                        buildDetailWithPrice(
-                          "Total".tr,
-                          controller.orderDetail.totalPrice.toString(),
-                          hasDiv: false,
-                          isBold: true,
-                        ),
-                      ],
-                    ),
-                  ),
-                  buildSeparatorWithText('Payment'.tr),
-                  SizedBox(
-                    height: 10.h,
-                  ),
-                  _buildPaymentListView(),
-                  SizedBox(
-                    height: 10.h,
-                  ),
-                  buildSeparatorWithText('Payment Method'.tr),
-                  SizedBox(
-                    height: 30.h,
-                  ),
-                  SizedBox(
-                    height: 56,
-                    child: _buildPaymentMethod(),
-                  ),
-                  SizedBox(
-                    height: 40.h,
-                  ),
-                ],
+        body: SingleChildScrollView(
+          child: Obx(() {
+            if (controller.isLoading.value) {
+              return Center(
+                child: CircularProgressIndicator(
+                  color: AppColorTheme.yellow,
+                ),
               );
-            }),
-          ),
+            }
+            return Column(
+              children: [
+                Container(
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                  decoration: BoxDecoration(
+                      color: AppColorTheme.white,
+                      borderRadius: BorderRadius.circular(12)),
+                  child: Column(
+                    children: [
+                      buildDetail(
+                          "Invoice".tr,
+                          " ${controller.orderDetail.totalPrice}"
+                          " ${"KWD".tr} "),
+                      buildDetail("Order Date".tr, " ${order["date"]}"),
+                      buildDetail(
+                          registerController.userDetail.value!.name.toString(),
+                          registerController.userDetail.value!.userEmail
+                              .toString(),
+                          isBold: true),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 15.h,
+                ),
+                _buildTitle("Order Details".tr),
+                Container(
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                  decoration: BoxDecoration(
+                      color: AppColorTheme.white,
+                      borderRadius: BorderRadius.circular(12)),
+                  child: Column(
+                    children: [
+                      ListView.builder(
+                        itemCount: controller.orderDetail.product.length,
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          final product = controller.orderDetail.product[index];
+                          //total price
+
+                          return SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                buildDetailWithPrice(
+                                    LocalizationService.instance
+                                                .currentLocaleLangCode ==
+                                            AppConstants.ENG
+                                        ? product.nameEng
+                                        : product.nameAr,
+                                    product.price.toString()),
+                                SizedBox(
+                                  height: 10.h,
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                      buildDetailWithPrice(
+                        "Total".tr,
+                        controller.orderDetail.totalPrice.toString(),
+                        hasDiv: false,
+                        isBold: true,
+                      ),
+                    ],
+                  ),
+                ),
+                buildSeparatorWithText('Payment'.tr),
+                SizedBox(
+                  height: 10.h,
+                ),
+                _buildPaymentListView(),
+                SizedBox(
+                  height: 10.h,
+                ),
+                buildSeparatorWithText('Payment Method'.tr),
+                SizedBox(
+                  height: 30.h,
+                ),
+                SizedBox(
+                  height: 56,
+                  child: _buildPaymentMethod(),
+                ),
+                SizedBox(
+                  height: 40.h,
+                ),
+              ],
+            );
+          }),
         ));
   }
 
@@ -180,8 +180,14 @@ class _OrderDetailState extends State<OrderDetail> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Expanded(
-                    child:
-                        Text("${"KWD".tr}$price", style: AppTextTheme.brown20)),
+                    child: Container(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "$price ${"KWD".tr}",
+                    style: AppTextTheme.brown20,
+                    textDirection: TextDirection.rtl,
+                  ),
+                )),
                 Expanded(
                     child: Text(title,
                         style: isBold
@@ -255,35 +261,38 @@ class _OrderDetailState extends State<OrderDetail> {
       itemBuilder: (context, index) {
         var paymentItem = controller.orderDetail.priceDetail[index];
 
-        return Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  margin: EdgeInsets.only(left: 10.w),
-                  child: buttonPyment(
-                    color: _getbtnColor(paymentItem.index),
-                    text: _getTitleForIndexBtn(paymentItem.index),
+        return Directionality(
+          textDirection: TextDirection.ltr,
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(left: 10.w),
+                    child: buttonPyment(
+                      color: _getbtnColor(paymentItem.index),
+                      text: _getTitleForIndexBtn(paymentItem.index),
+                    ),
                   ),
-                ),
-                SizedBox(
-                  width: 10.w,
-                ),
-                _buildTitle(
-                    '% ${(paymentItem.percentage.round()).toString()} : ${_getTitleForIndex(paymentItem.index)}'),
-                // _buildPaymentListView(),
-              ],
-            ),
-            SizedBox(
-              height: 5.h,
-            ),
-            _buildPrimerCard(paymentItem.price,
-                paymentItem.percentage.toString(), paymentItem.index),
-            SizedBox(
-              height: 10.h,
-            ),
-          ],
+                  SizedBox(
+                    width: 10.w,
+                  ),
+                  _buildTitle(
+                      '% ${(paymentItem.percentage.round()).toString()} : ${_getTitleForIndex(paymentItem.index)}'),
+                  // _buildPaymentListView(),
+                ],
+              ),
+              SizedBox(
+                height: 5.h,
+              ),
+              _buildPrimerCard(paymentItem.price,
+                  paymentItem.percentage.toString(), paymentItem.index),
+              SizedBox(
+                height: 10.h,
+              ),
+            ],
+          ),
         );
       },
     );
@@ -336,10 +345,14 @@ class _OrderDetailState extends State<OrderDetail> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              'KWD $price ',
-              style:
-                  index == 1 ? AppTextTheme.brown20bold : AppTextTheme.gray16,
+            Directionality(
+              textDirection: TextDirection.rtl,
+              child: Text(
+                ' $price  ${'KWD'.tr}',
+                style:
+                    index == 1 ? AppTextTheme.brown20bold : AppTextTheme.gray16,
+                textDirection: TextDirection.rtl,
+              ),
             ),
             Text(
               _getTitleForIndex(index),

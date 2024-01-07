@@ -11,4 +11,6 @@ class AppConstants {
 
   static const String ENG = 'en';
   static const String AR = 'ar';
+  static const String FailedTransaction = 'NOT CAPTURED';
+  static const String SuccessTransaction = 'CAPTURED';
 }

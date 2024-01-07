@@ -24,7 +24,7 @@ class ProductCategory extends GetView<ProductController> {
         child: Column(
       children: [
         Text(
-          "Categories",
+          "Categories".tr,
           style: AppTextTheme.brown25,
         ),
         SizedBox(
@@ -54,7 +54,7 @@ class ProductCategory extends GetView<ProductController> {
             margin: EdgeInsets.only(right: 19.w),
             alignment: Alignment.topRight,
             child: Text(
-              "sections",
+              "sections".tr,
               style: AppTextTheme.brown14,
               textAlign: TextAlign.left,
             ),
@@ -142,14 +142,14 @@ class ProductCategory extends GetView<ProductController> {
                 ),
                 Obx(() {
                   return CircleAvatar(
+                    radius: 20.r,
                     backgroundColor: Colors.transparent,
-                    radius: 22.r,
                     child: ClipOval(
                       child: SvgPicture.network(
                         '${AppConstants.IMAGER_URL}/${controller.selectedCountry.value!.attachment.id}',
                         fit: BoxFit.cover,
-                        width: 30,
-                        height: 30,
+                        width: 78.r,
+                        height: 78.r,
                       ),
                     ),
                   );

@@ -1,18 +1,25 @@
 import 'dart:developer';
 
 import 'package:get/get.dart';
+import 'package:mawad/src/core/constants/contants.dart';
 import 'package:mawad/src/core/models/orderItem.dart';
 import 'package:mawad/src/data/repositories/order_repo.dart';
+import 'package:mawad/src/modules/cart/checkout/failed_transaction_screen.dart';
+import 'package:mawad/src/modules/cart/checkout/success_transaction_screen.dart';
 
 class OrderDetailController extends GetxController {
   RxBool isLoading = false.obs;
   final _newOrdersItem = <OrderItem>[].obs;
   final _oldOrdersItem = <OrderItem>[].obs;
   final _orderDetail = OrderDetail.empty().obs;
+
+  final isLoadingNew = false.obs;
+  final isLoadingOld = false.obs;
   final _selectedTab = 0.obs;
 
   List<OrderItem> get newOrdersItem => _newOrdersItem;
   List<OrderItem> get oldOrdersItem => _oldOrdersItem;
+
   //single order
   OrderDetail get orderDetail => _orderDetail.value;
   final OrderRepo _orderRepo = OrderRepo();
@@ -28,30 +35,47 @@ class OrderDetailController extends GetxController {
   }
 
   void getNewOrders() async {
-    isLoading.value = true;
+    isLoadingNew.value = true;
 
     try {
       final result = await _orderRepo.getNewOrderItemList();
-      log("====>aaaa$result");
+      isLoadingNew.value = false;
       _newOrdersItem.value = result;
       update(['newOrders']);
     } catch (error) {
       Get.snackbar('Error', 'Error fetching new orders');
     } finally {
-      isLoading.value = false;
+      isLoadingNew.value = false;
+    }
+  }
+
+//check the order status
+  void checkOrderStatus(String id) async {
+    try {
+      final response = await _orderRepo.checkOrderStatus(id);
+      if (AppConstants.FailedTransaction == response) {
+        Get.to(const FailedTransactionScreen());
+      }
+      if (AppConstants.SuccessTransaction == response) {
+        Get.to(SuccessTransactionScreen());
+      }
+    } catch (error) {
+      log('Error fetching products checkOrderStatus: $error');
+      rethrow;
     }
   }
 
   void getOldOrders() async {
-    isLoading.value = true;
+    isLoadingOld.value = true;
     try {
       final result = await _orderRepo.getOldOrderItemList();
       _oldOrdersItem.value = result;
+      isLoadingOld.value = false;
       update(['oldOrders']);
     } catch (error) {
       Get.snackbar('Error', 'Error fetching old orders');
     } finally {
-      isLoading.value = false;
+      isLoadingOld.value = false;
     }
   }
 

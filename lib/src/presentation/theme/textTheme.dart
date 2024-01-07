@@ -18,6 +18,11 @@ class AppTextTheme {
         fontWeight: FontWeight.w500,
         color: AppColorTheme.brown,
       );
+  static TextStyle get brown28 => TextStyle(
+        fontSize: 28.sp,
+        fontWeight: FontWeight.w500,
+        color: AppColorTheme.brown,
+      );
   static TextStyle get brown20bold => TextStyle(
         fontSize: 20.sp,
         fontWeight: FontWeight.w700,

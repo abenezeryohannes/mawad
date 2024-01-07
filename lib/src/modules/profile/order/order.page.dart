@@ -51,96 +51,105 @@ class _OrderPageState extends State<OrderPage> {
             ),
             if (selectedTab == 0)
               GetBuilder(
-                  id: 'newOrders',
-                  builder: (OrderDetailController OrderController) {
+                id: 'newOrders',
+                builder: (OrderDetailController OrderController) {
+                  if (OrderController.isLoadingNew.value) {
+                    // Display a loading indicator while the data is being fetched
+                    return const Center(child: CircularProgressIndicator());
+                  } else {
                     return Expanded(
                       child: ListView.builder(
-                          physics: const ClampingScrollPhysics(),
-                          itemCount: OrderController.newOrdersItem.length,
-                          itemBuilder: (context, index) {
-                            final order = OrderController.newOrdersItem[index];
-                            return Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 20, right: 20.0),
-                              child: Directionality(
-                                textDirection: TextDirection.rtl,
-                                child: ProfileItemCard(
-                                  onClick: () {
-                                    Get.toNamed(AppRoutes.orderDetail,
-                                        arguments: {
-                                          'id': order.id,
-                                          'date':
-                                              Util.formatDate(order.createdAt)
-                                        });
-                                  },
-                                  title:
-                                      'Order: ${Util.formatDate(order.createdAt)}',
-                                  backgroundColor:
-                                      Theme.of(context).scaffoldBackgroundColor,
-                                  icon: Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 10.0, right: 10),
-                                    child: Image.asset(
-                                      'assets/icon/box.png',
-                                      width: 20,
-                                      height: 20,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .secondary,
-                                    ),
+                        physics: const ClampingScrollPhysics(),
+                        itemCount: OrderController.newOrdersItem.length,
+                        itemBuilder: (context, index) {
+                          final order = OrderController.newOrdersItem[index];
+                          return Padding(
+                            padding:
+                                const EdgeInsets.only(left: 20, right: 20.0),
+                            child: Directionality(
+                              textDirection: TextDirection.rtl,
+                              child: ProfileItemCard(
+                                onClick: () {
+                                  Get.toNamed(AppRoutes.orderDetail,
+                                      arguments: {
+                                        'id': order.id,
+                                        'date': Util.formatDate(order.createdAt)
+                                      });
+                                },
+                                title:
+                                    '${'Order'.tr}: ${Util.formatDate(order.createdAt)}',
+                                backgroundColor:
+                                    Theme.of(context).scaffoldBackgroundColor,
+                                icon: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 10.0, right: 10),
+                                  child: Image.asset(
+                                    'assets/icon/box.png',
+                                    width: 20,
+                                    height: 20,
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
                                   ),
                                 ),
                               ),
-                            );
-                          }),
+                            ),
+                          );
+                        },
+                      ),
                     );
-                  }),
+                  }
+                },
+              ),
             if (selectedTab == 1)
               GetBuilder(
-                  id: 'olderOrders',
-                  builder: (OrderDetailController OrderController) {
+                id: 'olderOrders',
+                builder: (OrderDetailController OrderController) {
+                  if (OrderController.isLoadingOld.value) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else {
                     return Expanded(
                       child: ListView.builder(
-                          physics: const ClampingScrollPhysics(),
-                          itemCount: OrderController.oldOrdersItem.length,
-                          itemBuilder: (context, index) {
-                            final order = OrderController.oldOrdersItem[index];
-                            return Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 20, right: 20.0),
-                              child: Directionality(
-                                textDirection: TextDirection.rtl,
-                                child: ProfileItemCard(
-                                  onClick: () {
-                                    Get.toNamed(AppRoutes.orderDetail,
-                                        arguments: {
-                                          'id': order.id,
-                                          'date':
-                                              Util.formatDate(order.createdAt)
-                                        });
-                                  },
-                                  title:
-                                      'Order: ${Util.formatDate(order.createdAt)}',
-                                  backgroundColor:
-                                      Theme.of(context).scaffoldBackgroundColor,
-                                  icon: Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 10.0, right: 10),
-                                    child: Image.asset(
-                                      'assets/icon/box.png',
-                                      width: 20,
-                                      height: 20,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .secondary,
-                                    ),
+                        physics: const ClampingScrollPhysics(),
+                        itemCount: OrderController.oldOrdersItem.length,
+                        itemBuilder: (context, index) {
+                          final order = OrderController.oldOrdersItem[index];
+                          return Padding(
+                            padding:
+                                const EdgeInsets.only(left: 20, right: 20.0),
+                            child: Directionality(
+                              textDirection: TextDirection.rtl,
+                              child: ProfileItemCard(
+                                onClick: () {
+                                  Get.toNamed(AppRoutes.orderDetail,
+                                      arguments: {
+                                        'id': order.id,
+                                        'date': Util.formatDate(order.createdAt)
+                                      });
+                                },
+                                title:
+                                    '${'Order'.tr} ${Util.formatDate(order.createdAt)}',
+                                backgroundColor:
+                                    Theme.of(context).scaffoldBackgroundColor,
+                                icon: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 10.0, right: 10),
+                                  child: Image.asset(
+                                    'assets/icon/box.png',
+                                    width: 20,
+                                    height: 20,
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
                                   ),
                                 ),
                               ),
-                            );
-                          }),
+                            ),
+                          );
+                        },
+                      ),
                     );
-                  })
+                  }
+                },
+              )
           ],
         ),
       ),

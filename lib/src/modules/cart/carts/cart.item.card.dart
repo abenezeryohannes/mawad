@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mawad/src/core/models/cart_items.dart';
+import 'package:mawad/src/data/services/localization_service.dart';
 import 'package:mawad/src/modules/cart/widgets/item.count.controller.dart';
 import 'package:mawad/src/presentation/theme/textTheme.dart';
 
@@ -94,15 +95,20 @@ class _CartItemCardState extends State<CartItemCard> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(),
+                          child: Container(
+                            alignment: Alignment.centerLeft,
                             child: Text(
                               widget.countable
-                                  ? "${"KWD".tr}${widget.item.product.price * widget.item.quantity}"
+                                  ? "${widget.item.product.price * widget.item.quantity} ${'KWD'.tr}"
                                   : 'Special request'.tr,
                               style: widget.countable
                                   ? AppTextTheme.darkGray14bold
                                   : AppTextTheme.yellow14,
+                              textDirection: LocalizationService
+                                          .instance.currentLocaleLangCode ==
+                                      'eg'
+                                  ? TextDirection.ltr
+                                  : TextDirection.rtl,
                             ),
                           ),
                         ),

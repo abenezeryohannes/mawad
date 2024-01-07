@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:mawad/src/modules/profile/order/orderdetail/order_detail_controller.dart';
+import 'package:mawad/src/presentation/theme/app_color.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 // Import for iOS features.
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
@@ -16,6 +19,8 @@ class PaymentWebViewScreen extends StatefulWidget {
 
 class _PaymentWebViewScreenState extends State<PaymentWebViewScreen> {
   late WebViewController _controller;
+  final OrderDetailController orderDetailController =
+      Get.put(OrderDetailController());
   bool _isLoading = true; // Add this line
 
   @override
@@ -52,6 +57,18 @@ class _PaymentWebViewScreenState extends State<PaymentWebViewScreen> {
               _isLoading = false;
             });
           },
+          onNavigationRequest: (NavigationRequest request) {
+            final Uri uri = Uri.parse(request.url);
+
+            // Extract track_id from the query parameters
+            final String? trackId = uri.queryParameters['track_id'];
+
+            if (trackId != null) {
+              orderDetailController.checkOrderStatus(trackId);
+            }
+
+            return NavigationDecision.navigate;
+          },
         ),
       )
       ..loadRequest(Uri.parse(widget.paymentUrl));
@@ -60,13 +77,15 @@ class _PaymentWebViewScreenState extends State<PaymentWebViewScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.title)),
+      appBar: AppBar(title: Text(widget.title.tr)),
       body: Stack(
         children: [
           WebViewWidget(controller: _controller),
           if (_isLoading)
-            const Center(
-              child: CircularProgressIndicator(),
+            Center(
+              child: CircularProgressIndicator(
+                color: AppColorTheme.yellow,
+              ),
             ),
         ],
       ),

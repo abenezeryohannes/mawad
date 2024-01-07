@@ -142,6 +142,16 @@ class LocalizationService extends Translations {
           'Resend code in': 'Resend code in',
           "seconds": "seconds",
           "Confirm": "Confirm",
+          "Go To order": 'Go To order',
+          "The order  confirmation has been sent to":
+              "The order  confirmation has been sent to",
+          "Payment successful!": "Payment successful!",
+          "BACK": "BACK",
+          "Please try again": "Please try again",
+          "Categories": "Categories",
+          "sections": "sections",
+          "Payments": "Payments",
+          "Order": "Order"
         },
         'ar': {
           'login': 'تسجيل الدخول',
@@ -250,6 +260,16 @@ class LocalizationService extends Translations {
           'Resend code in': 'إعادة إرسال الرمز في',
           "seconds": "ثواني",
           "Confirm": "تؤكد",
+          "Go To order": 'اذهب للطلب',
+          "The order  confirmation has been sent to":
+              "تم إرسال تأكيد الطلب إلى",
+          "Payment successful!": "تم الدفع بنجاح!",
+          "BACK": "خلف",
+          "Please try again": "حاول مرة اخرى",
+          "Categories": "التصنيفات",
+          "sections": "أقسام",
+          "Payments": "المدفوعات",
+          "Order": "طلب"
         }
       };
 }

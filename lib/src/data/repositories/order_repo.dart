@@ -45,4 +45,20 @@ class OrderRepo {
       rethrow;
     }
   }
+
+  //cehck the order status
+  Future<String> checkOrderStatus(String id) async {
+    log("response= ==trak=> $id");
+    try {
+      final response = await _apiService
+          .postRequest('/check-payment-status?trackId=$id', {});
+
+      final orderDetail = response["data"]["transaction"]['result'];
+      log("response==========????????---<< $orderDetail");
+      return orderDetail;
+    } catch (error) {
+      log('Error fetching products checkOrderStatus: $error');
+      rethrow;
+    }
+  }
 }

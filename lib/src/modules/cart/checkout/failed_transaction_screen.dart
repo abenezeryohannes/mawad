@@ -40,7 +40,7 @@ class FailedTransactionScreen extends StatelessWidget {
           AppButton(
             text: "BACK".tr,
             onPressed: () {
-              Get.back();
+              Get.close(2);
             },
             width: Get.width * 0.8,
             radius: 20.r,

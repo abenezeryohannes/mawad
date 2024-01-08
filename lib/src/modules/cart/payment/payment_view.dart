@@ -61,10 +61,13 @@ class _PaymentWebViewScreenState extends State<PaymentWebViewScreen> {
             final Uri uri = Uri.parse(request.url);
 
             // Extract track_id from the query parameters
+
             final String? trackId = uri.queryParameters['track_id'];
+            _isLoading = false;
 
             if (trackId != null) {
               orderDetailController.checkOrderStatus(trackId);
+              _isLoading = false;
             }
 
             return NavigationDecision.navigate;
@@ -76,18 +79,21 @@ class _PaymentWebViewScreenState extends State<PaymentWebViewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(widget.title.tr)),
-      body: Stack(
-        children: [
-          WebViewWidget(controller: _controller),
-          if (_isLoading)
-            Center(
-              child: CircularProgressIndicator(
-                color: AppColorTheme.yellow,
+    return Directionality(
+      textDirection: TextDirection.ltr,
+      child: Scaffold(
+        appBar: AppBar(title: Text(widget.title.tr)),
+        body: Stack(
+          children: [
+            WebViewWidget(controller: _controller),
+            if (_isLoading)
+              Center(
+                child: CircularProgressIndicator(
+                  color: AppColorTheme.yellow,
+                ),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }

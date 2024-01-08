@@ -151,7 +151,8 @@ class LocalizationService extends Translations {
           "Categories": "Categories",
           "sections": "sections",
           "Payments": "Payments",
-          "Order": "Order"
+          "Order": "Order",
+          "Payment Failed!": "Payment Failed!",
         },
         'ar': {
           'login': 'تسجيل الدخول',
@@ -269,7 +270,8 @@ class LocalizationService extends Translations {
           "Categories": "التصنيفات",
           "sections": "أقسام",
           "Payments": "المدفوعات",
-          "Order": "طلب"
+          "Order": "طلب",
+          "Payment Failed!": "فشل الدفع!",
         }
       };
 }

@@ -11,6 +11,7 @@ class OrderModel {
   final UserData userData;
   final String userId;
   final String deliveryArea;
+  final String percentageId;
 
   OrderModel({
     required this.products,
@@ -21,6 +22,7 @@ class OrderModel {
     required this.userData,
     required this.userId,
     required this.deliveryArea,
+    required this.percentageId,
   });
 
   //to map
@@ -34,6 +36,7 @@ class OrderModel {
       'userData': userData.toMap(),
       'userId': userId,
       'deliveryArea': deliveryArea,
+      'percentageId': percentageId,
     };
   }
 
@@ -48,6 +51,7 @@ class OrderModel {
       userData: UserData.fromJson(json['userData']),
       userId: json['userId'],
       deliveryArea: json['deliveryArea'],
+      percentageId: json['percentageId'],
     );
   }
 }

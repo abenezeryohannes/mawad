@@ -229,20 +229,21 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           return;
                         } else {
                           _checkoutcontroller.makeOrder(OrderModel(
-                            products: _cartController.cartItems,
-                            orderTimeType: "AS_SOON_AS_POSSIBLE",
-                            status: "DELIVERY",
-                            payType: paymentTypeToString(_checkoutcontroller
-                                .selectedPaymentTypeId.value),
-                            services: _cartController.listOfOtherServices,
-                            userData: UserData(
-                                user: _authController.userDetail.value!,
-                                address: _addressController.selectedLocation),
-                            userId: _authController.userDetail.value!.userId
-                                .toString(),
-                            deliveryArea: _addressController
-                                .selectedLocation.area!.areaId,
-                          ));
+                              products: _cartController.cartItems,
+                              orderTimeType: "AS_SOON_AS_POSSIBLE",
+                              status: "DELIVERY",
+                              payType: paymentTypeToString(_checkoutcontroller
+                                  .selectedPaymentTypeId.value),
+                              services: _cartController.listOfOtherServices,
+                              userData: UserData(
+                                  user: _authController.userDetail.value!,
+                                  address: _addressController.selectedLocation),
+                              userId: _authController.userDetail.value!.userId
+                                  .toString(),
+                              deliveryArea: _addressController
+                                  .selectedLocation.area!.areaId,
+                              percentageId: _checkoutcontroller
+                                  .paymentPercentageItems.first.id));
                         }
                       },
                     );

@@ -139,8 +139,6 @@ class RegisterWithPhoneController extends GetxController {
             convertToInternationalPhoneNumber(phone), OTP.value.toString());
         final userd = await getUserDetail();
 
-        log("userDetail.value${userDetail.value?.toJsonInput()}");
-
         isOtpLoading.value = false;
         if (userd.name != "" && userd.userEmail != "" && userd.phone != "") {
           Get.toNamed(AppRoutes.main);

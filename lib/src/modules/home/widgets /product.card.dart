@@ -116,6 +116,7 @@ class ProductCard extends StatelessWidget {
                           ? product.detailsEng ?? ''
                           : product.detailsAr ?? '',
                       overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
                       style: Theme.of(context)
                           .textTheme
                           .bodySmall!

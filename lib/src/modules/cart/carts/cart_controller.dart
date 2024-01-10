@@ -161,6 +161,7 @@ class CartController extends GetxController {
 
   //get the other services
   void getOtherServices(List<String> ids) async {
+    log("Other services====>ids: $ids");
     try {
       final result = await _productsRepo.getOtherServices(ids);
       _otherServices.value = result;

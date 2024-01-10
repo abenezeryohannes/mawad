@@ -37,7 +37,7 @@ class CheckoutController extends GetxController {
   void getPaymentPercentage() async {
     try {
       final result = await _checkoutRepo.getPaymentPercentage();
-      log('getPaymentPercentage==>: $result');
+
       paymentPercentageItems.value = result;
     } catch (error) {
       rethrow;

@@ -57,6 +57,11 @@ class _PaymentWebViewScreenState extends State<PaymentWebViewScreen> {
               _isLoading = false;
             });
           },
+          onWebResourceError: (error) {
+            setState(() {
+              _isLoading = false;
+            });
+          },
           onNavigationRequest: (NavigationRequest request) {
             final Uri uri = Uri.parse(request.url);
 
@@ -73,7 +78,9 @@ class _PaymentWebViewScreenState extends State<PaymentWebViewScreen> {
             return NavigationDecision.navigate;
           },
         ),
-      )
+      ).whenComplete(() => setState(() {
+            _isLoading = false;
+          }))
       ..loadRequest(Uri.parse(widget.paymentUrl));
   }
 

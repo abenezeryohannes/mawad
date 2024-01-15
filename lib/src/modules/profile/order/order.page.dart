@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mawad/src/modules/main.page.dart';
 import 'package:mawad/src/modules/profile/order/orderdetail/order_detail_controller.dart';
 import 'package:mawad/src/modules/profile/widgets/tab.custom.dart';
 import 'package:mawad/src/presentation/routes/app_routes.dart';
@@ -15,6 +16,16 @@ class OrderPage extends StatefulWidget {
 }
 
 class _OrderPageState extends State<OrderPage> {
+  final args = Get.arguments;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Get.find<OrderDetailController>().getNewOrders();
+    Get.find<OrderDetailController>().getOldOrders();
+  }
+
   int selectedTab = 0;
   @override
   Widget build(BuildContext context) {
@@ -167,7 +178,11 @@ class _OrderPageState extends State<OrderPage> {
           children: [
             InkWell(
                 onTap: () {
-                  Get.back();
+                  if (args == 'success') {
+                    Get.to(const MainPage());
+                  } else {
+                    Get.back();
+                  }
                 },
                 child: const Icon(
                   Icons.chevron_left,

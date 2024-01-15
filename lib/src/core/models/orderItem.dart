@@ -1,3 +1,5 @@
+import 'package:mawad/src/core/models/payment_mode.dart';
+
 class OrderItem {
   final String id;
   final String orderId;
@@ -23,6 +25,48 @@ class OrderItem {
       id: json['id'],
       orderId: json['orderId'],
       createdAt: json['createdAt'],
+    );
+  }
+}
+
+class InvoiceOrder {
+  InvoiceProductOrder orders;
+  List<PaymentItem> transactions;
+
+  InvoiceOrder({
+    required this.orders,
+    required this.transactions,
+  });
+
+  factory InvoiceOrder.fromJson(Map<String, dynamic> json) {
+    return InvoiceOrder(
+      orders: InvoiceProductOrder.fromJson(json['orders']),
+      transactions: List<PaymentItem>.from(json['transactions']
+          .map((transaction) => PaymentItem.fromJson(transaction))),
+    );
+  }
+}
+
+class InvoiceProductOrder {
+  String id;
+  String orderId;
+  List<OrderProduct> product;
+  int totalPrice;
+
+  InvoiceProductOrder({
+    required this.id,
+    required this.orderId,
+    required this.product,
+    required this.totalPrice,
+  });
+
+  factory InvoiceProductOrder.fromJson(Map<String, dynamic> json) {
+    return InvoiceProductOrder(
+      id: json['id'],
+      orderId: json['orderId'],
+      product: List<OrderProduct>.from(
+          json['product'].map((product) => OrderProduct.fromJson(product))),
+      totalPrice: json['totalPrice'],
     );
   }
 }
@@ -63,66 +107,35 @@ class OrderProduct {
   }
 }
 
-class OrderDetail {
-  List<OrderProduct> product;
-  double totalPrice;
-  String orderId;
-  List<PriceDetail> priceDetail;
-
-  OrderDetail({
-    required this.product,
-    required this.totalPrice,
-    required this.orderId,
-    required this.priceDetail,
-  });
-
-  //empty constructor
-  OrderDetail.empty()
-      : product = [],
-        totalPrice = 0.0,
-        orderId = '',
-        priceDetail = [];
-
-  factory OrderDetail.fromJson(List<dynamic> json) {
-    final productDetails = json[0];
-    final priceDetailsJson = json[1];
-
-    return OrderDetail(
-      product: List<OrderProduct>.from(productDetails['product']
-          .map((productJson) => OrderProduct.fromJson(productJson))),
-      totalPrice: productDetails['totalPrice'].toDouble(),
-      orderId: productDetails['orderId'],
-      priceDetail: List<PriceDetail>.from(priceDetailsJson
-          .map((percentageJson) => PriceDetail.fromJson(percentageJson))),
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'product': product.map((product) => product.toJson()).toList(),
-      'totalPrice': totalPrice,
-      'orderId': orderId,
-    };
-  }
-}
-
-class PriceDetail {
+class PaymentItem {
+  bool isPaid;
   double price;
-  double percentage;
+  double? totalPrice;
+  List<InvoiceService>? service;
+  int percentage;
   int index;
   bool permission;
 
-  PriceDetail({
+  PaymentItem({
+    required this.isPaid,
     required this.price,
+    this.totalPrice,
+    this.service,
     required this.percentage,
     required this.index,
     required this.permission,
   });
 
-  factory PriceDetail.fromJson(Map<String, dynamic> json) {
-    return PriceDetail(
-      price: json['price'].toDouble(),
-      percentage: json['percentage'].toDouble(),
+  factory PaymentItem.fromJson(Map<String, dynamic> json) {
+    return PaymentItem(
+      isPaid: json['isPaid'],
+      price: json['price'],
+      totalPrice: json['totalPrice'],
+      service: json['service'] != null
+          ? List<InvoiceService>.from(
+              json['service'].map((s) => InvoiceService.fromJson(s)))
+          : null,
+      percentage: json['percentage'],
       index: json['index'],
       permission: json['permission'],
     );
@@ -130,7 +143,10 @@ class PriceDetail {
 
   Map<String, dynamic> toJson() {
     return {
+      'isPaid': isPaid,
       'price': price,
+      'totalPrice': totalPrice,
+      'service': service?.map((s) => s.toJson()).toList(),
       'percentage': percentage,
       'index': index,
       'permission': permission,

@@ -13,6 +13,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 class CheckoutController extends GetxController {
   final CheckoutRepo _checkoutRepo = CheckoutRepo();
   final paymentPercentageItems = RxList<PaymentPercentage>([]);
+  final invoice = Rxn<Invoice>();
   late WebViewController controller;
   var paymentAvailability = Rxn<PaymentMethods>();
   var selectedPaymentTypeId = PaymentType.values[0].obs;
@@ -21,6 +22,8 @@ class CheckoutController extends GetxController {
 
   double get downPayment => _downPayment.value;
   set downPayment(double value) => _downPayment.value = value;
+
+  //get invoice
 
   void setSelectedPaymentType(PaymentType id) {
     selectedPaymentTypeId.value = id;
@@ -39,6 +42,15 @@ class CheckoutController extends GetxController {
       final result = await _checkoutRepo.getPaymentPercentage();
 
       paymentPercentageItems.value = result;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  void calculatePayment(CaluatePayment caluatePayment) async {
+    try {
+      final result = await _checkoutRepo.calculatePayment(caluatePayment);
+      invoice.value = result;
     } catch (error) {
       rethrow;
     }

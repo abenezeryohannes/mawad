@@ -18,43 +18,41 @@ class TextAreaFiled extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: TextField(
-        controller: controller,
-        expands: true,
-        maxLines: null,
-        keyboardType: TextInputType.multiline,
-        onChanged: onChanged,
-        focusNode: FocusNode(),
-        decoration: InputDecoration(
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: AppColorTheme.lightGray, // Light gray border color
-            ),
-            borderRadius: BorderRadius.circular(15.r), // Border radius
+    return TextField(
+      controller: controller,
+      maxLines: null,
+      keyboardType: TextInputType.multiline,
+      textAlign: TextAlign.start,
+      onChanged: onChanged,
+      focusNode: FocusNode(),
+      decoration: InputDecoration(
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: AppColorTheme.lightGray, // Light gray border color
           ),
-          disabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: AppColorTheme.lightGray, // Light gray border color
-            ),
-            borderRadius: BorderRadius.circular(15.r), // Border radius
-          ),
-          hintText: hintText,
-          border: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: AppColorTheme.lightGray, // Light gray border color
-            ),
-            borderRadius: BorderRadius.circular(15.r), // Border radius
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: AppColorTheme.lightGray, // Light gray border color
-            ),
-            borderRadius: BorderRadius.circular(15.r), // Border radius
-          ),
-          contentPadding: const EdgeInsets.symmetric(
-              vertical: 10.0, horizontal: 16.0), // Padding
+          borderRadius: BorderRadius.circular(15.r), // Border radius
         ),
+        disabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: AppColorTheme.lightGray, // Light gray border color
+          ),
+          borderRadius: BorderRadius.circular(15.r), // Border radius
+        ),
+        hintText: hintText,
+        border: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: AppColorTheme.lightGray, // Light gray border color
+          ),
+          borderRadius: BorderRadius.circular(15.r), // Border radius
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: AppColorTheme.lightGray, // Light gray border color
+          ),
+          borderRadius: BorderRadius.circular(15.r), // Border radius
+        ),
+        contentPadding: const EdgeInsets.symmetric(
+            horizontal: 10.0, vertical: 4), // Padding
       ),
     );
   }

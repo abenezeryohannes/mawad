@@ -3,10 +3,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:mawad/src/core/constants/contants.dart';
+import 'package:mawad/src/core/models/payment_mode.dart';
 import 'package:mawad/src/data/services/localization_service.dart';
 import 'package:mawad/src/modules/auth/register/register_with_phone_controller.dart';
 import 'package:mawad/src/modules/cart/checkout/checkout_controller.dart';
 import 'package:mawad/src/modules/profile/order/orderdetail/order_detail_controller.dart';
+import 'package:mawad/src/presentation/sharedwidgets/cards/primery_cards.dart';
 import 'package:mawad/src/presentation/sharedwidgets/scaffold/main_scaffold.dart';
 import 'package:mawad/src/presentation/theme/app_color.dart';
 import 'package:mawad/src/presentation/theme/textTheme.dart';
@@ -30,10 +32,10 @@ class _OrderDetailState extends State<OrderDetail> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    controller.getOrderItem(order["id"]);
     availablePaymentTypes = _checkoutcontroller.paymentType
         .where((type) => type.isAvailable)
         .toList();
-    controller.getOrderItem(order["id"]);
   }
 
   @override
@@ -45,7 +47,8 @@ class _OrderDetailState extends State<OrderDetail> {
         showBackButton: true,
         body: SingleChildScrollView(
           child: Obx(() {
-            if (controller.isLoading.value) {
+            if (controller.isLoading.value ||
+                controller.orderDetail.value == null) {
               return Center(
                 child: CircularProgressIndicator(
                   color: AppColorTheme.yellow,
@@ -64,7 +67,7 @@ class _OrderDetailState extends State<OrderDetail> {
                     children: [
                       buildDetail(
                           "Invoice".tr,
-                          " ${controller.orderDetail.totalPrice}"
+                          " ${controller.orderDetail.value!.orders.totalPrice}"
                           " ${"KWD".tr} "),
                       buildDetail("Order Date".tr, " ${order["date"]}"),
                       buildDetail(
@@ -88,11 +91,13 @@ class _OrderDetailState extends State<OrderDetail> {
                   child: Column(
                     children: [
                       ListView.builder(
-                        itemCount: controller.orderDetail.product.length,
+                        itemCount:
+                            controller.orderDetail.value!.orders.product.length,
                         physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
-                          final product = controller.orderDetail.product[index];
+                          final product = controller
+                              .orderDetail.value!.orders.product[index];
                           //total price
 
                           return SingleChildScrollView(
@@ -115,7 +120,8 @@ class _OrderDetailState extends State<OrderDetail> {
                       ),
                       buildDetailWithPrice(
                         "Total".tr,
-                        controller.orderDetail.totalPrice.toString(),
+                        controller.orderDetail.value!.orders.totalPrice
+                            .toString(),
                         hasDiv: false,
                         isBold: true,
                       ),
@@ -126,6 +132,7 @@ class _OrderDetailState extends State<OrderDetail> {
                 SizedBox(
                   height: 10.h,
                 ),
+                //todo check this
                 _buildPaymentListView(),
                 SizedBox(
                   height: 10.h,
@@ -257,9 +264,9 @@ class _OrderDetailState extends State<OrderDetail> {
     return ListView.builder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
-      itemCount: controller.orderDetail.priceDetail.length,
+      itemCount: controller.orderDetail.value!.transactions.length,
       itemBuilder: (context, index) {
-        var paymentItem = controller.orderDetail.priceDetail[index];
+        var paymentItem = controller.orderDetail.value!.transactions[index];
 
         return Directionality(
           textDirection: TextDirection.ltr,
@@ -286,8 +293,13 @@ class _OrderDetailState extends State<OrderDetail> {
               SizedBox(
                 height: 5.h,
               ),
-              _buildPrimerCard(paymentItem.price,
-                  paymentItem.percentage.toString(), paymentItem.index),
+              _buildPrimerCard(
+                  price: paymentItem.price,
+                  total: paymentItem.totalPrice,
+                  percentage: paymentItem.percentage,
+                  index: paymentItem.index,
+                  service: paymentItem.service,
+                  permission: paymentItem.permission),
               SizedBox(
                 height: 10.h,
               ),
@@ -304,6 +316,10 @@ class _OrderDetailState extends State<OrderDetail> {
         return 'Down Payment'.tr;
       case 2:
         return 'Second Payment'.tr;
+      case 3:
+        return 'Third Payment'.tr;
+      case 4:
+        return 'Fourth Payment'.tr;
       default:
         return '${'Payment'.tr} $index';
     }
@@ -331,33 +347,91 @@ class _OrderDetailState extends State<OrderDetail> {
     }
   }
 
-  Widget _buildPrimerCard(double price, String percentage, int index) {
-    return Card(
-      margin: EdgeInsets.symmetric(horizontal: 10.w),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      elevation: 2,
-      surfaceTintColor: Colors.white,
-      color: Colors.white,
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Widget _buildPrimerCard(
+      {required double price,
+      double? total,
+      required int percentage,
+      required int index,
+      List<InvoiceService>? service,
+      required bool permission}) {
+    return PrimerCard(
+      height: service != null && index == 2 || service != null && index == 2
+          ? 100
+          : 65,
+      radius: 14,
+      child: Directionality(
+        textDirection: TextDirection.ltr,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Directionality(
-              textDirection: TextDirection.rtl,
-              child: Text(
-                ' $price  ${'KWD'.tr}',
-                style:
-                    index == 1 ? AppTextTheme.brown20bold : AppTextTheme.gray16,
-                textDirection: TextDirection.rtl,
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    '$price ${'KWD'.tr}',
+                    style: index == 1
+                        ? AppTextTheme.brown20bold
+                        : AppTextTheme.gray16,
+                  ),
+                  Text(
+                    _getTitleForIndex(index),
+                    style: AppTextTheme.gray18,
+                  ),
+                ],
               ),
             ),
-            Text(
-              _getTitleForIndex(index),
-              style: AppTextTheme.gray18,
-            ),
+            (service != null && service.isNotEmpty)
+                ? Expanded(
+                    child: SizedBox(
+                    height: 200,
+                    child: ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: service.length,
+                      itemBuilder: (context, index) {
+                        var serviceItem = service[index];
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              '${serviceItem.price} ${'KWD'.tr}',
+                              style: index == 1
+                                  ? AppTextTheme.brown20bold
+                                  : AppTextTheme.gray16,
+                            ),
+                            Text(
+                              serviceItem.title.tr,
+                              style: AppTextTheme.gray18,
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  ))
+                : const SizedBox.shrink(),
+            total != null
+                ? Expanded(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '$total ${'KWD'.tr}',
+                          style: index == 1
+                              ? AppTextTheme.brown20bold
+                              : AppTextTheme.gray16,
+                        ),
+                        Text(
+                          "Total".tr,
+                          style: AppTextTheme.gray18,
+                        ),
+                      ],
+                    ),
+                  )
+                : const SizedBox.shrink(),
           ],
         ),
       ),

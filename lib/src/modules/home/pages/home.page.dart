@@ -126,67 +126,75 @@ class _HomePageState extends State<HomePage> {
         textDirection: TextDirection.ltr,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-              padding: EdgeInsets.only(top: 10, bottom: 10, left: 35.w),
+              padding: const EdgeInsets.only(top: 10, bottom: 10),
               child: Row(
-                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Expanded(
-                    child: Text(
-                      'Products'.tr,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleMedium!
-                          .copyWith(fontWeight: FontWeight.bold),
+                  Container(
+                    width: Get.width * 0.15,
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    child: Column(
+                      children: [
+                        Text(
+                          'Products'.tr,
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium!
+                              .copyWith(fontWeight: FontWeight.bold),
+                        ),
+                      ],
                     ),
                   ),
-                  Directionality(
-                    textDirection: TextDirection.ltr,
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 20),
-                      child: InkWell(
-                        onTap: () {
-                          showAppBottomSheet(
-                            Obx(() {
-                              return ChangeCountryBottomSheet(
-                                countries: productController.countries,
-                                initialSelectedCountry:
-                                    productController.selectedCountry.value,
-                                onCountrySelected: (selected) {
-                                  productController
-                                      .getProductByCountry(selected.id);
-                                  productController
-                                      .getCategoryByCountry(selected.id);
-                                  productController.selectedCountry(selected);
-                                },
-                              );
-                            }),
-                          );
-                        },
-                        child: CircleAvatar(
-                          radius: 24.r,
-                          backgroundColor: Colors.transparent,
-                          child: Obx(
-                            () => ClipOval(
-                              child: productController.selectedCountry.value !=
-                                      null
-                                  ? ClipOval(
-                                      child: SvgPicture.network(
-                                        '${AppConstants.IMAGER_URL}/${productController.selectedCountry.value!.attachment.id}',
-                                        fit: BoxFit.cover,
-                                        width: 78.r,
-                                        height: 78.r,
-                                      ),
-                                    )
-                                  : const SizedBox(),
-                            ),
+                  Container(
+                    margin: const EdgeInsets.only(
+                        right: 16), // Adjust margin as needed
+                    alignment: Alignment.centerRight,
+                    child: InkWell(
+                      onTap: () {
+                        showAppBottomSheet(
+                          Obx(() {
+                            return ChangeCountryBottomSheet(
+                              countries: productController.countries,
+                              initialSelectedCountry:
+                                  productController.selectedCountry.value,
+                              onCountrySelected: (selected) {
+                                productController
+                                    .getProductByCountry(selected.id);
+                                productController
+                                    .getCategoryByCountry(selected.id);
+                                productController.selectedCountry(selected);
+                              },
+                            );
+                          }),
+                        );
+                      },
+                      child: CircleAvatar(
+                        radius: 24.r,
+                        backgroundColor: Colors.transparent,
+                        child: Obx(
+                          () => ClipOval(
+                            child:
+                                productController.selectedCountry.value != null
+                                    ? ClipOval(
+                                        child: SvgPicture.network(
+                                          '${AppConstants.IMAGER_URL}/${productController.selectedCountry.value!.attachment.id}',
+                                          fit: BoxFit.cover,
+                                          width: 78.r,
+                                          height: 78.r,
+                                        ),
+                                      )
+                                    : const SizedBox(),
                           ),
                         ),
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:mawad/src/core/constants/contants.dart';
 import 'package:mawad/src/core/models/orderItem.dart';
 import 'package:mawad/src/data/repositories/order_repo.dart';
+import 'package:mawad/src/modules/cart/carts/cart_controller.dart';
 import 'package:mawad/src/modules/cart/checkout/failed_transaction_screen.dart';
 import 'package:mawad/src/modules/cart/checkout/success_transaction_screen.dart';
 
@@ -11,7 +12,9 @@ class OrderDetailController extends GetxController {
   RxBool isLoading = false.obs;
   final _newOrdersItem = <OrderItem>[].obs;
   final _oldOrdersItem = <OrderItem>[].obs;
-  final _orderDetail = OrderDetail.empty().obs;
+  final orderDetail = Rxn<InvoiceOrder>();
+  //CartController
+  final CartController _cartController = Get.find<CartController>();
 
   final isLoadingNew = false.obs;
   final isLoadingOld = false.obs;
@@ -21,7 +24,6 @@ class OrderDetailController extends GetxController {
   List<OrderItem> get oldOrdersItem => _oldOrdersItem;
 
   //single order
-  OrderDetail get orderDetail => _orderDetail.value;
   final OrderRepo _orderRepo = OrderRepo();
 
   int get selectedTab => _selectedTab.value;
@@ -57,6 +59,7 @@ class OrderDetailController extends GetxController {
         Get.to(const FailedTransactionScreen());
       }
       if (AppConstants.SuccessTransaction == response) {
+        _cartController.clearCart();
         Get.to(SuccessTransactionScreen());
       }
     } catch (error) {
@@ -84,7 +87,7 @@ class OrderDetailController extends GetxController {
     isLoading.value = true;
     try {
       final result = await _orderRepo.getOrderItem(id);
-      _orderDetail.value = result;
+      orderDetail.value = result;
       update(['orderDetail']);
     } catch (error) {
       Get.snackbar('Error', 'Error fetching order detail');

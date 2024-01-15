@@ -21,6 +21,8 @@ class ProductController extends GetxController {
   final ProductCategoryController productCategoryController =
       Get.put(ProductCategoryController());
 
+  final conmment = ''.obs;
+
   final TextEditingController commentController = TextEditingController();
   final TextEditingController searchController = TextEditingController();
 

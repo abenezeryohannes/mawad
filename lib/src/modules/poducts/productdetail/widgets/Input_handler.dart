@@ -23,11 +23,20 @@ class InputAddonHandler extends GetView<ProductController> {
               style: AppTextTheme.darkblueTitle16,
             ),
           ),
-          TextAreaFiled(
-            controller: controller
-                .commentController, // You need to create a TextEditingController
-            hintText: '',
-            onChanged: (text) {},
+          Expanded(
+            child: SizedBox(
+              child: TextAreaFiled(
+                maxLines: 3,
+
+                controller: controller
+                    .commentController, // You need to create a TextEditingController
+                hintText: '',
+                onChanged: (val) {
+                  // add listener here
+                  controller.conmment.value = val;
+                },
+              ),
+            ),
           ),
           Container(
             padding: EdgeInsets.only(top: 10.h),

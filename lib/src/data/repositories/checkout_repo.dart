@@ -18,6 +18,19 @@ class CheckoutRepo {
     }
   }
 
+  // calculate payment
+  Future<Invoice> calculatePayment(CaluatePayment caluatePayment) async {
+    log('calculatePayment  in==>: ${caluatePayment.toJson()}');
+    try {
+      final result = await _apiService.postRequest(
+          '/payment-percentage/calculate-payment', caluatePayment.toJson());
+      return Invoice.fromJson(result['data']);
+    } catch (error) {
+      log("calculatePayment #error $error");
+      rethrow;
+    }
+  }
+
   List<PaymentPercentage> mapPaymentMode(List<dynamic> data) {
     return data.map((json) => PaymentPercentage.fromJson(json)).toList();
   }

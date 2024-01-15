@@ -75,6 +75,11 @@ class AppTextTheme {
         fontWeight: FontWeight.w400,
         color: AppColorTheme.brown,
       );
+  static TextStyle get brown17 => TextStyle(
+        fontSize: 17.sp,
+        fontWeight: FontWeight.w400,
+        color: AppColorTheme.brown,
+      );
 
   static TextStyle get darkGray14bold => TextStyle(
         fontSize: 14.sp,

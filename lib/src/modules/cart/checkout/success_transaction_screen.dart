@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:mawad/src/modules/auth/register/register_with_phone_controller.dart';
-import 'package:mawad/src/modules/home/pages/home.page.dart';
+import 'package:mawad/src/modules/profile/order/order.page.dart';
 import 'package:mawad/src/presentation/sharedwidgets/button/app_button.dart';
 import 'package:mawad/src/presentation/sharedwidgets/scaffold/main_scaffold.dart';
 import 'package:mawad/src/presentation/theme/app_color.dart';
@@ -34,9 +34,13 @@ class SuccessTransactionScreen extends StatelessWidget {
           SizedBox(
             height: 20.h,
           ),
-          Text(
-            "${"The order  confirmation has been sent to".tr} ${controller.userDetail.value?.userEmail}",
-            style: AppTextTheme.brown20,
+          SizedBox(
+            width: Get.width * 0.8,
+            child: Text(
+              "${"The order  confirmation has been sent to".tr} ${controller.userDetail.value?.userEmail}",
+              style: AppTextTheme.brown17,
+              textAlign: TextAlign.center,
+            ),
           ),
           SizedBox(
             height: 100.h,
@@ -44,7 +48,7 @@ class SuccessTransactionScreen extends StatelessWidget {
           AppButton(
             text: "Go To order".tr.toUpperCase(),
             onPressed: () {
-              Get.to(const HomePage());
+              Get.to(const OrderPage(), arguments: 'success');
             },
             width: Get.width * 0.8,
             radius: 20.r,

@@ -34,12 +34,12 @@ class OrderRepo {
     return data.map((json) => OrderItem.fromJson(json)).toList();
   }
 
-  Future<OrderDetail> getOrderItem(String id) async {
+  Future<InvoiceOrder> getOrderItem(String id) async {
     try {
       final response = await _apiService.getRequest('/order/getOne/$id');
+      log("response= ==trak=> $response");
 
-      final orderDetail = OrderDetail.fromJson(response["data"]);
-      return orderDetail;
+      return InvoiceOrder.fromJson(response["data"]);
     } catch (error) {
       log('Error fetching products getOrderItem: $error');
       rethrow;
@@ -54,7 +54,7 @@ class OrderRepo {
           .postRequest('/check-payment-status?trackId=$id', {});
 
       final orderDetail = response["data"]["transaction"]['result'];
-      log("response==========????????---<< $orderDetail");
+
       return orderDetail;
     } catch (error) {
       log('Error fetching products checkOrderStatus: $error');

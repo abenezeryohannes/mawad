@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -66,6 +68,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   }
 
   Widget buildProductDetailBody() {
+    log(productController.commentController.text);
     return SingleChildScrollView(
       child: Container(
         margin: const EdgeInsets.only(top: 10),
@@ -87,10 +90,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           ))
                       .toList(),
                   const SizedBox(height: 10),
-                  Visibility(
-                      visible: productController
-                          .productDetail.value!.allowInstructions!,
-                      child: const InputAddonHandler()),
+                  Obx(() {
+                    return Visibility(
+                        visible: productController
+                            .productDetail.value!.allowInstructions!,
+                        child: const InputAddonHandler());
+                  }),
                   const SizedBox(height: 10),
                   buildButton(),
                 ],
@@ -353,7 +358,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           enabled:
               productController.productDetail.value!.allowInstructions == true
                   ? productController.productDetail.value!.allowInstructions! &&
-                      productController.commentController.text.isNotEmpty
+                      productController.conmment.value != ''
                   : true,
           elevation: 0,
           backgroudColor: Theme.of(context).colorScheme.secondary,
